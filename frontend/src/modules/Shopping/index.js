@@ -10,7 +10,7 @@ const Shopping = () => {
     const fetchOrder = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/buy/payment/placeorder/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/buy/payment/placeorder/${user.id}`
         );
         const jsonOrder = await res.json();
         setShowOrder(jsonOrder);

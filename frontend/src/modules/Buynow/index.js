@@ -23,7 +23,7 @@ function Buynow() {
     const fetchData = async () => {
       try {
         const rese = await fetch(
-          `http://localhost:4000/api/userdetails/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/userdetails/${user.id}`
         );
         const jsonData = await rese.json();
         setGetAddGet(jsonData);
@@ -38,7 +38,7 @@ function Buynow() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
         );
         const jsonData = await res.json();
         setGetData(jsonData);

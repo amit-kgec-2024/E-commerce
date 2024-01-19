@@ -44,21 +44,24 @@ const Reviews = () => {
     const { secure_url } = await uploadImage();
     setImgUrl(secure_url);
     console.log(imgUrl, "ImhUrl :>>");
-    const res = await fetch("http://localhost:4000/api/product/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        imgUrl: secure_url,
-        title: product.title,
-        price: product.price,
-        stars: product.stars,
-        discount: product.discount,
-        category: product.category,
-        sale: product.sale,
-      }),
-    });
+    const res = await fetch(
+      "https://e-commerce-nu-seven.vercel.app/api/product/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imgUrl: secure_url,
+          title: product.title,
+          price: product.price,
+          stars: product.stars,
+          discount: product.discount,
+          category: product.category,
+          sale: product.sale,
+        }),
+      }
+    );
     if (res.status === 400) {
       alert("Invalid Credintial!");
     } else {
@@ -73,7 +76,7 @@ const Reviews = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
         );
         const jsonData = await res.json();
         setGetdata(jsonData);

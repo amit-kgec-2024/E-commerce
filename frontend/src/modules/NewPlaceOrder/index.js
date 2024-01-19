@@ -23,7 +23,7 @@ const NewPlaceOrder = () => {
     const fetchOrder = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/buy/payment/placeorder/${id}`
+          `https://e-commerce-nu-seven.vercel.app/api/buy/payment/placeorder/${id}`
         );
         const jsonOrder = await res.json();
         if (jsonOrder.length > 0) {

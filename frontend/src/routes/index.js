@@ -20,7 +20,6 @@ import Placeorder from "../modules/Placeorder";
 import Shopping from "../modules/Shopping";
 import NewPlaceOrder from "../modules/NewPlaceOrder";
 import TrackOrder from '../modules/TrackOrder'
-// import From from "../modules/Authorization/From";
 
 const PrivetRoute = ({ children }) => {
   const isUserLoggedIn = window.localStorage.getItem("user:token") || false;

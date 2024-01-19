@@ -26,7 +26,7 @@ const Navbar = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/userprofileget/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/userprofileget/${user.id}`
         );
         const jsonData = await res.json();
         setGetAdd(jsonData);

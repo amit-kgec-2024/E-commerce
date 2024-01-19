@@ -25,22 +25,25 @@ const SaveAddress = () => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:4000/api/userdetails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        mobil: detail.mobil,
-        place: detail.place,
-        post: detail.post,
-        police: detail.police,
-        dist: detail.dist,
-        pin: detail.pin,
-        state: detail.state,
-      }),
-    });
+    const res = await fetch(
+      "https://e-commerce-nu-seven.vercel.app/api/userdetails",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          mobil: detail.mobil,
+          place: detail.place,
+          post: detail.post,
+          police: detail.police,
+          dist: detail.dist,
+          pin: detail.pin,
+          state: detail.state,
+        }),
+      }
+    );
     if (res.status === 400) {
       alert("Invalid Credintial!");
     } else {

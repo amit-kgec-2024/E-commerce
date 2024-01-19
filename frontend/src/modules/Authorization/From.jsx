@@ -14,7 +14,7 @@ const From = ({isSigninPage = true}) => {
 
     const handelSubmit = async (e)=> {
         e.preventDefault(e)
-        const res = await fetch(`http://localhost:4000/api/${isSigninPage ? 'login' : 'register'}`, {
+        const res = await fetch(`https://e-commerce-nu-seven.vercel.app/api/${isSigninPage ? 'login' : 'register'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -11,16 +11,19 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
 
   const handelAddtoCart = async ()=>{
 
-    const res = await fetch("http://localhost:4000/api/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        productId: id
-      })
-    });
+    const res = await fetch(
+      "https://e-commerce-nu-seven.vercel.app/api/addToCart",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productId: id,
+        }),
+      }
+    );
     if (res.status === 400) {
       alert("Alredy Add To Cart!");
     } else {

@@ -26,7 +26,7 @@ const Control = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/userprofileget/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/userprofileget/${user.id}`
         );
         const jsonData = await res.json();
         setGetAdd(jsonData);
@@ -52,10 +52,10 @@ const Control = () => {
     const fetchAllData = async () => {
       try {
         const addCartRes = await fetch(
-          `http://localhost:4000/api/addToCartGet/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/addToCartGet/${user.id}`
         );
         const productRes = await fetch(
-          "http://localhost:4000/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
         );
 
         const addCartJsonData = await addCartRes.json();

@@ -34,7 +34,7 @@ function Payment() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/userdetails/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/userdetails/${user.id}`
         );
         const jsonData = await res.json();
         setGetAddGet(jsonData);
@@ -50,7 +50,7 @@ function Payment() {
   const handelClick = async () => {
     try {
       const res = await fetch(
-        "http://localhost:4000/api/buy/payment/placeorder",
+        "https://e-commerce-nu-seven.vercel.app/api/buy/payment/placeorder",
         {
           method: "POST",
           headers: {
@@ -101,7 +101,7 @@ function Payment() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
         );
         const jsonData = await res.json();
         setGetData(jsonData);

@@ -7,7 +7,7 @@ const Women = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
         );
         const jsonData = await res.json();
         setGetData(jsonData);

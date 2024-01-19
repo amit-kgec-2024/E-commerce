@@ -33,16 +33,19 @@ function Details() {
   );
   // Handel AddToCart..............
   const handelAddtoCart = async () => {
-    const res = await fetch("http://localhost:4000/api/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        productId: id,
-      }),
-    });
+    const res = await fetch(
+      "https://e-commerce-nu-seven.vercel.app/api/addToCart",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productId: id,
+        }),
+      }
+    );
     if (res.status === 400) {
       alert("Alredy Add To Cart!");
     } else {
@@ -53,17 +56,20 @@ function Details() {
   const [reviewsProduct, setReviewsProducts] = useState({ reviews: "" });
   const handelSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:4000/api/productReviews", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productId: id,
-        username: user.username,
-        reviews: reviewsProduct.reviews,
-      }),
-    });
+    const res = await fetch(
+      "https://e-commerce-nu-seven.vercel.app/api/productReviews",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: id,
+          username: user.username,
+          reviews: reviewsProduct.reviews,
+        }),
+      }
+    );
     if (res.status === 400) {
       alert("Please Fill Reviews!");
     } else {
@@ -76,7 +82,7 @@ function Details() {
     const fetchReviews = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/productReviews/${id}`
+          `https://e-commerce-nu-seven.vercel.app/api/productReviews/${id}`
         );
         const jsonReview = await res.json();
         setReviewGet(jsonReview);
@@ -91,7 +97,7 @@ function Details() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
         );
         const jsonData = await res.json();
         setGetData(jsonData);
