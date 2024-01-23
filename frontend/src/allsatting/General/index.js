@@ -56,7 +56,7 @@ const General = () => {
     }
   };
   return (
-    <div className="p-6">
+    <div className="p-6 flex justify-center items-center">
       <div className="">
         <form className="flex flex-col gap-4" onSubmit={(e) => handelSubmit(e)}>
           <Input

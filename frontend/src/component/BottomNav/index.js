@@ -4,9 +4,7 @@ import { CiSettings } from "react-icons/ci";
 import {
   FaRegHeart,
   FaShoppingCart,
-  FaAddressBook,
 } from "react-icons/fa";
-import { SlNote } from "react-icons/sl";
 import { Link } from "react-router-dom";
 
 const BottomNav = () => {
@@ -67,18 +65,6 @@ const BottomNav = () => {
           className="flex items-center gap-4 text-md font-bold mb-2 cursor-pointer"
         >
           <IoMdLocate className="text-xl sm:text-2xl" />
-        </Link>
-        <Link
-          to={"/saveAddress"}
-          className="flex items-center gap-4 text-md font-bold mb-2 cursor-pointer"
-        >
-          <FaAddressBook className="text-xl sm:text-2xl" />
-        </Link>
-        <Link
-          to={"/reviews"}
-          className="flex items-center gap-4 text-md font-bold mb-2 cursor-pointer"
-        >
-          <SlNote className="text-xl sm:text-2xl" />
         </Link>
         <Link
           to={"/sattings"}

@@ -4,11 +4,10 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 
 const NewPlaceOrder = () => {
   const { id} = useParams();
-  //   Current Data...............
   // Current Data
   const currentedDate = new Date();
   const futureesDate = new Date(currentedDate);
-  futureesDate.setDate(currentedDate.getDate());
+  futureesDate.setDate(currentedDate.getDate()-1);
 
   const optioned = {
     weekday: "short",
@@ -102,10 +101,10 @@ const NewPlaceOrder = () => {
           </span>
         </h1>
         <h1 className="flex flex-row items-center gap-4">
-          {currentfromDate >= showOrder.deliveryDate ? (
-            <IoIosCheckmarkCircle className="text-green-600" />
-          ) : (
+          {currentfromDate <= showOrder.deliveryDate ? (
             <IoIosCheckmarkCircle className="text-red-600" />
+          ) : (
+            <IoIosCheckmarkCircle className="text-green-600" />
           )}
           <span className="text-xs md:text-base">
             Deliverd, {showOrder.deliveryDate}

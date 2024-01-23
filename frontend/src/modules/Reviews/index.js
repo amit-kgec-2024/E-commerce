@@ -89,7 +89,7 @@ const Reviews = () => {
 
   return (
     <div>
-      <div className="w-full bg-stone-200 h-20 flex flex-row justify-between items-center">
+      <div className="w-full bg-stone-200 h-12 flex flex-row justify-between items-center">
         <h1 className="font-bold text-sm md:text-xl text-white px-6">
           Reviews
         </h1>

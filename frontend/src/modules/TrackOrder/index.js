@@ -26,23 +26,96 @@ const TrackOrder = () => {
     fetchOrder();
   }, [user.id]);
   // console.log(showOrder);
-  const currentedDate = new Date();
-  const futureesDate = new Date(currentedDate);
-  futureesDate.setDate(currentedDate.getDate());
-  const futurTwoDate = new Date(currentedDate);
-  futurTwoDate.setDate(currentedDate.getDate() + 2);
+  // const currentedDate = new Date();
+  // const futureesDate = new Date(currentedDate);
+  // futureesDate.setDate(currentedDate.getDate());
+  // const futurTwoDate = new Date(currentedDate);
+  // futurTwoDate.setDate(currentedDate.getDate() + 2);
 
-  const optioned = {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  };
-  const currentfromDate = futureesDate.toLocaleDateString(undefined, optioned);
-  const currentTwofromDate = futurTwoDate.toLocaleDateString(
-    undefined,
-    optioned
-  );
+  // const optioned = {
+  //   weekday: "short",
+  //   day: "numeric",
+  //   month: "short",
+  //   year: "numeric",
+  // };
+  // const [twodayw, setTwoDays] = useState()
+  // setTimeout(()=>{
+  //   const currentfromDate = futureesDate.toLocaleDateString(undefined, optioned);
+  //   setTwoDays(currentfromDate);
+  // }, 4000000)
+  // console.log(twodayw, 'opopop');
+  // const currentTwofromDate = futurTwoDate.toLocaleDateString(undefined,optioned);
+
+  const [boxColor, setBoxColor] = useState("red");
+
+  useEffect(() => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 3);
+
+    const timeDifference = futureDate - new Date();
+    const timeoutId = setTimeout(() => {
+      setBoxColor("green");
+    }, timeDifference);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const [boxForColor, setBoxForColor] = useState("red");
+
+  useEffect(() => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 4);
+
+    const timeDifference = futureDate - new Date();
+    const timeoutId = setTimeout(() => {
+      setBoxForColor("green");
+    }, timeDifference);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const [boxFiveColor, setBoxFiveColor] = useState("red");
+
+  useEffect(() => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 5);
+
+    const timeDifference = futureDate - new Date();
+    const timeoutId = setTimeout(() => {
+      setBoxFiveColor("green");
+    }, timeDifference);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const [boxSixColor, setBoxSixColor] = useState("red");
+
+  useEffect(() => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 6);
+
+    const timeDifference = futureDate - new Date();
+    const timeoutId = setTimeout(() => {
+      setBoxSixColor("green");
+    }, timeDifference);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 2);
+
+    const timeDifference = futureDate - new Date();
+
+    const timeoutId = setTimeout(() => {
+      setIsVisible(false);
+    }, timeDifference);
+
+    return () => clearTimeout(timeoutId);
+  }, []); 
   return (
     <div>
       <div className="w-full bg-stone-200 h-20 flex flex-row justify-between items-center">
@@ -56,7 +129,7 @@ const TrackOrder = () => {
           Home
         </Link>
       </div>
-      <div className="flex flex-col justify-center mt-2">
+      <div className="flex flex-col justify-center mt-2" style={{display: isVisible ? 'block' : 'none'}}>
         {showOrder.map((ele, index) => {
           return (
             <Link
@@ -99,27 +172,25 @@ const TrackOrder = () => {
                 </h1>
               </div>
               <div className="flex flex-col">
-                <h1>{currentfromDate}</h1>
-                <h1>{currentTwofromDate}</h1>
                 <div className="mb-6 flex items-center gap-6">
-                    <TbSquareRoundedNumber1Filled className="text-green-500" />
+                  <TbSquareRoundedNumber1Filled className="text-green-700" />
                   <span>{ele.order.title} is Confirmed Order</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  { currentTwofromDate <= currentfromDate ? (<TbSquareRoundedNumber2Filled className='text-red-500'/>):
-                  (<TbSquareRoundedNumber2Filled className='text-green-500'/>)}
+                  {" "}
+                  <TbSquareRoundedNumber2Filled style={{ color: boxColor }} />
                   <span>Shipped {ele.order.state}</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  <TbSquareRoundedNumber3Filled />
+                  <TbSquareRoundedNumber3Filled style={{ color: boxForColor }} />
                   <span>{ele.order.dist} Branch Received</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  <TbSquareRoundedNumber4Filled />
+                  <TbSquareRoundedNumber4Filled style={{color: boxFiveColor}}/>
                   <span>Will be deliverd tomorrow</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  <TbSquareRoundedCheckFilled />
+                  <TbSquareRoundedCheckFilled style={{color: boxSixColor}}/>
                   <span>Delivered</span>
                 </div>
               </div>

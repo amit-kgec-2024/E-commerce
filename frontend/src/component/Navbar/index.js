@@ -75,7 +75,7 @@ const Navbar = () => {
             to="/beauty"
             className={"text-sm md:text-lg font-semibold cursor-pointer"}
           >
-            Beauty
+            Chield
           </NavLink>
         </div>
       </div>

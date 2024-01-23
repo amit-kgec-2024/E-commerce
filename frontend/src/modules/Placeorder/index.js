@@ -67,7 +67,7 @@ const Placeorder = () => {
         </div>
         <div className="p-6">
           <h1 className="flex flex-row items-center mb-4 gap-4"><IoIosCheckmarkCircle className='text-green-600'/><span className="text-xs md:text-base">Order Confromed,{' '}{orderdata.order.conformDate}</span></h1>
-          <h1 className="flex flex-row items-center gap-4">{currentfromDate >= orderdata.order.deliveryDate ? <IoIosCheckmarkCircle className="text-green-600" /> : <IoIosCheckmarkCircle className="text-red-600" />}<span className="text-xs md:text-base">Deliverd, {orderdata.order.deliveryDate}</span></h1>
+          <h1 className="flex flex-row items-center gap-4">{currentfromDate <= orderdata.order.deliveryDate ? <IoIosCheckmarkCircle className="text-green-600" /> : <IoIosCheckmarkCircle className="text-red-600" />}<span className="text-xs md:text-base">Deliverd, {orderdata.order.deliveryDate}</span></h1>
         </div>
         <div className="border-y-2 p-6">
           <label className="text-xs md:text-sm text-gray-400">Shipping Details</label>

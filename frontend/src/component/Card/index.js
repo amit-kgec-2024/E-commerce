@@ -7,10 +7,11 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
   const orgPrice = Math.round(price - (price / 100) * discount);
 
   // post AddToCart.........................
-  const [user] = useState(()=> JSON.parse(localStorage.getItem("user:details")) || {});
+  const [user] = useState(
+    () => JSON.parse(localStorage.getItem("user:details")) || {}
+  );
 
-  const handelAddtoCart = async ()=>{
-
+  const handelAddtoCart = async () => {
     const res = await fetch(
       "https://e-commerce-nu-seven.vercel.app/api/addToCart",
       {
@@ -29,7 +30,7 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
     } else {
       await res.json();
     }
-  }
+  };
   return (
     <div className="border shadow-lg p-3 w-[230px] h-[350px] rounded flex flex-col cursor-pointer">
       <img src={img} alt={title} className="mb-3 w-full h-[200px] shadow" />
@@ -49,17 +50,25 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
           <FaShoppingCart />
         </div>
       </div>
-      <div className="flex gap-1 text-yellow-400 mb-2">
-        {[1, 2, 3, 4, 5].map((ele) =>
-          ele <= stars ? <AiFillStar key={ele} /> : <AiOutlineStar key={ele} />
-        )}
-      </div>
-      <Link to={`/productDat/${id}`} className="font-bold text-sm text-gray-400 hover:text-gray-500">{title}</Link>
-      <p className="text-blue-600 py-2 font-medium">{discount}% off</p>
-      <p className="text-green-500 font-medium">
-        ₹{orgPrice}.00{" "}
-        <del className="text-xs text-gray-400 font-medium">₹{price}.00</del>
-      </p>
+      <Link to={`/productDat/${id}`}>
+        <div className="flex gap-1 text-yellow-400 mb-2">
+          {[1, 2, 3, 4, 5].map((ele) =>
+            ele <= stars ? (
+              <AiFillStar key={ele} />
+            ) : (
+              <AiOutlineStar key={ele} />
+            )
+          )}
+        </div>
+        <h1 className="font-bold text-xs text-gray-400 hover:text-gray-500">
+          {title}
+        </h1>
+        <p className="text-blue-600 py-2 font-medium">{discount}% off</p>
+        <p className="text-green-500 font-medium">
+          ₹{orgPrice}.00{" "}
+          <del className="text-xs text-gray-400 font-medium">₹{price}.00</del>
+        </p>
+      </Link>
     </div>
   );
 };

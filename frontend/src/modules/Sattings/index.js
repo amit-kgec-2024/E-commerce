@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import General from "../../allsatting/General";
 import Themes from "../../allsatting/Themes";
 import { MdOutlineExitToApp } from "react-icons/md";
+import UserDetail from "../UserDetail";
+import SaveAddress from '../SaveAddress/index'
+import Reviews from '../Reviews/index'
 
 
 const Sattings = () => {
-  // Customize and Control
-  const [controlBox, setControlBox] = useState(false);
-  const togleControl = () => {
-    setControlBox(!controlBox);
-  };
-  const [controlTheams, setControlTheams] = useState(false);
-  const togleTheams = () => {
-    setControlTheams(!controlTheams);
-  };
   // LOG Out................
   const navigate = useNavigate();
   const logOut = () => {
@@ -22,45 +16,72 @@ const Sattings = () => {
     window.localStorage.removeItem("user:details");
     navigate("/account/signin");
   };
+  const [selectedButton, setSelectedButton] = useState(null);
+  const handelButton = (button) => {
+    if (selectedButton === button) {
+      setSelectedButton(null);
+    } else {
+      setSelectedButton(button);
+    }
+  };
+  const renderDetails = () => {
+    if (selectedButton === "userprofile") {
+      return <UserDetail />;
+    } else if (selectedButton === "general") {
+      return <General />;
+    } else if (selectedButton === "themes") {
+      return <Themes />;
+    } else if (selectedButton === "address") {
+      return <SaveAddress />;
+    } else if (selectedButton === "reviews") {
+      return <Reviews />;
+    }
+    return <UserDetail />;
+  };
   return (
-    <div className="w-full h-full bg-gray-950">
-      <div className="w-full bg-gray-900 h-20 flex flex-row justify-between items-center">
-        <h1 className="font-bold text-sm md:text-xl text-white px-6">
-          Sattings
-        </h1>
-        <Link
-          to={"/"}
-          className="py1 px-3 bg-gray-600 text-white font-semibold mx-4"
-        >
-          Home
-        </Link>
-      </div>
+    <div className="w-screen h-screen bg-gray-950">
       <div className="flex flex-row">
-        <div className="w-[200px] bg-gray-800 h-screen flex flex-col py-4">
+        <div className="bg-gray-800 w-[30%] md:w-[15%] p-2 h-screen flex flex-col py-4 fixed left-0">
+          <h1 className="font-bold text-center text-sm md:text-xl text-white mb-8">Sattings</h1>
           <button
-            onClick={togleControl}
-            className="font-bold text-white border rounded py-1 bg-slate-500 cursor-pointer"
+            onClick={() => handelButton("userprofile")}
+            className="font-bold w-full text-white mb-2 border rounded py-1 bg-slate-800 text-sm md:text-base"
+          >
+            Profile
+          </button>
+          <button
+            onClick={() => handelButton("general")}
+            className="font-bold text-white border mb-2 rounded py-1 bg-slate-800 text-sm md:text-base"
           >
             General
           </button>
           <button
-            onClick={togleTheams}
-            className="font-bold text-white border rounded py-1 bg-slate-500 cursor-pointer"
+            onClick={() => handelButton("themes")}
+            className="font-bold text-white border mb-2 rounded py-1 bg-slate-800 text-sm md:text-base"
           >
             Themes
           </button>
-
-          <div
-            className="flex items-center gap-4 text-md font-bold mb-2 cursor-pointer"
+          <button
+            onClick={() => handelButton("address")}
+            className="font-bold text-white border mb-2 rounded py-1 bg-slate-800 text-sm md:text-base"
+          >
+            Address
+          </button>
+          <button
+            onClick={() => handelButton("reviews")}
+            className="font-bold text-white border mb-2 rounded py-1 bg-slate-800 text-sm md:text-base"
+          >
+            Reviews
+          </button>
+          <button
+            className="flex items-center justify-center mb-2 border rounded text-white bg-slate-800 py-1 gap-1 text-sm md:text-base font-bold"
             onClick={() => logOut()}
           >
             <MdOutlineExitToApp className="text-2xl" />
-          </div>
+            LOG OUT
+          </button>
         </div>
-        <div className="flex bg-gray-300">
-          {controlBox && <General />}
-          {controlTheams && <Themes />}
-        </div>
+        <div className="w-screen h-screen bg-gray-600 ml-[30%] md:ml-[15%]">{renderDetails()}</div>
       </div>
     </div>
   );

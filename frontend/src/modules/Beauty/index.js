@@ -17,21 +17,27 @@ const Beauty = () => {
     };
     fetchData();
   }, []);
-  const shuffleArray = (array) => {
-    return array
+  const shuffleAndFilterArray = (array) => {
+    const shuffledArray = array
       .map((value) => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value);
+
+    const beautyProducts = shuffledArray.filter(
+      (product) => product.product.category === "beauty"
+    );
+
+    return beautyProducts.slice(0, 20);
   };
 
-  let shuffledProducts = shuffleArray(getData).slice(0, 20);
+let shuffledAndFilteredProducts = shuffleAndFilterArray(getData);
+
   return (
     <div>
       {
         <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
-          {shuffledProducts.map(
-            (ele, index) =>
-              ele.product.category === "beauty" && (
+          {shuffledAndFilteredProducts.map(
+            (ele, index) =>(
                 <Card
                   key={ele.product.id}
                   id={ele.product.id}

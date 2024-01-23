@@ -21,12 +21,20 @@ const From = ({isSigninPage = true}) => {
             },
             body: JSON.stringify({...data}),
         })
-        if(res.status === 200 && isSigninPage){
-            const{token, user} = await res.json();
-            console.log(token, user, 'response');
-            localStorage.setItem('user:token', token);
-            localStorage.setItem('user:details', JSON.stringify(user));
-            navigate('/');
+
+        if (res.status === 200) {
+            if (isSigninPage) {
+                const { token, user } = await res.json();
+                console.log(token, user, 'response');
+                localStorage.setItem('user:token', token);
+                localStorage.setItem('user:details', JSON.stringify(user));
+                navigate('/');
+            } else {
+                alert('Registration successful!');
+                navigate('/account/signin');
+            }
+        } else {
+            alert('Registration failed. Please try again.');
         }
     }
 

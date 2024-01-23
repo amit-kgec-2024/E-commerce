@@ -138,7 +138,7 @@ const Routes = () => {
       />
       <Route
         path="/sattings"
-        element={<PrivetRoute>{<Sattings />}<BottomNav/></PrivetRoute>}
+        element={<PrivetRoute>{<Sattings />}</PrivetRoute>}
       />
     </Router>
   );
