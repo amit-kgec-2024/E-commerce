@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 import General from "../../allsatting/General";
 import Themes from "../../allsatting/Themes";
+import { MdOutlineExitToApp } from "react-icons/md";
+
 
 const Sattings = () => {
   // Customize and Control
@@ -12,6 +14,13 @@ const Sattings = () => {
   const [controlTheams, setControlTheams] = useState(false);
   const togleTheams = () => {
     setControlTheams(!controlTheams);
+  };
+  // LOG Out................
+  const navigate = useNavigate();
+  const logOut = () => {
+    window.localStorage.removeItem("user:token");
+    window.localStorage.removeItem("user:details");
+    navigate("/account/signin");
   };
   return (
     <div className="w-full h-full bg-gray-950">
@@ -40,6 +49,13 @@ const Sattings = () => {
           >
             Themes
           </button>
+
+          <div
+            className="flex items-center gap-4 text-md font-bold mb-2 cursor-pointer"
+            onClick={() => logOut()}
+          >
+            <MdOutlineExitToApp className="text-2xl" />
+          </div>
         </div>
         <div className="flex bg-gray-300">
           {controlBox && <General />}
