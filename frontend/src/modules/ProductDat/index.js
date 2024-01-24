@@ -73,7 +73,7 @@ function Details() {
       alert("Please Fill Reviews!");
     } else {
       await res.json();
-      window.location.reload();
+      alert("Add Comment!");
     }
   };
   // API CAll Reviews Get......................
