@@ -38,13 +38,39 @@ const AddToCart = () => {
   const common = productData.filter((cart1) => {
     return addCartGet.some(
       (cart2) => cart1.product.id === cart2.addCart.productId
+    );
+  });
+  // Removed products............................
+  const handelRemove = async (productId) => {
+    try {
+      const response = await fetch(
+        `https://e-commerce-nu-seven.vercel.app/api/removeFromCart/${productId}`,
+        {
+          method: "DELETE",
+        }
       );
-    });
+
+      if (response.ok) {
+        alert("Item removed from the cart successfully");
+        window.location.reload();
+      } else if (response.status === 404) {
+        alert("Item not found in the cart");
+      } else {
+        alert("An error occurred while removing the item from the cart");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-gray-50">
       <div className="w-full bg-stone-200 h-20 flex flex-row justify-between items-center">
         <h1 className="font-bold text-sm md:text-xl text-white px-6">
-          Add To Cart <span className="text-white text-xs font-bold rounded-full px-2 py-1 shadow-stone-200 bg-red-700">{common.length}</span>
+          Add To Cart{" "}
+          <span className="text-white text-xs font-bold rounded-full px-2 py-1 shadow-stone-200 bg-red-700">
+            {common.length}
+          </span>
         </h1>
         <Link
           to={"/"}
@@ -98,13 +124,16 @@ const AddToCart = () => {
               <span className="text-green-500">FREE Delivery</span>
             </div>
             <div className="flex flex-row text-sm gap-2">
-              <h1 className="flex flex-row gap-2 items-center border py-1 px-3 cursor-pointer">
+              <button
+                onClick={() => handelRemove(e.product.id)}
+                className="flex flex-row gap-2 items-center border py-1 px-3 shadow hover:bg-gray-200"
+              >
                 <RiDeleteBin6Line />
                 <span>Remove</span>
-              </h1>
+              </button>
               <Link
                 to={`/productDat/${e.product.id}`}
-                className="flex flex-row gap-2 items-center border p-1"
+                className="flex flex-row gap-2 items-center border p-1 shadow hover:bg-gray-200"
               >
                 <MdElectricBolt />
                 <span>Buy this now</span>

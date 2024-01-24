@@ -54,8 +54,7 @@ function Details() {
   };
   //  API CALL Reviews................
   const [reviewsProduct, setReviewsProducts] = useState({ reviews: "" });
-  const handelSubmit = async (e) => {
-    e.preventDefault();
+  const handelSubmit = async () => {
     const res = await fetch(
       "https://e-commerce-nu-seven.vercel.app/api/productReviews",
       {
@@ -74,6 +73,7 @@ function Details() {
       alert("Please Fill Reviews!");
     } else {
       await res.json();
+      window.location.reload();
     }
   };
   // API CAll Reviews Get......................
@@ -246,7 +246,7 @@ function Details() {
           <h1 className="font-light text-sm text-gray-300">212 reviews</h1>
           <form
             className="flex justify-between gap-3"
-            onSubmit={(e) => handelSubmit(e)}
+            onSubmit={() => handelSubmit()}
           >
             <input
               type="text"

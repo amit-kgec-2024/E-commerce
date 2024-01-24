@@ -66,6 +66,8 @@ const Reviews = () => {
       alert("Invalid Credintial!");
     } else {
       await res.json();
+      alert("Product Register Successfully!");
+      window.location.reload();
     }
   };
 

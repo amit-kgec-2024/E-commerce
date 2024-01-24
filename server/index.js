@@ -2,19 +2,20 @@ const express = require("express");
 const cors = require("cors");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
 
 // use appp
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(bodyParser.json());
 
 // connect DB
 require("./db/connections");
 // import files
 const Users = require("./modules/Users");
 const Products = require("./modules/Products");
-const AddToCart = require("./modules/Addtocarts");
 const AddToCarts = require("./modules/Addtocarts");
 const UserDetails = require("./modules/UserDetails");
 const UserProfiles = require("./modules/UserProfiles");
@@ -279,11 +280,11 @@ app.get("/api/product/register/get", async (req, res) => {
 app.post("/api/addToCart", async (req, res) => {
   try {
     const { userId, productId } = req.body;
-    const isExistAdd = await AddToCart.findOne({ productId });
+    const isExistAdd = await AddToCarts.findOne({ productId });
     if (isExistAdd) {
       res.status(400).send("Product Alredy Add To Cart");
     } else {
-      const newCarts = new AddToCart({ userId, productId });
+      const newCarts = new AddToCarts({ userId, productId });
       await newCarts.save();
       return res
         .status(200)
@@ -303,8 +304,10 @@ app.get("/api/addToCartGet/:userId", async (req, res) => {
 
     const addToCartData = Promise.all(
       addToCarts.map(async (addCart) => {
+        const _id = addCart._id;
         return {
           addCart: {
+            id: _id,
             userId: addCart.userId,
             productId: addCart.productId,
           },
@@ -313,6 +316,26 @@ app.get("/api/addToCartGet/:userId", async (req, res) => {
     );
 
     res.status(200).send(await addToCartData);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error!");
+  }
+});
+
+// AddToCart Delete.................
+app.delete("/api/removeFromCart/:productId", async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    const result = await AddToCarts.deleteOne({
+      productId: productId,
+    });
+
+    if (result.deletedCount > 0) {
+      res.status(200).send("Item removed from the cart successfully");
+    } else {
+      res.status(404).send("Item not found in the cart");
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error!");

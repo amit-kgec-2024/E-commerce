@@ -48,6 +48,7 @@ const SaveAddress = () => {
       alert("Invalid Credintial!");
     } else {
       await res.json();
+      alert("Address Save Successfully!");
     }
     navigate('/userDetail')
   };

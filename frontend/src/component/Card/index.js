@@ -24,7 +24,8 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
           productId: id,
         }),
       }
-    );
+      );
+      alert("Product Add To Cart!");
     if (res.status === 400) {
       alert("Alredy Add To Cart!");
     } else {

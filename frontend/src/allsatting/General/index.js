@@ -53,6 +53,8 @@ const General = () => {
       alert("Invalid Credintial!");
     } else {
       await res.json();
+      alert("Profile Upgrated!");
+      window.location.reload();
     }
   };
   return (

@@ -25,27 +25,7 @@ const TrackOrder = () => {
     };
     fetchOrder();
   }, [user.id]);
-  // console.log(showOrder);
-  // const currentedDate = new Date();
-  // const futureesDate = new Date(currentedDate);
-  // futureesDate.setDate(currentedDate.getDate());
-  // const futurTwoDate = new Date(currentedDate);
-  // futurTwoDate.setDate(currentedDate.getDate() + 2);
-
-  // const optioned = {
-  //   weekday: "short",
-  //   day: "numeric",
-  //   month: "short",
-  //   year: "numeric",
-  // };
-  // const [twodayw, setTwoDays] = useState()
-  // setTimeout(()=>{
-  //   const currentfromDate = futureesDate.toLocaleDateString(undefined, optioned);
-  //   setTwoDays(currentfromDate);
-  // }, 4000000)
-  // console.log(twodayw, 'opopop');
-  // const currentTwofromDate = futurTwoDate.toLocaleDateString(undefined,optioned);
-
+  
   const [boxColor, setBoxColor] = useState("red");
 
   useEffect(() => {
@@ -182,16 +162,20 @@ const TrackOrder = () => {
                   <span>Shipped {ele.order.state}</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  <TbSquareRoundedNumber3Filled style={{ color: boxForColor }} />
+                  <TbSquareRoundedNumber3Filled
+                    style={{ color: boxForColor }}
+                  />
                   <span>{ele.order.dist} Branch Received</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  <TbSquareRoundedNumber4Filled style={{color: boxFiveColor}}/>
+                  <TbSquareRoundedNumber4Filled
+                    style={{ color: boxFiveColor }}
+                  />
                   <span>Will be deliverd tomorrow</span>
                 </div>
                 <div className="mb-6 flex items-center gap-6">
-                  <TbSquareRoundedCheckFilled style={{color: boxSixColor}}/>
-                  <span>Delivered</span>
+                  <TbSquareRoundedCheckFilled style={{ color: boxSixColor }} />
+                  <span>Delivered {ele.order.deliveryDate}</span>
                 </div>
               </div>
             </Link>
