@@ -1,10 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes as Router } from "react-router-dom";
-import Home from "../modules/Home";
 import Form from "../modules/Authorization";
-import Men from "../modules/Men";
-import Women from "../modules/Women";
-import Beauty from "../modules/Beauty";
 import Navbar from "../component/Navbar";
 import Control from "../modules/Control";
 import Reviews from "../modules/Reviews";
@@ -21,6 +17,9 @@ import Shopping from "../modules/Shopping";
 import NewPlaceOrder from "../modules/NewPlaceOrder";
 import TrackOrder from '../modules/TrackOrder'
 import BottomNav from "../component/BottomNav";
+import Main from "../component/Main";
+import AdminLogin from "../component/admin/AdminLogin";
+import Admin from "../component/admin/Admin";
 
 const PrivetRoute = ({ children }) => {
   const isUserLoggedIn = window.localStorage.getItem("user:token") || false;
@@ -35,31 +34,14 @@ const PrivetRoute = ({ children }) => {
     return <Navigate to={redirectUrl} replace />;
   }
 };
+
 const Routes = () => {
   const routes = [
     {
       id: 1,
-      name: "home",
+      name: "main",
       path: "/",
-      Comment: <Home />,
-    },
-    {
-      id: 2,
-      name: "men",
-      path: "/men",
-      Comment: <Men />,
-    },
-    {
-      id: 3,
-      name: "women",
-      path: "/women",
-      Comment: <Women />,
-    },
-    {
-      id: 4,
-      name: "beauty",
-      path: "/beauty",
-      Comment: <Beauty />,
+      Comment: <Main />,
     }
   ];
   return (
@@ -73,13 +55,13 @@ const Routes = () => {
               <PrivetRoute>
                 <Navbar />
                 {Comment}
-                <BottomNav/>
-                <Footer/>
+                <BottomNav />
+                <Footer />
               </PrivetRoute>
             }
           />
         );
-      })} 
+      })}
       <Route
         path="/account/signup"
         element={<PrivetRoute>{<Form />}</PrivetRoute>}
@@ -88,53 +70,115 @@ const Routes = () => {
         path="/account/signin"
         element={<PrivetRoute>{<Form />}</PrivetRoute>}
       />
+      <Route path="/adminlogin" element={<AdminLogin />} />
+      <Route path="/admin" element={<Admin />} />
       <Route
         path="/control"
-        element={<PrivetRoute>{<Control />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<Control />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="/reviews"
-        element={<PrivetRoute>{<Reviews />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<Reviews />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path={`/productDat/:id`}
-        element={<PrivetRoute>{<ProductDat />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<ProductDat />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path={`/productDat/buynow/:id/:selectedSize/:formattedDate`}
-        element={<PrivetRoute>{<Buynow />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<Buynow />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path={`/productDat/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
-        element={<PrivetRoute>{<Payment />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<Payment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path={`/placeorder/:id`}
-        element={<PrivetRoute>{<Placeorder />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<Placeorder />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path={`/nweplaceorder/:id/:selectedSize/:dropItems/:currentFormatDate`}
-        element={<PrivetRoute>{<NewPlaceOrder />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<NewPlaceOrder />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="/addToCart"
-        element={<PrivetRoute>{<AddToCart />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<AddToCart />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="userDetail"
-        element={<PrivetRoute>{<UserDetail />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<UserDetail />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="trackorder"
-        element={<PrivetRoute>{<TrackOrder />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<TrackOrder />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="/saveAddress"
-        element={<PrivetRoute>{<SaveAddress />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<SaveAddress />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="/shopping"
-        element={<PrivetRoute>{<Shopping />}<BottomNav/></PrivetRoute>}
+        element={
+          <PrivetRoute>
+            {<Shopping />}
+            <BottomNav />
+          </PrivetRoute>
+        }
       />
       <Route
         path="/sattings"

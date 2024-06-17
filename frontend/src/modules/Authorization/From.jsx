@@ -1,7 +1,7 @@
 import Input from '../../component/Input'
 import Button from '../../component/Button'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const From = ({isSigninPage = true}) => {
     const navigate = useNavigate()
@@ -40,7 +40,8 @@ const From = ({isSigninPage = true}) => {
 
     
   return (
-    <div className="flex h-screen justify-center items-center bg-gray-100" style={{backgroundImage: `url(signinup.svg)`}}>
+    <div className="flex h-screen flex-col justify-center items-center bg-gray-100" style={{backgroundImage: `url(signinup.svg)`}}>
+        <Link to="/adminlogin" className='text-blue-300 absolute top-0 right-0 m-10 shadow p-3 font-bold'>Admin Section</Link>
         <div className="border rounded shadow p-4 flex flex-col items-center">
             <h1 className='text-3xl font-bold uppercase mb-4'>welcome {isSigninPage && 'Back'}</h1>
             <h2 className='text-md font-extralight uppercase mb-8'>ples {isSigninPage ? 'login' : 'register'} to continue</h2>

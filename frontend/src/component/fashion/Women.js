@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Card from "../../component/Card";
+import React, { useState, useEffect } from "react";
+import Card from "./Card";
+import Loader from "./Loader";
 
-const Men = () => {
+const Women = () => {
   const [getData, setGetData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
+          "https://e-commerce-nu-seven.vercel.app/api/fashion/data"
         );
         const jsonData = await res.json();
         setGetData(jsonData);
@@ -24,16 +25,24 @@ const Men = () => {
       .map(({ value }) => value);
 
     const beautyProducts = shuffledArray.filter(
-      (product) => product.product.category === "boys"
+      (product) => product.product.category === "girls"
     );
 
     return beautyProducts.slice(0, 20);
   };
 
   let shuffledAndFilteredProducts = shuffleAndFilterArray(getData);
+  const [isLoder, setIsLoader] = useState("");
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setIsLoader("Loader finished");
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  });
   return (
     <div>
-      {
+      {isLoder ? (
         <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
           {shuffledAndFilteredProducts.map((ele, index) => (
             <Card
@@ -49,9 +58,11 @@ const Men = () => {
             />
           ))}
         </div>
-      }
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };
 
-export default Men;
+export default Women;

@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import Card from '../../component/Card'
+import React, { useState, useEffect } from "react";
+import Card from "../fashion/Card";
 
-const Home = () => {
-  const [getData, setGetData] = useState([])
-  useEffect(()=>{
-    const fetchData = async ()=>{
+const Kitchen = () => {
+  const [getData, setGetData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const res = await fetch('https://e-commerce-nu-seven.vercel.app/api/product/register/get');
+        const res = await fetch(
+          "https://e-commerce-nu-seven.vercel.app/api/kitchen/data"
+        );
         const jsonData = await res.json();
-        setGetData(jsonData)
+        setGetData(jsonData);
       } catch (error) {
         console.log("Error Fetching Data", error);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
   const shuffleArray = (array) => {
     return array
       .map((value) => ({ value, sort: Math.random() }))
@@ -30,17 +32,16 @@ const Home = () => {
           <Card
             key={ele.product.id}
             id={ele.product.id}
-            img={ele.product.img} 
-            title={ele.product.title} 
+            img={ele.product.img}
+            title={ele.product.title}
             price={ele.product.price}
             discount={ele.product.discount}
-            stars={ele.product.stars} 
-            sale={ele.product.sale} 
+            stars={ele.product.stars}
+            sale={ele.product.sale}
           />
         ))}
       </div>
     </div>
-  );
-}
+  );};
 
-export default Home
+export default Kitchen;

@@ -32,11 +32,13 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
       await res.json();
     }
   };
+
+  const deFaultImage = "amitphotos.jpg";
   return (
-    <div className="border shadow-lg p-3 w-[230px] h-[350px] rounded flex flex-col cursor-pointer">
-      <img src={img} alt={title} className="mb-3 w-full h-[200px] shadow" />
+    <div className="border bg-teal-100 shadow-lg p-3 w-[230px] h-[350px] rounded flex flex-col cursor-pointer">
+      <img src={img || deFaultImage} alt={title} className="mb-3 w-full h-[200px] shadow" />
       {sale === "true" && (
-        <div className="uppercase border bg-red-700 text-white text-xs rounded p-1 inline-block absolute">
+        <div className="uppercase border bg-green-700 bg-opacity-40 text-white text-xs font-semibold rounded p-1 inline-block absolute">
           sale!
         </div>
       )}
