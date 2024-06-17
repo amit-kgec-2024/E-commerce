@@ -19,7 +19,7 @@ const Admin = () => {
     const logOut = () => {
       window.localStorage.removeItem("user:token");
       window.localStorage.removeItem("user:details");
-      navigate("/adminlogin");
+      navigate("/account/signin");
     };
   return (
     <div className="bg-teal-50 flex flex-row w-full">

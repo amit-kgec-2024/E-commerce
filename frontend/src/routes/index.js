@@ -4,9 +4,6 @@ import Form from "../modules/Authorization";
 import Navbar from "../component/Navbar";
 import Control from "../modules/Control";
 import Reviews from "../modules/Reviews";
-import ProductDat from "../modules/ProductDat";
-import Buynow from "../modules/Buynow";
-import Payment from "../modules/Payment";
 import AddToCart from "../modules/AddToCart";
 import UserDetail from "../modules/UserDetail";
 import SaveAddress from "../modules/SaveAddress";
@@ -20,6 +17,38 @@ import BottomNav from "../component/BottomNav";
 import Main from "../component/Main";
 import AdminLogin from "../component/admin/AdminLogin";
 import Admin from "../component/admin/Admin";
+import FashionDetails from "../component/fashion/FashionDetails";
+import FashionBuy from "../component/fashion/FashionBuy";
+import FashionPayment from "../component/fashion/FashionPayment";
+import AppliancesDetails from "../component/appliens/AppliancesDetails";
+import AppliancesBuy from "../component/appliens/AppliancesBuy";
+import AppliancesPayment from "../component/appliens/AppliancesPayment";
+import ElectronicsDetails from "../component/electronics/ElectronicsDetails";
+import ElectronicsBuy from "../component/electronics/ElectronicsBuy";
+import ElectronicsPayment from "../component/electronics/ElectronicsPayment";
+import BeautyDetails from "../component/beauty/BeautyDetails";
+import BeautyBuy from "../component/beauty/BeautyBuy";
+import BeautyPayment from "../component/beauty/BeautyPayment";
+import KitcheneDetails from "../component/kitchene/KitcheneDetails";
+import KitcheneBuy from "../component/kitchene/KitcheneBuy";
+import KitchenePayment from "../component/kitchene/KitchenePayment";
+import FurnitureDetails from "../component/furniture/FurnitureDetails";
+import FurnitureBuy from "../component/furniture/FurnitureBuy";
+import FurniturePayment from "../component/furniture/FurniturePayment";
+import MobilesDetails from "../component/mobiles/MobilesDetails";
+import MobilesBuy from "../component/mobiles/MobilesBuy";
+import MobilesPayment from "../component/mobiles/MobilesPayment";
+import GroceryDetails from "../component/grocery/GroceryDetails";
+import GroceryBuy from "../component/grocery/GroceryBuy";
+import GroceryPayment from "../component/grocery/GroceryPayment";
+import Mobiles from "../component/mobiles/Mobiles";
+import Appliens from "../component/appliens/Appliens";
+import Electronics from "../component/electronics/Electronics";
+import Fashion from "../component/fashion/Fashion";
+import Beauty from "../component/beauty/Beauty";
+import Kitchen from "../component/kitchene/Kitchen";
+import Furniture from "../component/furniture/Furniture";
+import Grocery from "../component/grocery/Grocery";
 
 const PrivetRoute = ({ children }) => {
   const isUserLoggedIn = window.localStorage.getItem("user:token") || false;
@@ -62,6 +91,7 @@ const Routes = () => {
           />
         );
       })}
+      {/* User Sections................... */}
       <Route
         path="/account/signup"
         element={<PrivetRoute>{<Form />}</PrivetRoute>}
@@ -70,6 +100,320 @@ const Routes = () => {
         path="/account/signin"
         element={<PrivetRoute>{<Form />}</PrivetRoute>}
       />
+      {/* mobiles....... */}
+      <Route
+        path={`/mobiles`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Mobiles />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/mobilesDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<MobilesDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/mobilesDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<MobilesBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/mobilesDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<MobilesPayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* Appliances....... */}
+      <Route
+        path={`/appliances`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Appliens />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/appliancesDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<AppliancesDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/appliancesDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<AppliancesBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/appliancesDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<AppliancesPayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* electronics....... */}
+      <Route
+        path={`/electronics`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Electronics />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/electronicsDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<ElectronicsDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/electronicsDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<ElectronicsBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/electronicsDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<ElectronicsPayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* Fashion....... */}
+      <Route
+        path={`/fashion`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Fashion />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/fashionDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<FashionDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/fashionDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<FashionBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/fashionDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<FashionPayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* beauty....... */}
+      <Route
+        path={`/beauty`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Beauty />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/beautyDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<BeautyDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/beautyDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<BeautyBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/beautyDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<BeautyPayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* kitchene....... */}
+      <Route
+        path={`/kitchene`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Kitchen />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/kitcheneDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<KitcheneDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/kitcheneDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<KitcheneBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/kitcheneDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<KitchenePayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* Furniture....... */}
+      <Route
+        path={`/furniture`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Furniture />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/furnitureDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<FurnitureDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/furnitureDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<FurnitureBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/furnitureDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<FurniturePayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      {/* grocery....... */}
+      <Route
+        path={`/grocery`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<Grocery />}
+            <Footer/>
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/groceryDetails/:id`}
+        element={
+          <PrivetRoute>
+            {<GroceryDetails />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/groceryDetails/buynow/:id/:selectedSize/:formattedDate`}
+        element={
+          <PrivetRoute>
+            {<GroceryBuy />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path={`/groceryDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        element={
+          <PrivetRoute>
+            {<GroceryPayment />}
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+
+      {/* Admin Sections.................... */}
       <Route path="/adminlogin" element={<AdminLogin />} />
       <Route path="/admin" element={<Admin />} />
       <Route
@@ -86,33 +430,6 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<Reviews />}
-            <BottomNav />
-          </PrivetRoute>
-        }
-      />
-      <Route
-        path={`/productDat/:id`}
-        element={
-          <PrivetRoute>
-            {<ProductDat />}
-            <BottomNav />
-          </PrivetRoute>
-        }
-      />
-      <Route
-        path={`/productDat/buynow/:id/:selectedSize/:formattedDate`}
-        element={
-          <PrivetRoute>
-            {<Buynow />}
-            <BottomNav />
-          </PrivetRoute>
-        }
-      />
-      <Route
-        path={`/productDat/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
-        element={
-          <PrivetRoute>
-            {<Payment />}
             <BottomNav />
           </PrivetRoute>
         }

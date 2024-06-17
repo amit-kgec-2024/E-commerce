@@ -60,6 +60,7 @@ export const optionCategoryFashion = [
 // Mobile...................
 export const optionCategoryMobiles = [
   { label: "Choice", value: 0 },
+  { label: "Apple", value: "apple" },
   { label: "Samsumg", value: "samsumg" },
   { label: "OPPO", value: "oppo" },
   { label: "Vivo", value: "vivo" },

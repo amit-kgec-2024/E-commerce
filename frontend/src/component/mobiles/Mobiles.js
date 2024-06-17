@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Card from "../fashion/Card";
+import MobileCard from "./MobileCard";
 
 const Mobiles = () => {
 const [getData, setGetData] = useState([]);
@@ -7,7 +7,7 @@ useEffect(() => {
   const fetchData = async () => {
     try {
       const res = await fetch(
-        "https://e-commerce-nu-seven.vercel.app/api/mobile/data"
+        "https://e-commerce-nu-seven.vercel.app/api/mobiles/data"
       );
       const jsonData = await res.json();
       setGetData(jsonData);
@@ -29,7 +29,7 @@ return (
   <div>
     <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
       {shuffledProducts.map((ele, index) => (
-        <Card
+        <MobileCard
           key={ele.product.id}
           id={ele.product.id}
           img={ele.product.img}

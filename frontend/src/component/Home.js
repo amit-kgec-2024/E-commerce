@@ -2,42 +2,50 @@ import React, { useState, useEffect } from "react";
 import Card from "./fashion/Card";
 
 const Home = () => {
-  const [getData, setGetData] = useState([]);
+  const [shuffledProducts, setShuffledProducts] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          "https://e-commerce-nu-seven.vercel.app/api/product/register/get"
+        const response = await fetch(
+          "https://e-commerce-nu-seven.vercel.app/api/data/all-data"
         );
-        const jsonData = await res.json();
-        setGetData(jsonData);
+        const data = await response.json();
+
+        const allProducts = [
+          ...data.products,
+          ...data.mobiles,
+          ...data.appliances,
+          ...data.electronics,
+          ...data.beauty,
+          ...data.kitchen,
+          ...data.furniture,
+          ...data.grocery,
+        ];
+
+        const shuffled = allProducts.sort(() => Math.random() - 0.5);
+
+        setShuffledProducts(shuffled);
       } catch (error) {
-        console.log("Error Fetching Data", error);
+        console.error("Error fetching data:", error);
       }
     };
+
     fetchData();
   }, []);
-  const shuffleArray = (array) => {
-    return array
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-  };
-
-  let shuffledProducts = shuffleArray(getData).slice(0, 50);
   return (
     <div>
       <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
         {shuffledProducts.map((ele, index) => (
           <Card
-            key={ele.product.id}
-            id={ele.product.id}
-            img={ele.product.img}
-            title={ele.product.title}
-            price={ele.product.price}
-            discount={ele.product.discount}
-            stars={ele.product.stars}
-            sale={ele.product.sale}
+            key={ele._id}
+            id={ele._id}
+            img={ele.img}
+            title={ele.title}
+            price={ele.price}
+            discount={ele.discount}
+            stars={ele.stars}
+            sale={ele.sale}
           />
         ))}
       </div>

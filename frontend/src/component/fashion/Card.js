@@ -36,7 +36,11 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
   const deFaultImage = "amitphotos.jpg";
   return (
     <div className="border bg-teal-100 shadow-lg p-3 w-[230px] h-[350px] rounded flex flex-col cursor-pointer">
-      <img src={img || deFaultImage} alt={title} className="mb-3 w-full h-[200px] shadow" />
+      <img
+        src={img || deFaultImage}
+        alt={title}
+        className="mb-3 w-full h-[200px] shadow"
+      />
       {sale === "true" && (
         <div className="uppercase border bg-green-700 bg-opacity-40 text-white text-xs font-semibold rounded p-1 inline-block absolute">
           sale!
@@ -53,7 +57,7 @@ const Card = ({ id, img, stars, title, price, discount, sale }) => {
           <FaShoppingCart />
         </div>
       </div>
-      <Link to={`/productDat/${id}`}>
+      <Link to={`/fashionDetails/${id}`}>
         <div className="flex gap-1 text-yellow-400 mb-2">
           {[1, 2, 3, 4, 5].map((ele) =>
             ele <= stars ? (

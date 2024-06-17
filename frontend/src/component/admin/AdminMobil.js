@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
-import { optionStars, optionCategoryMobiles, optionSale } from "../../utils/dropdown";
+import {
+  optionStars,
+  optionCategoryMobiles,
+  optionSale,
+} from "../../utils/dropdown";
 
 const AdminMobil = () => {
   // POST request...........
@@ -38,6 +42,10 @@ const AdminMobil = () => {
       return "Error";
     }
   };
+  // ...................
+  useEffect(() => {
+    fetchData();
+  }, []);
   // image POST MongoDB
   const handelSubmit = async (e) => {
     e.preventDefault();
@@ -74,15 +82,11 @@ const AdminMobil = () => {
 
   // GET request............
   const [getData, setGetdata] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  console.log("lll-->", getData);
   const fetchData = async () => {
     try {
       const res = await fetch(
-        "https://e-commerce-nu-seven.vercel.app/api/mobile/data"
+        "https://e-commerce-nu-seven.vercel.app/api/mobiles/data"
       );
       const jsonData = await res.json();
       setGetdata(jsonData);
@@ -90,23 +94,23 @@ const AdminMobil = () => {
       console.log("Error Fetching Data", error);
     }
   };
-// Delete Products..................
-const handleDelete = async (id) => {
-  try {
-    const response = await fetch(
-      `https://e-commerce-nu-seven.vercel.app/api/mobile/delete/${id}`,
-      {
-        method: "DELETE",
+  // Delete Products..................
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(
+        `https://e-commerce-nu-seven.vercel.app/api/mobiles/delete/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    );
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+      fetchData();
+    } catch (error) {
+      console.error("Delete error:", error);
     }
-    fetchData();
-  } catch (error) {
-    console.error("Delete error:", error);
-  }
-};
+  };
   return (
     <div>
       <div className="w-full bg-stone-500 h-12 flex flex-row justify-between items-center">

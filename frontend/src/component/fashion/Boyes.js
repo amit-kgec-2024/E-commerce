@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import Loader from "./Loader";
 
 const Boyes = () => {
   const [getData, setGetData] = useState([]);
@@ -32,17 +31,9 @@ const Boyes = () => {
   };
 
   let shuffledAndFilteredProducts = shuffleAndFilterArray(getData);
-  const [isLoder, setIsLoader] = useState("");
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setIsLoader("Loader finished");
-    }, 2000);
-
-    return () => clearTimeout(timeoutId);
-  });
+  
   return (
     <div>
-      {isLoder ? (
         <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
           {shuffledAndFilteredProducts.map((ele, index) => (
             <Card
@@ -58,9 +49,6 @@ const Boyes = () => {
             />
           ))}
         </div>
-      ) : (
-        <Loader />
-      )}
     </div>
   );
 };

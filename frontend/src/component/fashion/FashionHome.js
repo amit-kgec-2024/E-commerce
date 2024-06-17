@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import Loader from "./Loader";
-const FashionHome = () => {
-  const [isLoder, setIsLoader] = useState("");
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setIsLoader("Loader finished");
-    }, 2000);
 
-    return () => clearTimeout(timeoutId);
-  });
+const FashionHome = () => {
+
   const [getData, setGetData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +28,6 @@ const FashionHome = () => {
   let shuffledProducts = shuffleArray(getData).slice(0, 50);
   return (
     <div>
-      {isLoder ? (
         <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
           {shuffledProducts.map((ele, index) => (
             <Card
@@ -50,9 +42,6 @@ const FashionHome = () => {
             />
           ))}
         </div>
-      ) : (
-        <Loader />
-      )}
     </div>
   );
 };
