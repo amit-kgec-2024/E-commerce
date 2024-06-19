@@ -5,7 +5,6 @@ const bcryptjs = require("bcryptjs");
 const router = express.Router();
 const Users = require("../modules/Users");
 const UserAddress = require("../modules/UserAddress");
-const UserProfiles = require("../modules/UserProfiles");
 
 // register............
 router.post("/register", async (req, res, next) => {
@@ -116,19 +115,16 @@ router.put("/email/update/:id", async (req, res) => {
 
     const trimmedId = id.trim();
 
-    // Check if the trimmed ID is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
       return res.status(400).send("Invalid user ID");
     }
 
-    // Find user by ID
     let user = await Users.findById(trimmedId);
 
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    // Update user details
     user.email = email;
 
     await user.save();
@@ -278,4 +274,32 @@ router.delete("/address/remove/:id", async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 });
+
+// Orderaddress.... GET Request.......
+router.get("/order/address/:id?", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      const firstAddress = await UserAddress.findOne(); // Fetch the first available address
+      if (!firstAddress) {
+        return res.status(404).send("No addresses available");
+      }
+      return res.status(200).json(firstAddress);
+    }
+
+    const trimmedId = id.trim(); // Trim any whitespace characters including newlines
+    const orderAddress = await UserAddress.findById(trimmedId);
+
+    if (!orderAddress) {
+      return res.status(404).send("Address not found");
+    }
+
+    return res.status(200).json(orderAddress);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error 500");
+  }
+});
+
 module.exports = router;

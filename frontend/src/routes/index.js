@@ -50,6 +50,7 @@ import Furniture from "../component/furniture/Furniture";
 import Grocery from "../component/grocery/Grocery";
 import MobilesStore from "../component/mobiles/MobilesStore";
 import Profile from "../component/sattings/Profile";
+import PlacedOrder from "../component/PlacedOrder";
 
 
 const PrivetRoute = ({ children }) => {
@@ -146,9 +147,10 @@ const Routes = () => {
         }
       />
       <Route
-        path={`/mobile/payment/:id/:dropItems/:formattedDate`}
+        path={`/mobile/payment/:id/:dropItems/:formattedDate/:selectedAddressId`}
         element={
           <PrivetRoute>
+            <Navbar />
             {<MobilesPayment />}
             <BottomNav />
           </PrivetRoute>
@@ -436,10 +438,18 @@ const Routes = () => {
         path="/profile"
         element={
           <PrivetRoute>
-            <Navbar/>
+            <Navbar />
             {<Profile />}
-            <Footer/>
+            <Footer />
             <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
+        path="/placedorder"
+        element={
+          <PrivetRoute>
+            {<PlacedOrder />}
           </PrivetRoute>
         }
       />

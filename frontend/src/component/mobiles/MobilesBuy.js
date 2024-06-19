@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { Link, useParams } from "react-router-dom";
 import { quentity } from "../../utils/dropdown";
+import OrderAddress from "../sattings/OrderAddress";
 
 const MobilesBuy = () => {
   const { id, formattedDate } = useParams();
@@ -11,17 +12,23 @@ const MobilesBuy = () => {
   const handelDrop = (event) => {
     setdropItems(event.target.value);
   };
-  // User Details
-  const [user] = useState(
-    () => JSON.parse(localStorage.getItem("user:details")) || {}
-  );
+  const [addressSet, isAddressSet] = useState(false);
+  const handelAddersSet = () => {
+    isAddressSet(!addressSet);
+  };
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const handleSelectAddress = (id) => {
+    setSelectedAddressId(id);
+    isAddressSet(false);
+  };
   // Get Request.................
   const [isAddress, setAddress] = useState([]);
+  console.log("isAddress", isAddress);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const rese = await fetch(
-          `https://e-commerce-nu-seven.vercel.app/api/userdetails/${user.id}`
+          `https://e-commerce-nu-seven.vercel.app/api/order/address/${selectedAddressId}`
         );
         const jsonData = await rese.json();
         setAddress(jsonData);
@@ -30,7 +37,7 @@ const MobilesBuy = () => {
       }
     };
     fetchData();
-  }, [user.id]);
+  }, [selectedAddressId]);
   // API CAlllll.........................
   useEffect(() => {
     const fetchData = async () => {
@@ -56,38 +63,41 @@ const MobilesBuy = () => {
     return (
       <div className="flex flex-col justify-center items-center px-4">
         <div className="w-full p-3">
-          {isAddress.map((ele, index) => (
-            <div
-              key={index}
-              className="w-full my-4 md:px-20 flex flex-row justify-between"
-            >
-              <div className="">
-                <h1 className="font-bold">Deliver to:</h1>
-                <h1 className="font-bold">{user.username}</h1>
-                <h1 className="font-light">
-                  {ele.details.place}, {ele.details.post}, {ele.details.police},{" "}
-                  {ele.details.dist}, {ele.details.pin}, {ele.details.state}
-                </h1>
-                <h1 className="font-light">{ele.details.mobil}</h1>
-              </div>
-              <div>
-                <Link
-                  to={"/saveAddress"}
-                  className="bg-blue-500 px-3 py-2 rounded text-white font-semibold"
-                >
-                  Change
-                </Link>
-              </div>
+          <div className="w-full my-4 md:px-20 flex flex-row justify-between">
+            <div className="">
+              <h1 className="font-bold">Deliver to:</h1>
+              <h1 className="font-light">
+                {isAddress.place}, {isAddress.post}, {isAddress.police},{" "}
+                {isAddress.dist}, {isAddress.pin}, {isAddress.state}
+              </h1>
+              <h1 className="font-light">{isAddress.mobil}</h1>
             </div>
-          ))}
+            <div>
+              <button
+                onClick={handelAddersSet}
+                className="bg-blue-500 px-3 py-2 rounded text-white font-semibold"
+              >
+                Change
+              </button>
+            </div>
+          </div>
         </div>
+        {addressSet && (
+          <div className="absolute w-full h-screen flex items-center justify-center top-0 left-0 bg-opacity-40 z-50 bg-teal-500">
+            <OrderAddress
+              isAddressSet={isAddressSet}
+              handleSelectAddress={handleSelectAddress}
+              selectedAddressId={selectedAddressId}
+            />
+          </div>
+        )}
         <div className="flex flex-row justify-around gap-4">
           <div className="p-3">
             <img
               src={data.product.img}
               alt={data.product.title}
-              width={250}
-              height={100}
+              width={1000}
+              height={1000}
               className="w-[100px] sm:w-[200px] h-[100px] sm:h-[200px] mb-3"
             />
             <div
@@ -208,7 +218,7 @@ const MobilesBuy = () => {
             </span>
           </h1>
           <Link
-            to={`/mobile/payment/${id}/${dropItems}/${formattedDate}`}
+            to={`/mobile/payment/${id}/${dropItems}/${formattedDate}/${selectedAddressId}`}
             className="bg-yellow-400 text-xs md:text-sm py-1 px-4 rounded font-semibold"
           >
             Place order
@@ -216,6 +226,6 @@ const MobilesBuy = () => {
         </div>
       </div>
     );
-}
+};
 
 export default MobilesBuy;

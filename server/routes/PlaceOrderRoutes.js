@@ -1,97 +1,104 @@
 const express = require("express");
 const router = express.Router();
-const PlaceOrders = require("../modules/PlaceOrderes");
-
+const PlaceOrder = require("../modules/PlaceOrder");
+const Users = require("../modules/Users");
+const UserAddress = require("../modules/UserAddress");
+const Mobiles = require("../modules/Mobiles");
 
 // OrderPlaced POST......................
-router.post("/buy/payment/placeorder", async (req, res) => {
+router.post("/order/confrom", async (req, res) => {
   try {
     const {
-      img,
-      title,
-      price,
+      productId,
+      userId,
+      addressId,
       items,
       size,
-      username,
-      userId,
-      productId,
-      place,
-      post,
-      police,
-      dist,
-      pin,
-      state,
-      mobil,
-      conformDate,
+      payType,
+      orderDate,
       deliveryDate,
-      payment,
     } = req.body;
-    const newPlaceOrder = new PlaceOrders({
-      img,
-      title,
-      price,
+
+    const newPlaceOrder = new PlaceOrder({
+      productId,
+      userId,
+      addressId,
       items,
       size,
-      username,
-      userId,
-      productId,
-      place,
-      post,
-      police,
-      dist,
-      pin,
-      state,
-      mobil,
-      conformDate,
+      payType,
+      orderDate,
       deliveryDate,
-      payment,
     });
-    newPlaceOrder.save();
-    return res.status(200).send("Place Order register Successfully");
+
+    await newPlaceOrder.save();
+
+    return res.status(200).send("Place Order registered successfully");
   } catch (error) {
-    console.error(error);
-    return res.status(500).send("Internal Server Error!");
+    console.error("Error saving place order:", error);
+    return res.status(500).send("Internal Server Error");
   }
 });
-// OrderPlace GET Request...................
-router.get("/buy/payment/placeorder/:userId", async (req, res) => {
+
+// Confrom..... GET Request...................
+// router.get("/all/order/:userId", async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+
+//     const productOrders = await PlaceOrder.find({ userId: userId });
+
+//      if (productOrders.length === 0) {
+//        return res.status(404).send("No orders found for this user");
+//      }
+//      const lastOrder = productOrders[productOrders.length - 1];
+
+//     res.status(200).json(lastOrder);
+//   } catch (error) {
+//     console.error("Error fetching user orders:", error);
+//     return res.status(500).send("Internal Server Error");
+//   }
+// });
+router.get("/order/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    const productOrders = await PlaceOrders.find({
-      userId: userId,
-    });
-    const orderData = Promise.all(
-      productOrders.map(async (order) => {
-        return {
-          order: {
-            id: order._id,
-            img: order.img,
-            title: order.title,
-            price: order.price,
-            items: order.items,
-            size: order.size,
-            username: order.username,
-            userId: order.userId,
-            productId: order.productId,
-            place: order.place,
-            post: order.post,
-            police: order.police,
-            dist: order.dist,
-            pin: order.pin,
-            state: order.state,
-            mobil: order.mobil,
-            conformDate: order.conformDate,
-            deliveryDate: order.deliveryDate,
-            payment: order.payment,
-          },
-        };
-      })
+
+    const productOrders = await PlaceOrder.find({ userId: userId });
+
+    if (productOrders.length === 0) {
+      return res.status(404).send("No orders found for this user");
+    }
+    const user = await Users.findById(userId);
+    const userAddresses = await UserAddress.find({ userId: userId });
+
+    const userMobiles = await Mobiles.find();
+
+    const lastOrder = productOrders[productOrders.length - 1];
+
+    const addressId = lastOrder.addressId; 
+    const productId = lastOrder.productId; 
+
+    const addressDetails = userAddresses.find((addr) =>
+      addr._id.equals(addressId)
+    );
+    const productDetails = userMobiles.find((addrs) =>
+      addrs._id.equals(productId)
     );
 
-    res.status(200).send(await orderData);
+    if (!addressDetails) {
+      return res.status(404).send("Address details not found");
+    }
+
+    const responseData = {
+      lastOrder: lastOrder,
+      addressDetails: addressDetails,
+      productDetails: productDetails,
+      user: user,
+    };
+
+    res.status(200).json(responseData);
   } catch (error) {
-    console.error(error);
-    return res.status(500).send("Internal Server Error!");
+    console.error("Error fetching user orders:", error);
+    return res.status(500).send("Internal Server Error");
   }
 });
+
 module.exports = router;

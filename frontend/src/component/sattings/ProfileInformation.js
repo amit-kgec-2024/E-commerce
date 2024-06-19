@@ -98,7 +98,6 @@ const ProfileInformation = () => {
   const [gender, setGender] = useState("");
   const handelSaveUsername = async (e) => {
     e.preventDefault();
-    console.log("-->", firstname, lastname, gender);
     try {
       const response = await fetch(
         `https://e-commerce-nu-seven.vercel.app/api/usernamd/update/${user.id}`,
