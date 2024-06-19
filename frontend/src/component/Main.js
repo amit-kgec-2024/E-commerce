@@ -7,7 +7,7 @@ const Main = () => {
   return (
     <div className="bg-slate-100 p-3 flex flex-col gap-4">
       <div className="w-full flex flex-row justify-around items-center p-2 bg-white overflow-x-visible">
-        <Link to={"mobiles"}>
+        <Link to={"mobiles/store"}>
           <div
             className="p-10"
             style={{ backgroundImage: "url(mobile.webp)" }}

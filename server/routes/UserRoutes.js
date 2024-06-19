@@ -1,23 +1,24 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const router = express.Router();
 const Users = require("../modules/Users");
-const UserDetails = require("../modules/UserDetails");
+const UserAddress = require("../modules/UserAddress");
 const UserProfiles = require("../modules/UserProfiles");
 
 // register............
 router.post("/register", async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
+    const { firstname, lastname, email, password } = req.body;
+    if (!firstname || !lastname || !email || !password) {
       res.status(200).send("Plese all require files");
     } else {
       const isAlreadyExist = await Users.findOne({ email });
       if (isAlreadyExist) {
         res.status(400).send("User alredy Exist");
       } else {
-        const newUser = new Users({ username, email });
+        const newUser = new Users({ firstname, lastname, email });
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
           newUser.save();
@@ -63,7 +64,8 @@ router.post("/login", async (req, res, next) => {
                   id: user._id,
                   email: user.email,
                   password: user.password,
-                  username: user.username,
+                  firstname: user.firstname,
+                  lastname: user.lastname,
                 },
                 token: token,
               });
@@ -76,9 +78,117 @@ router.post("/login", async (req, res, next) => {
     console.log(error, "Error");
   }
 });
+// User name update....................
+router.put("/usernamd/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstname, lastname, gender } = req.body;
 
+    const trimmedId = id.trim();
+
+    if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
+      return res.status(400).send("Invalid user ID");
+    }
+
+    let user = await Users.findById(trimmedId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    user.firstname = firstname;
+    user.lastname = lastname;
+    user.gender = gender;
+
+    await user.save();
+
+    res.status(200).send("User updated successfully");
+  } catch (error) {
+    console.error(error, "Error");
+    return res.status(500).send("Server error");
+  }
+});
+// User email update....................
+router.put("/email/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { email } = req.body;
+
+    const trimmedId = id.trim();
+
+    // Check if the trimmed ID is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
+      return res.status(400).send("Invalid user ID");
+    }
+
+    // Find user by ID
+    let user = await Users.findById(trimmedId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Update user details
+    user.email = email;
+
+    await user.save();
+
+    res.status(200).send("User updated successfully");
+  } catch (error) {
+    console.error(error, "Error");
+    return res.status(500).send("Server error");
+  }
+});
+// User mobile update....................
+router.put("/mobile/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { mobile } = req.body;
+
+    const trimmedId = id.trim();
+
+    if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
+      return res.status(400).send("Invalid user ID");
+    }
+
+    let user = await Users.findById(trimmedId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    // Update user details
+    user.mobile = mobile;
+
+    await user.save();
+
+    res.status(200).send("User updated successfully");
+  } catch (error) {
+    console.error(error, "Error");
+    return res.status(500).send("Server error");
+  }
+});
+// User....................
+router.get("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const trimmedId = id.trim();
+
+    if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
+      return res.status(400).send("Invalid user ID");
+    }
+    let user = await Users.findById(trimmedId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error, "Error");
+    return res.status(500).send("Server error");
+  }
+});
 // User Addresss POST details...
-router.post("/userdetails", async (req, res) => {
+router.post("/address", async (req, res) => {
   try {
     const { userId, mobil, place, post, police, dist, pin, state } = req.body;
 
@@ -94,119 +204,78 @@ router.post("/userdetails", async (req, res) => {
     ) {
       return res.status(400).send("Please provide all required fields");
     }
-
-    const existingUser = await UserDetails.findOne({ userId });
-
-    if (existingUser) {
-      existingUser.mobil = mobil;
-      existingUser.place = place;
-      existingUser.post = post;
-      existingUser.police = police;
-      existingUser.dist = dist;
-      existingUser.pin = pin;
-      existingUser.state = state;
-
-      await existingUser.save();
-      return res.status(200).send("User details updated successfully");
-    } else {
-      const newUser = new UserDetails({
-        userId,
-        mobil,
-        place,
-        post,
-        police,
-        dist,
-        pin,
-        state,
-      });
-      await newUser.save();
-      return res.status(201).send("User details registered successfully");
-    }
+    const newUser = new UserAddress({
+      userId,
+      mobil,
+      place,
+      post,
+      police,
+      dist,
+      pin,
+      state,
+    });
+    await newUser.save();
+    return res.status(201).send("User Address registered successfully");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error");
   }
 });
+
 // userAddress GET Request.......
-router.get("/userdetails/:userId", async (req, res) => {
+router.get("/address/:userId", async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
+    const users = await Users.findById(userId);
+    const userAddresses = await UserAddress.find({ userId });
 
-    const userdetails = await UserDetails.find({ userId: userId });
+    if (!userAddresses.length) {
+      return res.status(404).send("User addresses not found");
+    }
 
-    const userdetailsdata = Promise.all(
-      userdetails.map(async (details) => {
-        return {
-          details: {
-            userId: details.userId,
-            mobil: details.mobil,
-            place: details.place,
-            post: details.post,
-            police: details.police,
-            dist: details.dist,
-            pin: details.pin,
-            state: details.state,
-          },
-        };
-      })
+    return res.status(200).json({ userAddresses, users });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error 400");
+  }
+});
+// user address modified........................
+router.put("/address/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { mobil, place, post, police, dist, pin, state } = req.body;
+
+    const updatedUserAddress = await UserAddress.findByIdAndUpdate(
+      id,
+      { mobil, place, post, police, dist, pin, state },
+      { new: true, runValidators: true }
     );
 
-    res.status(200).send(await userdetailsdata);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send("Internal Server Error!");
-  }
-});
-// userProfile PoST..................
-router.post("/userprofile", async (req, res) => {
-  try {
-    const { imgUrl, userId, bio } = req.body;
-    if (!imgUrl || !userId || !bio) {
-      return res.status(400).send("Please provide all required fields");
+    if (!updatedUserAddress) {
+      return res.status(404).send("User address not found");
     }
-    const existingprofile = await UserProfiles.findOne({ userId });
-    if (existingprofile) {
-      existingprofile.img = imgUrl;
-      existingprofile.bio = bio;
 
-      await existingprofile.save();
-      return res.status(200).send("User details updated successfully");
-    } else {
-      const newUser = new UserProfiles({ img: imgUrl, userId, bio });
-      await newUser.save();
-      return res.status(201).send("User details registered successfully");
-    }
+    return res.status(200).json(updatedUserAddress);
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Internal Server Error!");
+    return res.status(500).send("Internal Server Error");
   }
 });
-
-// userProfile GET Request.......
-router.get("/userprofileget/:userId", async (req, res) => {
+// user address Delete........................
+router.delete("/address/remove/:id", async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const { id } = req.params;
 
-    const userprofiles = await UserProfiles.find({ userId: userId });
+    const deletedAddress = await UserAddress.findByIdAndDelete(id);
 
-    const userprofilesdata = Promise.all(
-      userprofiles.map(async (profile) => {
-        return {
-          profile: {
-            userId: profile.userId,
-            img: profile.img,
-            bio: profile.bio,
-          },
-        };
-      })
-    );
+    if (!deletedAddress) {
+      return res.status(404).json({ error: "Address not found" });
+    }
 
-    res.status(200).send(await userprofilesdata);
+    return res.status(200).json({ message: "Address deleted successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Internal Server Error!");
+    return res.status(500).send("Internal Server Error");
   }
 });
-
-
 module.exports = router;

@@ -5,7 +5,7 @@ import { TbBrandVercel } from "react-icons/tb";
 
 const Footer = () => {
   return (
-    <footer className="p-4" style={{backgroundImage: `url(footer.svg)`}}>
+    <footer className="p-4 bg-slate-900">
       <div className="flex flex-wrap justify-around gap-4 px-3 py-2">
         <div className="">
           <label className="font-bold text-md md:text-xl text-gray-950">Product</label>

@@ -5,16 +5,19 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const From = ({isSigninPage = true}) => {
     const navigate = useNavigate()
-
+    const username = {
+    firstname: "",
+    lastname: ""
+    };
     const [data, setData] = useState({
-        ...(!isSigninPage && {username: ''}),
+        ...(!isSigninPage && {username}),
         email: '',
         password: ''
     })
 
     const handelSubmit = async (e)=> {
         e.preventDefault(e)
-        const res = await fetch(`https://e-commerce-nu-seven.vercel.app/api/${isSigninPage ? 'login' : 'register'}`, {
+        const res = await fetch(`http://localhost:4000/api/${isSigninPage ? 'login' : 'register'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -46,7 +49,8 @@ const From = ({isSigninPage = true}) => {
             <h1 className='text-3xl font-bold uppercase mb-4'>welcome {isSigninPage && 'Back'}</h1>
             <h2 className='text-md font-extralight uppercase mb-8'>ples {isSigninPage ? 'login' : 'register'} to continue</h2>
             <form className="flex flex-col items-center" onSubmit={(e)=> handelSubmit(e)}>
-                {!isSigninPage && <Input type='text' label='Username' placeholder='username..' value={data.username} onChange={(e)=> setData({...data, username: e.target.value})}/>}
+                {!isSigninPage && <Input type='text' label='First Name' placeholder='firstname..' value={data.firstname} onChange={(e)=> setData({...data, firstname: e.target.value})}/>}
+                {!isSigninPage && <Input type='text' label='Last Name' placeholder='lastname..' value={data.lastname} onChange={(e)=> setData({...data, lastname: e.target.value})}/>}
                 <Input type='email' label='Email' placeholder='email..' value={data.email} onChange={(e)=> setData({...data, email: e.target.value})}/>
                 <Input type='password' label='Password' placeholder='password..' value={data.password} onChange={(e)=> setData({...data, password: e.target.value})}/>
                 <Button type='submit' label={isSigninPage ? 'Sign in':'Sign up'}/>

@@ -4,6 +4,8 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { IoReturnUpBack } from "react-icons/io5";
 import { HiOutlineCurrencyRupee } from "react-icons/hi2";
 import { TbShoppingCartCancel } from "react-icons/tb";
+import { FaCartShopping } from "react-icons/fa6";
+import { BsLightningFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 
 const MobilesDetails = () => {
@@ -21,12 +23,7 @@ const MobilesDetails = () => {
     year: "numeric",
   };
   const formattedDate = futureDate.toLocaleDateString(undefined, options);
-  // Call Sizes
-  const [selectedSize, setSelectedSize] = useState("S");
-  const sizes = ["S", "M", "L", "XL", "XXL"];
-  const handleSizeClick = (size) => {
-    setSelectedSize(size);
-  };
+ 
   // User Details
   const [user] = useState(
     () => JSON.parse(localStorage.getItem("user:details")) || {}
@@ -97,7 +94,7 @@ const MobilesDetails = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://e-commerce-nu-seven.vercel.app/api/fashion/data"
+          "https://e-commerce-nu-seven.vercel.app/api/mobiles/data"
         );
         const jsonData = await res.json();
         setGetData(jsonData);
@@ -114,47 +111,38 @@ const MobilesDetails = () => {
   const data = getData.find((p) => p.product.id === id);
   if (data)
     return (
-      <div className="flex flex-col justify-center items-center px-4">
-        <div className="my-6 p-2 bg-stone-200 flex flex-row justify-around items-center gap-1 text-stone-400 w-full">
-          <Link to={"/"} className="text-xs sm:text-base font-semibold">
-            Home
-          </Link>
-          <h1 className="text-xs sm:text-base font-semibold">
-            {data.product.category}
-          </h1>
-          <h1 className="text-xs sm:text-base font-semibold">
-            {data.product.title}
-          </h1>
-        </div>
-        <div className="flex flex-col sm:flex-row justify-around gap-4">
-          <div className="p-3">
+      <div className="flex flex-col">
+        <div className="flex flex-col sm:flex-row justify-center items-center">
+          <div className="p-3 flex flex-col">
             <img
               src={data.product.img}
               alt={data.product.title}
               width={250}
               height={100}
-              className="w-[200px] sm:w-[300px] h-[200px] sm:h-[300px]"
+              className="w-[20rem] sm:w-[30rem]"
             />
+            <div className="flex flex-row justify-center gap-3">
+              <button
+                onClick={handelAddtoCart}
+                className="uppercase bg-yellow-500 flex items-center shadow gap-2 hover:bg-yellow-600 py-2 px-3 text-xs md:text-base font-semibold text-white"
+              >
+                <FaCartShopping />
+                add to Cart
+              </button>
+              <Link
+                to={`/Mobile/buynow/${id}/${formattedDate}`}
+                className="uppercase bg-orange-500 hover:bg-orange-600 shadow py-1 px-3 text-xs md:text-base font-semibold text-white flex items-center gap-1"
+              >
+                <BsLightningFill />
+                buy now!
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col gap-3 justify-start items-start p-3">
             <h1 className="text-sm md:text-xl font-bold">
               {data.product.title}
             </h1>
-            <h1 className="text-sm md:text-xl font-bold text-green-400">
-              {data.product.discount}% Off
-            </h1>
-            <h1 className="text-sm md:text-xl font-bold">
-              ₹
-              {Math.round(
-                data.product.price -
-                  (data.product.price / 100) * data.product.discount
-              )}
-              .00{" "}
-              <del className="text-xs md:text-sm text-gray-500">
-                ₹{data.product.price}.00
-              </del>
-            </h1>
-            <div className="flex gap-2 md:text-2xl text-yellow-400">
+            <div className="flex gap-2 md:text-2xl text-green-400">
               {[1, 2, 3, 4, 5].map((ele) =>
                 ele <= data.product.stars ? (
                   <AiFillStar key={ele} />
@@ -163,49 +151,24 @@ const MobilesDetails = () => {
                 )
               )}
             </div>
-            <h1 className="text-xs font-bold md:text-base">
-              Size: <span>{selectedSize}</span>
+            <h1 className="text-sm md:text-xl font-bold text-blue-400">
+              {data.product.discount}% Off
             </h1>
-            <div className="flex flex-row gap-2">
-              {sizes.map((size) => (
-                <div key={size}>
-                  <button
-                    type="button"
-                    id={`size${size}`}
-                    name="size"
-                    onClick={() => handleSizeClick(size)}
-                    className={
-                      selectedSize === size
-                        ? "selected border bg-slate-400 py-1 px-2 text-sm"
-                        : "border bg-gray-100 py-1 px-2 text-sm"
-                    }
-                  >
-                    {size}
-                  </button>
-                </div>
-              ))}
-            </div>
-            <div>
-              <button
-                onClick={handelAddtoCart}
-                className="uppercase bg-red-500 hover:bg-red-600 py-1 px-3 text-xs md:text-base font-semibold text-white rounded-lg"
-              >
-                add to Cart
-              </button>
-            </div>
-            <div>
-              <Link
-                to={`/MobilesDetails/buynow/${id}/${selectedSize}/${formattedDate}`}
-                className="uppercase bg-blue-500 hover:bg-blue-600 py-1 px-3 text-xs md:text-base font-semibold text-white rounded-lg"
-              >
-                buy now!
-              </Link>
-            </div>
-            <h1 className="text-xs sm:text-sm font-bold">
-              Name: {data.product.title}
+            <h1 className="text-sm md:text-xl font-bold">
+              ₹
+              {Math.round(
+                data.product.price -
+                  (data.product.price / 100) * data.product.discount
+              )}{" "}
+              <del className="text-xs md:text-sm text-gray-400">
+                ₹{data.product.price}
+              </del>
             </h1>
-            <h1 className="text-xs sm:text-sm font-bold">
-              Category: {data.product.category}
+            <h1 className="text-sm sm:text-lg font-bold uppercase">
+              Brand: {data.product.category}
+            </h1>
+            <h1 className="text-sm sm:text-lg w-[30rem]">
+              {data.product.models}
             </h1>
           </div>
         </div>

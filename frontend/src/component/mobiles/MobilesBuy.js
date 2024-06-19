@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { BsArrowRightCircle } from "react-icons/bs";
-import { TbCircleNumber2, TbCircleNumber3 } from "react-icons/tb";
 import { Link, useParams } from "react-router-dom";
 import { quentity } from "../../utils/dropdown";
 
 const MobilesBuy = () => {
-  const { id, selectedSize, formattedDate } = useParams();
+  const { id, formattedDate } = useParams();
   const [getData, setGetData] = useState([]);
   // drop down box
   const [dropItems, setdropItems] = useState(1);
@@ -18,7 +16,7 @@ const MobilesBuy = () => {
     () => JSON.parse(localStorage.getItem("user:details")) || {}
   );
   // Get Request.................
-  const [getAddGet, setGetAddGet] = useState([]);
+  const [isAddress, setAddress] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,7 +24,7 @@ const MobilesBuy = () => {
           `https://e-commerce-nu-seven.vercel.app/api/userdetails/${user.id}`
         );
         const jsonData = await rese.json();
-        setGetAddGet(jsonData);
+        setAddress(jsonData);
       } catch (error) {
         console.log("Error Fetching Data", error);
       }
@@ -38,7 +36,7 @@ const MobilesBuy = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://e-commerce-nu-seven.vercel.app/api/fashion/data"
+          "https://e-commerce-nu-seven.vercel.app/api/mobiles/data"
         );
         const jsonData = await res.json();
         setGetData(jsonData);
@@ -57,42 +55,32 @@ const MobilesBuy = () => {
   if (data)
     return (
       <div className="flex flex-col justify-center items-center px-4">
-        <div className="flex flex-row justify-around gap-1 mt-3 w-full">
-          <BsArrowRightCircle className={"md:text-2xl text-blue-200"} />
-          <TbCircleNumber2 className={"md:text-2xl text-blue-800"} />
-          <TbCircleNumber3 className={"md:text-2xl text-blue-200"} />
-        </div>
-        <div className="w-full flex flex-row justify-around">
-          <h1 className="text-xs md:text-base text-gray-300">Address</h1>
-          <h1 className="text-xs md:text-base text-gray-800">Order Summary</h1>
-          <h1 className="text-xs md:text-base text-gray-300">Payment</h1>
-        </div>
-        <div className="w-full h-2 my-2 bg-gray-100" />
-        {getAddGet.map((ele, index) => (
-          <div
-            key={index}
-            className="w-full my-4 md:px-20 flex flex-row justify-between"
-          >
-            <div className="">
-              <h1 className="font-bold">Deliver to:</h1>
-              <h1 className="font-bold">{user.username}</h1>
-              <h1 className="font-light">
-                {ele.details.place}, {ele.details.post}, {ele.details.police},{" "}
-                {ele.details.dist}, {ele.details.pin}, {ele.details.state}
-              </h1>
-              <h1 className="font-light">{ele.details.mobil}</h1>
+        <div className="w-full p-3">
+          {isAddress.map((ele, index) => (
+            <div
+              key={index}
+              className="w-full my-4 md:px-20 flex flex-row justify-between"
+            >
+              <div className="">
+                <h1 className="font-bold">Deliver to:</h1>
+                <h1 className="font-bold">{user.username}</h1>
+                <h1 className="font-light">
+                  {ele.details.place}, {ele.details.post}, {ele.details.police},{" "}
+                  {ele.details.dist}, {ele.details.pin}, {ele.details.state}
+                </h1>
+                <h1 className="font-light">{ele.details.mobil}</h1>
+              </div>
+              <div>
+                <Link
+                  to={"/saveAddress"}
+                  className="bg-blue-500 px-3 py-2 rounded text-white font-semibold"
+                >
+                  Change
+                </Link>
+              </div>
             </div>
-            <div>
-              <Link
-                to={"/saveAddress"}
-                className="bg-blue-500 px-3 py-2 rounded text-white font-semibold"
-              >
-                Change
-              </Link>
-            </div>
-          </div>
-        ))}
-        <div className="w-full h-2 my-2 bg-gray-100" />
+          ))}
+        </div>
         <div className="flex flex-row justify-around gap-4">
           <div className="p-3">
             <img
@@ -121,10 +109,7 @@ const MobilesBuy = () => {
             <h1 className="text-sm md:text-xl font-light">
               {data.product.title}
             </h1>
-            <h1 className="text-sm md:text-base font-thin">
-              Size: <span>{selectedSize}</span>
-            </h1>
-            <div className="flex gap-2 md:text-2xl text-green-600">
+            <div className="flex gap-2 md:text-2xl text-green-400">
               {[1, 2, 3, 4, 5].map((w) =>
                 w <= data.product.stars ? (
                   <AiFillStar key={w} />
@@ -134,21 +119,21 @@ const MobilesBuy = () => {
               )}
             </div>
             <h1 className="text-sm md:text-xl font-bold">
-              <span className="text-xs md:text-md font-bold text-green-400">
+              <span className="text-sm md:text-lg font-bold text-blue-400">
                 {data.product.discount}% Off
               </span>{" "}
               ₹
               {Math.round(
                 data.product.price -
                   (data.product.price / 100) * data.product.discount
-              )}
-              .00{" "}
+              )}{" "}
               <del className="text-xs md:text-sm text-gray-500">
-                ₹{data.product.price}.00
+                ₹{data.product.price}
               </del>
             </h1>
             <h1 className="text-xs sm:text-base">
-              Delivery by Mon Jan 22 | <del className="text-gray-400">₹40</del>{" "}
+              Delivery by {formattedDate} |{" "}
+              <del className="text-gray-400">₹40</del>{" "}
               <span className="text-green-500">FREE Delivery</span>
             </h1>
           </div>
@@ -174,10 +159,6 @@ const MobilesBuy = () => {
             </del>
           </div>
           <div className="flex flex-row justify-between mb-2">
-            <h1 className="text-xs md:text-sm font-light">Size:</h1>
-            <h1 className="text-xs md:text-sm font-light">{selectedSize}</h1>
-          </div>
-          <div className="flex flex-row justify-between mb-2">
             <h1 className="text-xs md:text-sm font-light">Delivery Charge</h1>
             <h1 className="text-xs md:text-sm font-light">
               <del>₹40</del>{" "}
@@ -199,6 +180,7 @@ const MobilesBuy = () => {
             <h1 className="text-xs md:text-sm font-semibold text-green-600">
               You will save{" "}
               <span>
+                ₹
                 {Math.round(
                   dropItems *
                     ((data.product.price / 100) * data.product.discount)
@@ -211,11 +193,13 @@ const MobilesBuy = () => {
         <div className="w-full my-2 md:px-20 flex flex-row justify-between items-center bg-stone-100 p-3">
           <h1 className="flex flex-col">
             <del className="font-light text-xs">
+              ₹
               {Math.round(
                 dropItems * (data.product.price / 100) * data.product.discount
               )}
             </del>
             <span className="font-semibold">
+              ₹
               {Math.round(
                 dropItems *
                   (data.product.price -
@@ -224,7 +208,7 @@ const MobilesBuy = () => {
             </span>
           </h1>
           <Link
-            to={`/fashionDetails/buynow/payment/${id}/${selectedSize}/${dropItems}/${formattedDate}/${getAddGet}`}
+            to={`/mobile/payment/${id}/${dropItems}/${formattedDate}`}
             className="bg-yellow-400 text-xs md:text-sm py-1 px-4 rounded font-semibold"
           >
             Place order

@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate, Route, Routes as Router } from "react-router-dom";
 import Form from "../modules/Authorization";
 import Navbar from "../component/Navbar";
-import Control from "../modules/Control";
 import Reviews from "../modules/Reviews";
 import AddToCart from "../modules/AddToCart";
 import UserDetail from "../modules/UserDetail";
@@ -49,6 +48,9 @@ import Beauty from "../component/beauty/Beauty";
 import Kitchen from "../component/kitchene/Kitchen";
 import Furniture from "../component/furniture/Furniture";
 import Grocery from "../component/grocery/Grocery";
+import MobilesStore from "../component/mobiles/MobilesStore";
+import Profile from "../component/sattings/Profile";
+
 
 const PrivetRoute = ({ children }) => {
   const isUserLoggedIn = window.localStorage.getItem("user:token") || false;
@@ -102,7 +104,7 @@ const Routes = () => {
       />
       {/* mobiles....... */}
       <Route
-        path={`/mobiles`}
+        path={`/mobile/:category`}
         element={
           <PrivetRoute>
             <Navbar />
@@ -113,25 +115,38 @@ const Routes = () => {
         }
       />
       <Route
+        path={`/mobiles/store`}
+        element={
+          <PrivetRoute>
+            <Navbar />
+            {<MobilesStore />}
+            <Footer />
+            <BottomNav />
+          </PrivetRoute>
+        }
+      />
+      <Route
         path={`/mobilesDetails/:id`}
         element={
           <PrivetRoute>
+            <Navbar />
             {<MobilesDetails />}
             <BottomNav />
           </PrivetRoute>
         }
       />
       <Route
-        path={`/mobilesDetails/buynow/:id/:selectedSize/:formattedDate`}
+        path={`/mobile/buynow/:id/:formattedDate`}
         element={
           <PrivetRoute>
+            <Navbar />
             {<MobilesBuy />}
             <BottomNav />
           </PrivetRoute>
         }
       />
       <Route
-        path={`/mobilesDetails/buynow/payment/:id/:selectedSize/:dropItems/:formattedDate/:getAddGet`}
+        path={`/mobile/payment/:id/:dropItems/:formattedDate`}
         element={
           <PrivetRoute>
             {<MobilesPayment />}
@@ -380,7 +395,7 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<Grocery />}
-            <Footer/>
+            <Footer />
             <BottomNav />
           </PrivetRoute>
         }
@@ -416,11 +431,14 @@ const Routes = () => {
       {/* Admin Sections.................... */}
       <Route path="/adminlogin" element={<AdminLogin />} />
       <Route path="/admin" element={<Admin />} />
+      {/* Account Details........... */}
       <Route
-        path="/control"
+        path="/profile"
         element={
           <PrivetRoute>
-            {<Control />}
+            <Navbar/>
+            {<Profile />}
+            <Footer/>
             <BottomNav />
           </PrivetRoute>
         }
