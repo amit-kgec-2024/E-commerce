@@ -8,7 +8,7 @@ const Management = () => {
     setIsManagement(toggleManagement);
   }
   return (
-    <div className="w-full h-screen bg-teal-100 flex flex-col">
+    <div className="w-full h-screen bg-teal-100 flex flex-col overflow-hidden">
       <div className="w-full py-4 px-6 bg-teal-300 shadow flex flex-row items-center justify-between">
         <span>Employes</span>
         <button>Logout</button>

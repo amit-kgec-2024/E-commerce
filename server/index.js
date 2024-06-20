@@ -20,6 +20,7 @@ const productReviewsRouters = require("./routes/ProductReviewsRouter");
 const addtoCartRouters = require("./routes/AddCartRoutes");
 const allDataRouters = require("./routes/AllData");
 const deliveryRoutes = require("./routes/DeliveryRoutes");
+const managementRoutes = require("./routes/ManagementRouter");
 
 // useRouter..............
 app.use("/api", userRoutes);
@@ -29,6 +30,7 @@ app.use("/api", productReviewsRouters);
 app.use("/api", addtoCartRouters);
 app.use("/api", allDataRouters);
 app.use("/api", deliveryRoutes);
+app.use("/api", managementRoutes);
 
 const port = process.env.PORT || 4000;
 
