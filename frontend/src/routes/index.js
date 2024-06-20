@@ -11,7 +11,7 @@ import Footer from "../component/Footer";
 import Placeorder from "../modules/Placeorder";
 import Shopping from "../modules/Shopping";
 import NewPlaceOrder from "../modules/NewPlaceOrder";
-import TrackOrder from '../modules/TrackOrder'
+import TrackOrder from "../modules/TrackOrder";
 import BottomNav from "../component/BottomNav";
 import Main from "../component/Main";
 import AdminLogin from "../component/admin/AdminLogin";
@@ -51,7 +51,9 @@ import Grocery from "../component/grocery/Grocery";
 import MobilesStore from "../component/mobiles/MobilesStore";
 import Profile from "../component/sattings/Profile";
 import PlacedOrder from "../component/PlacedOrder";
-
+import DeliveryPartner from "../component/delivery/DeliveryPartner";
+import Employ from "../component/Employ";
+import DeliveryLogin from "../component/delivery/DeliveryLogin";
 
 const PrivetRoute = ({ children }) => {
   const isUserLoggedIn = window.localStorage.getItem("user:token") || false;
@@ -74,7 +76,7 @@ const Routes = () => {
       name: "main",
       path: "/",
       Comment: <Main />,
-    }
+    },
   ];
   return (
     <Router>
@@ -429,10 +431,20 @@ const Routes = () => {
           </PrivetRoute>
         }
       />
-
+      {/* Employ sections...... */}
+      <Route path="/employ/section" element={<Employ />} />
       {/* Admin Sections.................... */}
       <Route path="/adminlogin" element={<AdminLogin />} />
       <Route path="/admin" element={<Admin />} />
+      {/* // delivery-partner................. */}
+      <Route
+        path="/deliverylogin"
+        element={<DeliveryLogin />}
+      />
+      <Route
+        path="/delivery/patner"
+        element={<DeliveryPartner />}
+      />
       {/* Account Details........... */}
       <Route
         path="/profile"
@@ -447,11 +459,7 @@ const Routes = () => {
       />
       <Route
         path="/placedorder"
-        element={
-          <PrivetRoute>
-            {<PlacedOrder />}
-          </PrivetRoute>
-        }
+        element={<PrivetRoute>{<PlacedOrder />}</PrivetRoute>}
       />
       <Route
         path="/reviews"
