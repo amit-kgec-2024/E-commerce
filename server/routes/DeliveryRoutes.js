@@ -8,15 +8,15 @@ const Delivery = require("../modules/Delivery");
 // Admin register.....................
 router.post("/delivery/register", async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
+    const { firstname, lastname, email, password } = req.body;
+    if (!firstname || !lastname || !email || !password) {
       res.status(200).send("Plese all require files");
     } else {
       const isAlreadyExist = await Delivery.findOne({ email });
       if (isAlreadyExist) {
         res.status(400).send("User alredy Exist");
       } else {
-        const newUser = new Delivery({ username, email });
+        const newUser = new Delivery({ firstname, lastname, email });
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
           newUser.save();
@@ -62,7 +62,8 @@ router.post("/delivery/login", async (req, res, next) => {
                   id: user._id,
                   email: user.email,
                   password: user.password,
-                  username: user.username,
+                  firstname: user.firstname,
+                  lastname: user.lastname,
                 },
                 token: token,
               });
@@ -73,6 +74,17 @@ router.post("/delivery/login", async (req, res, next) => {
     }
   } catch (error) {
     console.log(error, "Error");
+  }
+});
+
+// GET request to retrieve all delivery users
+router.get('/delivery/users', async (req, res) => {
+  try {
+    const users = await Delivery.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
 });
 

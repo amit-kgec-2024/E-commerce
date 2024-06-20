@@ -3,7 +3,7 @@ import DeliveryRegister from './DeliveryRegister';
 import AdminRegister from './AdminRegister';
 
 const Management = () => {
-  const [isManagement, setIsManagement ] = useState("");
+  const [isManagement, setIsManagement ] = useState("admin");
   const handelManagement = (toggleManagement)=>{
     setIsManagement(toggleManagement);
   }
@@ -36,7 +36,7 @@ const Management = () => {
             Delivery Patner
           </button>
         </div>
-        <div className="w-full p-5">
+        <div className="w-full">
           {isManagement === "admin" && <AdminRegister />}
           {isManagement === "delivery" && <DeliveryRegister />}
         </div>

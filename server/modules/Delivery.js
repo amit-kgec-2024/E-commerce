@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const deliverySchame = mongoose.Schema({
-  username: {
+  firstname: {
+    type: String,
+    require: true,
+  },
+  lastname: {
     type: String,
     require: true,
   },

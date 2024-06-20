@@ -15,15 +15,15 @@ const Grocery = require("../modules/Grocery")
 // Admin register.....................
 router.post("/admin/register", async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
+    const { firstname, lastname, email, password } = req.body;
+    if (!firstname || !lastname || !email || !password) {
       res.status(200).send("Plese all require files");
     } else {
       const isAlreadyExist = await Admin.findOne({ email });
       if (isAlreadyExist) {
         res.status(400).send("User alredy Exist");
       } else {
-        const newUser = new Admin({ username, email });
+        const newUser = new Admin({ firstname, lastname, email });
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
           newUser.save();
@@ -69,7 +69,8 @@ router.post("/admin/login", async (req, res, next) => {
                   id: user._id,
                   email: user.email,
                   password: user.password,
-                  username: user.username,
+                  firstname: user.firstname, 
+                  lastname: user.lastname,
                 },
                 token: token,
               });
@@ -80,6 +81,16 @@ router.post("/admin/login", async (req, res, next) => {
     }
   } catch (error) {
     console.log(error, "Error");
+  }
+});
+// GET request to retrieve all delivery users
+router.get('/admin/users', async (req, res) => {
+  try {
+    const users = await Admin.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
 });
 // Mobile Section............................................................
