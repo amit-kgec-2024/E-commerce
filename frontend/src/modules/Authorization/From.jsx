@@ -17,7 +17,7 @@ const From = ({isSigninPage = true}) => {
 
     const handelSubmit = async (e)=> {
         e.preventDefault(e)
-        const res = await fetch(`http://localhost:4000/api/${isSigninPage ? 'login' : 'register'}`, {
+        const res = await fetch(`https://e-commerce-nu-seven.vercel.app/api/${isSigninPage ? 'login' : 'register'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ const From = ({isSigninPage = true}) => {
     
   return (
     <div className="flex h-screen flex-col justify-center items-center bg-gray-100" style={{backgroundImage: `url(signinup.svg)`}}>
-        <Link to="/employ/section" className='text-blue-300 absolute top-0 right-0 m-10 shadow p-3 font-bold'>Employ Section</Link>
+        <Link to="/management/section" className='text-blue-300 absolute top-0 right-0 m-10 shadow p-3 font-bold'>Management Section</Link>
         <div className="border rounded shadow p-4 flex flex-col items-center">
             <h1 className='text-3xl font-bold uppercase mb-4'>welcome {isSigninPage && 'Back'}</h1>
             <h2 className='text-md font-extralight uppercase mb-8'>ples {isSigninPage ? 'login' : 'register'} to continue</h2>

@@ -52,8 +52,10 @@ import MobilesStore from "../component/mobiles/MobilesStore";
 import Profile from "../component/sattings/Profile";
 import PlacedOrder from "../component/PlacedOrder";
 import DeliveryPartner from "../component/delivery/DeliveryPartner";
-import Employ from "../component/Employ";
 import DeliveryLogin from "../component/delivery/DeliveryLogin";
+import ManagementLogin from "../component/management/ManagementLogin";
+import ManagementSection from "../component/management/ManagementSection";
+import Management from "../component/management/Management";
 
 const PrivetRoute = ({ children }) => {
   const isUserLoggedIn = window.localStorage.getItem("user:token") || false;
@@ -431,8 +433,10 @@ const Routes = () => {
           </PrivetRoute>
         }
       />
-      {/* Employ sections...... */}
-      <Route path="/employ/section" element={<Employ />} />
+      {/* Management sections...... */}
+      <Route path="/management/section" element={<ManagementSection />} />
+      <Route path="/management/login" element={<ManagementLogin />} />
+      <Route path="/management" element={<Management />} />
       {/* Admin Sections.................... */}
       <Route path="/adminlogin" element={<AdminLogin />} />
       <Route path="/admin" element={<Admin />} />
