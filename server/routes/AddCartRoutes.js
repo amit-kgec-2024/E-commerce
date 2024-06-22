@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AddToCarts = require("../modules/Addtocarts");
+const Mobiles = require("../modules/Mobiles")
 
 // AddToCart POST Requests.................
 router.post("/addToCart", async (req, res) => {
@@ -22,7 +23,7 @@ router.post("/addToCart", async (req, res) => {
   }
 });
 // AddToCaer GET Request.......
-router.get("/addToCartGet/:userId", async (req, res) => {
+router.get("/addToCart/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
 
@@ -31,12 +32,19 @@ router.get("/addToCartGet/:userId", async (req, res) => {
     const addToCartData = Promise.all(
       addToCarts.map(async (addCart) => {
         const _id = addCart._id;
+        const product = await Mobiles.findById(addCart.productId);
         return {
-          addCart: {
-            id: _id,
-            userId: addCart.userId,
-            productId: addCart.productId,
-          },
+          id: _id,
+          userId: addCart.userId,
+          productId: addCart.productId,
+          category: product.category,
+          discount: product.discount,
+          img: product.img,
+          models: product.models,
+          price: product.price,
+          sale: product.sale,
+          stars: product.stars,
+          title: product.title
         };
       })
     );
@@ -49,22 +57,22 @@ router.get("/addToCartGet/:userId", async (req, res) => {
 });
 
 // AddToCart Delete.................
-router.delete("/removeFromCart/:productId", async (req, res) => {
+router.delete("/removeCart/:id", async (req, res) => {
   try {
-    const productId = req.params.productId;
+    const id = req.params.id;
+    console.log(`Attempting to delete comment with ID: ${id}`);
 
-    const result = await AddToCarts.deleteOne({
-      productId: productId,
-    });
+    const result = await AddToCarts.findByIdAndDelete(id);
 
-    if (result.deletedCount > 0) {
-      res.status(200).send("Item removed from the cart successfully");
-    } else {
-      res.status(404).send("Item not found in the cart");
+    if (!result) {
+      return res.status(404).json({ error: "Comment not found" });
     }
+      return res.status(404).send("Item not found in the cart");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error!");
   }
 });
+
+
 module.exports = router;

@@ -23,73 +23,88 @@ const MobilesDetails = () => {
     year: "numeric",
   };
   const formattedDate = futureDate.toLocaleDateString(undefined, options);
- 
+
   // User Details
   const [user] = useState(
     () => JSON.parse(localStorage.getItem("user:details")) || {}
   );
   // Handel AddToCart..............
   const handelAddtoCart = async () => {
-    const res = await fetch(
-      "https://e-commerce-nu-seven.vercel.app/api/addToCart",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          productId: id,
-        }),
-      }
-    );
+    const res = await fetch("http://localhost:4000/api/addToCart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        productId: id,
+      }),
+    });
     if (res.status === 400) {
       alert("Alredy Add To Cart!");
     } else {
       await res.json();
     }
   };
-  //  API CALL Reviews................
-  const [reviewsProduct, setReviewsProducts] = useState({ reviews: "" });
+  // API CAll comment Get......................
+  const [reviewGet, setReviewGet] = useState([]);
+  useEffect(() => {
+    fetchcomment(id);
+  }, [id]);
+  const fetchcomment = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:4000/api/productcomment/${id}`);
+      const jsonReview = await res.json();
+      setReviewGet(jsonReview);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+ 
+  //  API CALL comment................
+  const userId = user.id;
+  const [comment, setcomment] = useState("");
   const handelSubmit = async () => {
-    const res = await fetch(
-      "https://e-commerce-nu-seven.vercel.app/api/productReviews",
-      {
+    try {
+      const res = await fetch("http://localhost:4000/api/productcomment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           productId: id,
-          username: user.username,
-          reviews: reviewsProduct.reviews,
+          comment: comment,
+          userId: userId,
         }),
+      });
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
       }
-    );
-    if (res.status === 400) {
-      alert("Please Fill Reviews!");
-    } else {
-      await res.json();
-      alert("Add Comment!");
+      fetchcomment(id);
+    } catch (error) {
+      console.log("Error Fetching Data", error);
     }
   };
-  // API CAll Reviews Get......................
-  const [reviewGet, setReviewGet] = useState([]);
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch(
-          `https://e-commerce-nu-seven.vercel.app/api/productReviews/${id}`
-        );
-        const jsonReview = await res.json();
-        setReviewGet(jsonReview);
-      } catch (error) {
-        console.log(error);
+  // Delete comment.......................
+const handleDelete = async (commentId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:4000/api/comment/delete/${commentId}`,
+      {
+        method: "DELETE",
       }
-    };
-    fetchReviews();
-  }, [id]);
-  //  Api Calll Products
+    );
+    
+    if (!response.ok) {
+      throw new Error("Failed to delete comment");
+    }
+    fetchcomment(id);
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+  }
+};
+
+  //  Api Calll Products..........................
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -206,42 +221,53 @@ const MobilesDetails = () => {
         <div className="w-full h-1 my-2 bg-gray-100" />
         <div className="flex flex-col justify-start my-4 w-full md:px-20">
           <h1 className="font-bold">Reviews</h1>
-          <h1 className="font-light text-sm text-gray-300">212 reviews</h1>
-          <form
-            className="flex justify-between gap-3"
-            onSubmit={() => handelSubmit()}
-          >
+          <h1 className="font-light text-sm text-gray-300">
+            {reviewGet.length} comment
+          </h1>
+          <div className="flex justify-between gap-3">
             <input
               type="text"
-              name="reviews"
+              name="comment"
               className="outline-none border-2 p-1 text-sm w-full"
-              valu={reviewsProduct.reviews}
-              onChange={(e) =>
-                setReviewsProducts({
-                  ...reviewsProduct,
-                  reviews: e.target.value,
-                })
-              }
+              valu={comment}
+              onChange={(e) => setcomment(e.target.value)}
+              required
             />
             <button
-              type="submit"
+              onClick={() => handelSubmit()}
               className="bg-blue-500 border py-1 px-2 text-white shadow"
             >
               Add
             </button>
-          </form>
+          </div>
         </div>
         <div className="w-full my-2 md:px-20">
-          {reviewGet.map((ele, index) => (
-            <div key={index} className="mb-2 border-t-2 border-r-red-600 py-2">
-              <h1 className="font-bold text-sm md:text-base mb-1">
-                {ele.review.username}
-              </h1>
-              <h1 className="text-xs md:text-sm text-gray-600 font-semibold">
-                {ele.review.reviews}
-              </h1>
-            </div>
-          ))}
+          {reviewGet
+            .slice()
+            .reverse()
+            .map((ele, index) => (
+              <div
+                key={index}
+                className="mb-2 border-t-2 border-r-red-600 py-2"
+              >
+                <div className="text-xs w-full flex justify-between items-center">
+                  <h1 className="font-semibold text-sm md:text-base mb-1">
+                    {ele.firstname} {ele.lastname}
+                  </h1>
+                  {userId === ele.userId && (
+                    <button
+                      onClick={() => handleDelete(ele.commentId)}
+                      className="bg-red-400 px-3 py-1 rounded-md text-white"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <h1 className="text-xs md:text-sm text-gray-600 font-semibold">
+                  {ele.comment}
+                </h1>
+              </div>
+            ))}
         </div>
       </div>
     );

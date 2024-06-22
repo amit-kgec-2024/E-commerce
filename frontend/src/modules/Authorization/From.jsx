@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 const From = ({isSigninPage = true}) => {
+    const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
     const navigate = useNavigate()
     const username = {
     firstname: "",
@@ -31,19 +34,43 @@ const From = ({isSigninPage = true}) => {
                 console.log(token, user, 'response');
                 localStorage.setItem('user:token', token);
                 localStorage.setItem('user:details', JSON.stringify(user));
-                navigate('/');
+                setMessage("Login successful!");
+                setShowMessage(true);
+                setIsSuccess(true);
+                setTimeout(() => {
+                    setShowMessage(false);
+                    navigate('/');
+                }, 1000);
             } else {
-                alert('Registration successful!');
-                navigate('/account/signin');
+                setMessage("Registration successful!");
+                setShowMessage(true);
+                setIsSuccess(true);
+                setTimeout(() => {
+                    setShowMessage(false);
+                    navigate('/account/signin');
+                }, 3000);
             }
         } else {
-            alert('Registration failed. Please try again.');
+            setMessage("Registration failed. Please try again.");
+            setShowMessage(true);
+            // Hide...
+            setTimeout(() => {
+              setShowMessage(false);
+            }, 3000);
         }
     }
 
     
   return (
     <div className="flex h-screen flex-col justify-center items-center bg-gray-100" style={{backgroundImage: `url(signinup.svg)`}}>
+        {showMessage && (
+        <div
+          className="absolute right-0 bottom-0 m-12 px-5 py-1 bg-white"
+          style={{ color: isSuccess ? "green" : "red" }}
+        >
+          {message}
+        </div>
+      )}
         <Link to="/management/section" className='text-blue-300 absolute top-0 right-0 m-10 shadow p-3 font-bold'>Management Section</Link>
         <div className="border rounded shadow p-4 flex flex-col items-center">
             <h1 className='text-3xl font-bold uppercase mb-4'>welcome {isSigninPage && 'Back'}</h1>

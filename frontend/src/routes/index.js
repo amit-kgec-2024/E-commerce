@@ -3,7 +3,7 @@ import { Navigate, Route, Routes as Router } from "react-router-dom";
 import Form from "../modules/Authorization";
 import Navbar from "../component/Navbar";
 import Reviews from "../modules/Reviews";
-import AddToCart from "../modules/AddToCart";
+import AddToCarts from "../component/AddToCarts";
 import UserDetail from "../modules/UserDetail";
 import SaveAddress from "../modules/SaveAddress";
 import Sattings from "../modules/Sattings";
@@ -12,7 +12,6 @@ import Placeorder from "../modules/Placeorder";
 import Shopping from "../modules/Shopping";
 import NewPlaceOrder from "../modules/NewPlaceOrder";
 import TrackOrder from "../modules/TrackOrder";
-import BottomNav from "../component/BottomNav";
 import Main from "../component/Main";
 import AdminLogin from "../component/admin/AdminLogin";
 import Admin from "../component/admin/Admin";
@@ -91,7 +90,7 @@ const Routes = () => {
               <PrivetRoute>
                 <Navbar />
                 {Comment}
-                <BottomNav />
+                <Footer/>
                 <Footer />
               </PrivetRoute>
             }
@@ -115,7 +114,7 @@ const Routes = () => {
             <Navbar />
             {<Mobiles />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -126,7 +125,7 @@ const Routes = () => {
             <Navbar />
             {<MobilesStore />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -136,7 +135,7 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<MobilesDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -146,7 +145,7 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<MobilesBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -156,7 +155,7 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<MobilesPayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -168,7 +167,7 @@ const Routes = () => {
             <Navbar />
             {<Appliens />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -177,7 +176,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<AppliancesDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -186,7 +185,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<AppliancesBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -195,7 +194,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<AppliancesPayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -207,7 +206,7 @@ const Routes = () => {
             <Navbar />
             {<Electronics />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -216,7 +215,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<ElectronicsDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -225,7 +224,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<ElectronicsBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -234,7 +233,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<ElectronicsPayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -246,7 +245,7 @@ const Routes = () => {
             <Navbar />
             {<Fashion />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -255,7 +254,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<FashionDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -264,7 +263,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<FashionBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -273,7 +272,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<FashionPayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -285,7 +284,7 @@ const Routes = () => {
             <Navbar />
             {<Beauty />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -294,7 +293,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<BeautyDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -303,7 +302,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<BeautyBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -312,7 +311,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<BeautyPayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -324,7 +323,7 @@ const Routes = () => {
             <Navbar />
             {<Kitchen />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -333,7 +332,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<KitcheneDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -342,7 +341,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<KitcheneBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -351,7 +350,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<KitchenePayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -363,7 +362,7 @@ const Routes = () => {
             <Navbar />
             {<Furniture />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -372,7 +371,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<FurnitureDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -381,7 +380,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<FurnitureBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -390,7 +389,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<FurniturePayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -402,7 +401,7 @@ const Routes = () => {
             <Navbar />
             {<Grocery />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -411,7 +410,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<GroceryDetails />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -420,7 +419,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<GroceryBuy />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -429,7 +428,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<GroceryPayment />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -441,14 +440,8 @@ const Routes = () => {
       <Route path="/adminlogin" element={<AdminLogin />} />
       <Route path="/admin" element={<Admin />} />
       {/* // delivery-partner................. */}
-      <Route
-        path="/deliverylogin"
-        element={<DeliveryLogin />}
-      />
-      <Route
-        path="/delivery/patner"
-        element={<DeliveryPartner />}
-      />
+      <Route path="/deliverylogin" element={<DeliveryLogin />} />
+      <Route path="/delivery/patner" element={<DeliveryPartner />} />
       {/* Account Details........... */}
       <Route
         path="/profile"
@@ -457,7 +450,7 @@ const Routes = () => {
             <Navbar />
             {<Profile />}
             <Footer />
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -470,7 +463,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<Reviews />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -479,7 +472,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<Placeorder />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -488,7 +481,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<NewPlaceOrder />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -496,8 +489,9 @@ const Routes = () => {
         path="/addToCart"
         element={
           <PrivetRoute>
-            {<AddToCart />}
-            <BottomNav />
+            <Navbar/>
+            {<AddToCarts />}
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -506,7 +500,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<UserDetail />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -515,7 +509,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<TrackOrder />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -524,7 +518,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<SaveAddress />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />
@@ -533,7 +527,7 @@ const Routes = () => {
         element={
           <PrivetRoute>
             {<Shopping />}
-            <BottomNav />
+            <Footer/>
           </PrivetRoute>
         }
       />

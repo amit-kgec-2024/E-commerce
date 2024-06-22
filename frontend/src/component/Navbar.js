@@ -133,10 +133,7 @@ const Navbar = () => {
               </div>
             )}
           </button>
-          <Link
-            to={"/accountDetails"}
-            className="flex flex-row gap-2 items-center"
-          >
+          <Link to={"/addToCart"} className="flex flex-row gap-2 items-center">
             <FiShoppingCart />
             <span>Cart</span>
           </Link>

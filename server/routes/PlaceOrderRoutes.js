@@ -73,7 +73,7 @@ router.get("/order/:userId", async (req, res) => {
 
     const lastOrder = productOrders[productOrders.length - 1];
 
-    const addressId = lastOrder.addressId; 
+    const addressId = lastOrder.addressId;
     const productId = lastOrder.productId; 
 
     const addressDetails = userAddresses.find((addr) =>

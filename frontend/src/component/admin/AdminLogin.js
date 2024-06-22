@@ -49,8 +49,7 @@ const AdminLogin = () => {
       }, 3000);
 
     } catch (error) {
-      console.error("Error:", error);
-      setMessage("An error occurred during login.");
+      setMessage("An error occurred during login.", error);
       setShowMessage(true);
       // Hide...
       setTimeout(() => {
