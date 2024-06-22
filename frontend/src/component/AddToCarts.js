@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { MdElectricBolt } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { LuLoader2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 const AddToCarts = () => {
@@ -17,7 +18,7 @@ const AddToCarts = () => {
   const fetchAllData = async (userId) => {
     try {
       const addCartRes = await fetch(
-        `http://localhost:4000/api/addToCart/${userId}`
+        `https://e-commerce-nu-seven.vercel.app/api/addToCart/${userId}`
       );
 
       const addCartJsonData = await addCartRes.json();
@@ -30,19 +31,22 @@ const AddToCarts = () => {
   };
 
   // Removed products............................
+  const [isLoader, setIsLoader] = useState(false)
   const handelRemove = async (id) => {
+    setIsLoader(true)
     try {
       const response = await fetch(
-        `http://localhost:4000/api/removeCart/${id}`,
+        `https://e-commerce-nu-seven.vercel.app/api/removeCart/${id}`,
         {
           method: "DELETE",
         }
       );
 
+      setIsLoader(false)
+      fetchAllData(userId);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-        fetchAllData(userId);
     } catch (error) {
       console.error(error);
     }
@@ -99,15 +103,19 @@ const AddToCarts = () => {
                 onClick={() => handelRemove(e.id)}
                 className="flex flex-row gap-2 items-center border py-1 px-3 shadow bg-teal-500 hover:bg-teal-600"
               >
-                <RiDeleteBin6Line />
-                <span>Remove</span>
+                {!isLoader && (
+                    <RiDeleteBin6Line />
+                )}
+                {isLoader && (
+                  <LuLoader2 className="loader rounded-full border-solid animate-spin" />
+                )}
               </button>
               <Link
                 to={`/mobilesDetails/${e.id}`}
                 className="flex flex-row gap-2 items-center border py-1 px-3 shadow bg-cyan-400 hover:bg-cyan-500"
               >
-                <MdElectricBolt />
-                <span>Buy this now</span>
+                <MdElectricBolt className="text-orange-200" />
+                <span>Buy</span>
               </Link>
             </div>
           </div>

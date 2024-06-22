@@ -14,7 +14,6 @@ import { IoHeartOutline } from "react-icons/io5";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaPlusSquare } from "react-icons/fa";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { PiToolbox } from "react-icons/pi";
 
 const Navbar = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -42,6 +41,26 @@ const Navbar = () => {
     };
     fetchUser();
   }, [user.id]);
+  // AddCart length...........................
+  const userId = user.id;
+  const [addCartGet, setAddCartGet] = useState([]);
+  useEffect(() => {
+    fetchAllData(userId);
+  }, [userId]);
+  const fetchAllData = async (userId) => {
+    try {
+      const addCartRes = await fetch(
+        `https://e-commerce-nu-seven.vercel.app/api/addToCart/${userId}`
+      );
+
+      const addCartJsonData = await addCartRes.json();
+
+      setAddCartGet(addCartJsonData);
+      console.log(addCartJsonData);
+    } catch (error) {
+      console.log("Error fetching data", error);
+    }
+  };
   // LOG Out................
   const navigate = useNavigate();
   const logOut = () => {
@@ -69,7 +88,7 @@ const Navbar = () => {
             />
           </div>
         </div>
-        <div className="flex flex-row items-center w-full justify-around">
+        <div className="flex flex-row items-center w-full justify-end gap-10">
           <button
             className="relative flex flex-row hover:border hover:shadow hover:bg-slate-50 rounded p-1 group"
             onMouseEnter={() => setIsHovered(true)}
@@ -133,14 +152,10 @@ const Navbar = () => {
               </div>
             )}
           </button>
-          <Link to={"/addToCart"} className="flex flex-row gap-2 items-center">
+          <Link to={"/addToCart"} className="flex flex-row items-center">
             <FiShoppingCart />
-            <span>Cart</span>
+            <div className="text-xs bg-red-500 text-white w-4 text-center rounded-full mb-4">{addCartGet.length}</div>
           </Link>
-          <button className="flex flex-row gap-2 items-center">
-            <PiToolbox />
-            <span>Become a Seller</span>
-          </button>
           <button
             className="relative flex flex-row hover:border hover:shadow hover:bg-slate-50 rounded p-1 group"
             onMouseEnter={() => setIsHoveredMenu(true)}

@@ -4,6 +4,24 @@ import Button from "../../component/Button";
 import { optionStars, optionCategoryElectronics, optionSale } from "../../utils/dropdown";
 
 const AdminElectronics = () => {
+  // GET request............
+  const [getData, setGetdata] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        "https://e-commerce-nu-seven.vercel.app/api/electronics/data"
+      );
+      const jsonData = await res.json();
+      setGetdata(jsonData);
+    } catch (error) {
+      console.log("Error Fetching Data", error);
+    }
+  };
   // POST request...........
   const [product, setProduct] = useState({
     img: "",
@@ -63,33 +81,14 @@ const AdminElectronics = () => {
         }),
       }
     );
+    fetchData();
     if (res.status === 400) {
       alert("Invalid Credintial!");
     } else {
       await res.json();
-      alert("Product Register Successfully!");
-      fetchData();
     }
   };
 
-  // GET request............
-  const [getData, setGetdata] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const res = await fetch(
-        "https://e-commerce-nu-seven.vercel.app/api/electronics/data"
-      );
-      const jsonData = await res.json();
-      setGetdata(jsonData);
-    } catch (error) {
-      console.log("Error Fetching Data", error);
-    }
-  };
   // Delete Products..................
   const handleDelete = async (id) => {
     try {
@@ -99,10 +98,10 @@ const AdminElectronics = () => {
           method: "DELETE",
         }
       );
+      fetchData();
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      fetchData();
     } catch (error) {
       console.error("Delete error:", error);
     }
@@ -224,57 +223,61 @@ const AdminElectronics = () => {
         </div>
         {/* 0000000 */}
         <div className="border shadow flex flex-col p-3 items-center w-full sm:w-[55%] md:w-[40%] lg:w-[30%] h-[600px] overflow-y-scroll">
-          {getData.map((e, index) => (
-            <div
-              key={index}
-              className="flex flex-col mb-4 justify-around items-center p-3 gap-4 border w-full bg-yellow-100"
-            >
-              <div className="w-full text-end">
-                <button
-                  onClick={() => handleDelete(e.product.id)}
-                  className="px-3 py-1 bg-emerald-100 text-red-400 rounded-lg"
-                >
-                  Remove
-                </button>
+          {getData
+            .slice()
+            .reverse()
+            .map((e, index) => (
+              <div
+                key={index}
+                className="flex flex-col mb-4 justify-around items-center p-3 gap-4 border w-full bg-yellow-100"
+              >
+                <div className="w-full text-end">
+                  <button
+                    onClick={() => handleDelete(e.product.id)}
+                    className="px-3 py-1 bg-emerald-100 text-red-400 rounded-lg"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <img
+                  src={e.product.img}
+                  alt={e.product.title}
+                  className="w-[200px] h-[200px] "
+                />
+                <div className="flex flex-col justify-between w-full">
+                  <h1 className="font-bold text-sm mb-2">
+                    ID:{" "}
+                    <span className="text-red-500 text-xs">{e.product.id}</span>
+                  </h1>
+                  <h1 className="font-bold text-sm mb-2">
+                    Title:{" "}
+                    <span className="text-green-400 text-xs">
+                      {e.product.title}
+                    </span>
+                  </h1>
+                  <h1 className="font-bold text-sm mb-2">
+                    Price:{" "}
+                    <span className="text-green-400">{e.product.price}</span>
+                  </h1>
+                  <h1 className="font-bold text-sm mb-2">
+                    Discount:{" "}
+                    <span className="text-green-400">{e.product.discount}</span>
+                  </h1>
+                  <h1 className="font-bold text-sm mb-2">
+                    Stars:{" "}
+                    <span className="text-green-400">{e.product.stars}</span>
+                  </h1>
+                  <h1 className="font-bold text-sm mb-2">
+                    Category:{" "}
+                    <span className="text-green-400">{e.product.category}</span>
+                  </h1>
+                  <h1 className="font-bold text-sm mb-2">
+                    Sale:{" "}
+                    <span className="text-green-400">{e.product.sale}</span>
+                  </h1>
+                </div>
               </div>
-              <img
-                src={e.product.img}
-                alt={e.product.title}
-                className="w-[200px] h-[200px] "
-              />
-              <div className="flex flex-col justify-between w-full">
-                <h1 className="font-bold text-sm mb-2">
-                  ID:{" "}
-                  <span className="text-red-500 text-xs">{e.product.id}</span>
-                </h1>
-                <h1 className="font-bold text-sm mb-2">
-                  Title:{" "}
-                  <span className="text-green-400 text-xs">
-                    {e.product.title}
-                  </span>
-                </h1>
-                <h1 className="font-bold text-sm mb-2">
-                  Price:{" "}
-                  <span className="text-green-400">{e.product.price}</span>
-                </h1>
-                <h1 className="font-bold text-sm mb-2">
-                  Discount:{" "}
-                  <span className="text-green-400">{e.product.discount}</span>
-                </h1>
-                <h1 className="font-bold text-sm mb-2">
-                  Stars:{" "}
-                  <span className="text-green-400">{e.product.stars}</span>
-                </h1>
-                <h1 className="font-bold text-sm mb-2">
-                  Category:{" "}
-                  <span className="text-green-400">{e.product.category}</span>
-                </h1>
-                <h1 className="font-bold text-sm mb-2">
-                  Sale: <span className="text-green-400">{e.product.sale}</span>
-                </h1>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

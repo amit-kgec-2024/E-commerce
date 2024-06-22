@@ -4,6 +4,24 @@ import Button from "../../component/Button";
 import { optionStars, optionCategoryGrocery, optionSale } from "../../utils/dropdown";
 
 const AdminGrocery = () => {
+  // GET request............
+  const [getData, setGetdata] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        "https://e-commerce-nu-seven.vercel.app/api/grocery/data"
+      );
+      const jsonData = await res.json();
+      setGetdata(jsonData);
+    } catch (error) {
+      console.log("Error Fetching Data", error);
+    }
+  };
   // POST request...........
   const [product, setProduct] = useState({
     img: "",
@@ -63,33 +81,14 @@ const AdminGrocery = () => {
         }),
       }
     );
+    fetchData();
     if (res.status === 400) {
       alert("Invalid Credintial!");
     } else {
       await res.json();
-      alert("Product Register Successfully!");
-      fetchData();
     }
   };
 
-  // GET request............
-  const [getData, setGetdata] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const res = await fetch(
-        "https://e-commerce-nu-seven.vercel.app/api/grocery/data"
-      );
-      const jsonData = await res.json();
-      setGetdata(jsonData);
-    } catch (error) {
-      console.log("Error Fetching Data", error);
-    }
-  };
   // Delete Products..................
   const handleDelete = async (id) => {
     try {
@@ -99,10 +98,10 @@ const AdminGrocery = () => {
           method: "DELETE",
         }
       );
+      fetchData();
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      fetchData();
     } catch (error) {
       console.error("Delete error:", error);
     }

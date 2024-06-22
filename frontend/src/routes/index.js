@@ -91,7 +91,6 @@ const Routes = () => {
                 <Navbar />
                 {Comment}
                 <Footer/>
-                <Footer />
               </PrivetRoute>
             }
           />
@@ -114,7 +113,6 @@ const Routes = () => {
             <Navbar />
             {<Mobiles />}
             <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />
@@ -125,7 +123,6 @@ const Routes = () => {
             <Navbar />
             {<MobilesStore />}
             <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />
@@ -167,7 +164,6 @@ const Routes = () => {
             <Navbar />
             {<Appliens />}
             <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />
@@ -206,7 +202,6 @@ const Routes = () => {
             <Navbar />
             {<Electronics />}
             <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />
@@ -245,7 +240,6 @@ const Routes = () => {
             <Navbar />
             {<Fashion />}
             <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />
@@ -283,7 +277,6 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<Beauty />}
-            <Footer />
             <Footer/>
           </PrivetRoute>
         }
@@ -322,7 +315,6 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<Kitchen />}
-            <Footer />
             <Footer/>
           </PrivetRoute>
         }
@@ -362,7 +354,6 @@ const Routes = () => {
             <Navbar />
             {<Furniture />}
             <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />
@@ -400,7 +391,6 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<Grocery />}
-            <Footer />
             <Footer/>
           </PrivetRoute>
         }
@@ -449,8 +439,6 @@ const Routes = () => {
           <PrivetRoute>
             <Navbar />
             {<Profile />}
-            <Footer />
-            <Footer/>
           </PrivetRoute>
         }
       />

@@ -6,6 +6,7 @@ import { HiOutlineCurrencyRupee } from "react-icons/hi2";
 import { TbShoppingCartCancel } from "react-icons/tb";
 import { FaCartShopping } from "react-icons/fa6";
 import { BsLightningFill } from "react-icons/bs";
+import { LuLoader2 } from "react-icons/lu";
 import { Link, useParams } from "react-router-dom";
 
 const MobilesDetails = () => {
@@ -28,18 +29,24 @@ const MobilesDetails = () => {
   const [user] = useState(
     () => JSON.parse(localStorage.getItem("user:details")) || {}
   );
+  const [isLoader, setIsLoader] = useState(false)
   // Handel AddToCart..............
   const handelAddtoCart = async () => {
-    const res = await fetch("http://localhost:4000/api/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        productId: id,
-      }),
-    });
+    setIsLoader(true);
+    const res = await fetch(
+      "https://e-commerce-nu-seven.vercel.app/api/addToCart",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productId: id,
+        }),
+      }
+    );
+    setIsLoader(false);
     if (res.status === 400) {
       alert("Alredy Add To Cart!");
     } else {
@@ -53,7 +60,9 @@ const MobilesDetails = () => {
   }, [id]);
   const fetchcomment = async (id) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/productcomment/${id}`);
+      const res = await fetch(
+        `https://e-commerce-nu-seven.vercel.app/api/productcomment/${id}`
+      );
       const jsonReview = await res.json();
       setReviewGet(jsonReview);
     } catch (error) {
@@ -64,23 +73,29 @@ const MobilesDetails = () => {
   //  API CALL comment................
   const userId = user.id;
   const [comment, setcomment] = useState("");
+  const [addLoader, isAddLoader] = useState(false)
   const handelSubmit = async () => {
+    isAddLoader(true);
     try {
-      const res = await fetch("http://localhost:4000/api/productcomment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: id,
-          comment: comment,
-          userId: userId,
-        }),
-      });
+      const res = await fetch(
+        "https://e-commerce-nu-seven.vercel.app/api/productcomment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: id,
+            comment: comment,
+            userId: userId,
+          }),
+        }
+      );
+      isAddLoader(false);
+      fetchcomment(id);
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
-      fetchcomment(id);
     } catch (error) {
       console.log("Error Fetching Data", error);
     }
@@ -89,16 +104,16 @@ const MobilesDetails = () => {
 const handleDelete = async (commentId) => {
   try {
     const response = await fetch(
-      `http://localhost:4000/api/comment/delete/${commentId}`,
+      `https://e-commerce-nu-seven.vercel.app/api/comment/delete/${commentId}`,
       {
         method: "DELETE",
       }
     );
     
+    fetchcomment(id);
     if (!response.ok) {
       throw new Error("Failed to delete comment");
     }
-    fetchcomment(id);
   } catch (error) {
     console.error("Error deleting comment:", error);
   }
@@ -119,10 +134,6 @@ const handleDelete = async (commentId) => {
     };
     fetchData();
   }, []);
-
-  if (!getData) {
-    return <div>Loading...</div>;
-  }
   const data = getData.find((p) => p.product.id === id);
   if (data)
     return (
@@ -139,17 +150,19 @@ const handleDelete = async (commentId) => {
             <div className="flex flex-row justify-center gap-3">
               <button
                 onClick={handelAddtoCart}
-                className="uppercase bg-yellow-500 flex items-center shadow gap-2 hover:bg-yellow-600 py-2 px-3 text-xs md:text-base font-semibold text-white"
+                className="uppercase bg-yellow-500 text-3xl flex items-center shadow gap-2 hover:bg-yellow-600 py-2 px-3 md:text-base font-semibold text-white"
               >
-                <FaCartShopping />
-                add to Cart
+                {!isLoader && <FaCartShopping />}
+                {isLoader && (
+                  <LuLoader2 className="loader rounded-full border-solid animate-spin" />
+                )}
               </button>
               <Link
                 to={`/Mobile/buynow/${id}/${formattedDate}`}
                 className="uppercase bg-orange-500 hover:bg-orange-600 shadow py-1 px-3 text-xs md:text-base font-semibold text-white flex items-center gap-1"
               >
                 <BsLightningFill />
-                buy now!
+                buy
               </Link>
             </div>
           </div>
@@ -237,7 +250,10 @@ const handleDelete = async (commentId) => {
               onClick={() => handelSubmit()}
               className="bg-blue-500 border py-1 px-2 text-white shadow"
             >
-              Add
+              {!addLoader && "Add"}
+              {addLoader && (
+                <LuLoader2 className="loader rounded-full border-solid animate-spin" />
+              )}
             </button>
           </div>
         </div>
