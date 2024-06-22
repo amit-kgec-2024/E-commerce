@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AddToCarts = require("../modules/Addtocarts");
-const Mobiles = require("../modules/Mobiles")
+const Mobiles = require("../modules/Mobiles");
 
 // AddToCart POST Requests.................
 router.post("/addToCart", async (req, res) => {
@@ -44,7 +44,7 @@ router.get("/addToCart/:userId", async (req, res) => {
           price: product.price,
           sale: product.sale,
           stars: product.stars,
-          title: product.title
+          title: product.title,
         };
       })
     );
@@ -67,12 +67,29 @@ router.delete("/removeCart/:id", async (req, res) => {
     if (!result) {
       return res.status(404).json({ error: "Comment not found" });
     }
-      return res.status(404).send("Item not found in the cart");
+    return res.status(404).send("Item not found in the cart");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error!");
   }
 });
+// AddToCart Delete Heart.................
+router.delete("/removeHeart/:id", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    console.log(`Attempting to delete item with product ID: ${productId}`);
 
+    const item = await AddToCarts.findOne({ productId });
+    if (!item) {
+      return res.status(404).json({ error: "Item not found in the cart" });
+    }
+
+    await AddToCarts.findByIdAndDelete(item._id);
+    res.status(200).send("Item successfully removed from the cart");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error!");
+  }
+});
 
 module.exports = router;
