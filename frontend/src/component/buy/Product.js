@@ -8,10 +8,10 @@ import { FaCartShopping } from "react-icons/fa6";
 import { BsLightningFill } from "react-icons/bs";
 import { LuLoader2 } from "react-icons/lu";
 import { Link, useParams } from "react-router-dom";
+import Form from "../From";
 
-const MobilesDetails = () => {
+const Product = () => {
   const { id } = useParams();
-  const [getData, setGetData] = useState([]);
   // Date..........................
   const currentDate = new Date();
   const futureDate = new Date(currentDate);
@@ -29,7 +29,7 @@ const MobilesDetails = () => {
   const [user] = useState(
     () => JSON.parse(localStorage.getItem("user:details")) || {}
   );
-  const [isLoader, setIsLoader] = useState(false)
+  const [isLoader, setIsLoader] = useState(false);
   // Handel AddToCart..............
   const handelAddtoCart = async () => {
     setIsLoader(true);
@@ -69,11 +69,11 @@ const MobilesDetails = () => {
       console.log(error);
     }
   };
- 
+
   //  API CALL comment................
   const userId = user.id;
   const [comment, setcomment] = useState("");
-  const [addLoader, isAddLoader] = useState(false)
+  const [addLoader, isAddLoader] = useState(false);
   const handelSubmit = async () => {
     isAddLoader(true);
     try {
@@ -91,8 +91,8 @@ const MobilesDetails = () => {
           }),
         }
       );
-      isAddLoader(false);
       fetchcomment(id);
+      isAddLoader(false);
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -100,71 +100,86 @@ const MobilesDetails = () => {
       console.log("Error Fetching Data", error);
     }
   };
-  // Delete comment.......................
-const handleDelete = async (commentId) => {
-  try {
-    const response = await fetch(
-      `https://e-commerce-nu-seven.vercel.app/api/comment/delete/${commentId}`,
-      {
-        method: "DELETE",
-      }
-    );
-    
-    fetchcomment(id);
-    if (!response.ok) {
-      throw new Error("Failed to delete comment");
-    }
-  } catch (error) {
-    console.error("Error deleting comment:", error);
-  }
-};
-
   //  Api Calll Products..........................
+  const [getData, setGetData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          "https://e-commerce-nu-seven.vercel.app/api/mobiles/data"
+        const endpoints = [
+          "https://e-commerce-nu-seven.vercel.app/api/mobiles/data",
+          "https://e-commerce-nu-seven.vercel.app/api/appliances/data",
+          "https://e-commerce-nu-seven.vercel.app/api/electronics/data",
+          "https://e-commerce-nu-seven.vercel.app/api/fashion/data",
+          "https://e-commerce-nu-seven.vercel.app/api/beauty/data",
+          "https://e-commerce-nu-seven.vercel.app/api/kitchen/data",
+          "https://e-commerce-nu-seven.vercel.app/api/furniture/data",
+          "https://e-commerce-nu-seven.vercel.app/api/grocery/data",
+        ];
+
+        const fetchPromises = endpoints.map((endpoint) =>
+          fetch(endpoint).then((response) => response.json())
         );
-        const jsonData = await res.json();
-        setGetData(jsonData);
+        const results = await Promise.all(fetchPromises);
+
+        const allData = results.flat();
+        setGetData(allData);
       } catch (error) {
         console.log("Error Fetching Data", error);
       }
     };
     fetchData();
   }, []);
+  const deFaultImage = "amitphotos.jpg";
   const data = getData.find((p) => p.product.id === id);
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    const token = window.localStorage.getItem("user:token");
+    setHasToken(!!token);
+  }, []);
+const [isLogin, setIsLogin] = useState(false);
   if (data)
     return (
       <div className="flex flex-col">
         <div className="flex flex-col sm:flex-row justify-center items-center">
-          <div className="p-3 flex flex-col">
-            <img
-              src={data.product.img}
-              alt={data.product.title}
-              width={250}
-              height={100}
-              className="w-[20rem] sm:w-[30rem]"
+          <div className="p-3 flex flex-col gap-6">
+            <div
+              className="w-[20rem] h-[20rem]"
+              style={{
+                backgroundImage: `url(${data.product.img || deFaultImage})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
             />
-            <div className="flex flex-row justify-center gap-3">
-              <button
-                onClick={handelAddtoCart}
-                className="uppercase bg-yellow-500 text-3xl flex items-center shadow gap-2 hover:bg-yellow-600 py-2 px-3 md:text-base font-semibold text-white"
-              >
-                {!isLoader && <FaCartShopping />}
-                {isLoader && (
-                  <LuLoader2 className="loader rounded-full border-solid animate-spin" />
-                )}
+            {hasToken ? (
+              <div className="flex flex-row justify-center gap-3">
+                <button
+                  onClick={handelAddtoCart}
+                  className="uppercase bg-yellow-500 text-3xl flex items-center shadow gap-2 hover:bg-yellow-600 py-2 px-3 md:text-base font-semibold text-white"
+                >
+                  {!isLoader && <FaCartShopping />}
+                  {isLoader && (
+                    <LuLoader2 className="loader rounded-full border-solid animate-spin" />
+                  )}
+                </button>
+                <Link
+                  to={`/product/${id}/${formattedDate}`}
+                  className="uppercase bg-orange-500 hover:bg-orange-600 shadow py-1 px-3 text-xs md:text-base font-semibold text-white flex items-center gap-1"
+                >
+                  <BsLightningFill />
+                  buy
+                </Link>
+              </div>
+            ) : (
+              <button className="p-3 text-white">
+                <button
+                  onClick={() => setIsLogin(true)}
+                  className="uppercase py-2 px-6 shadow rounded-md bg-orange-600"
+                >
+                  Sign In
+                </button>
               </button>
-              <Link
-                to={`/Mobile/buynow/${id}/${formattedDate}`}
-                className="uppercase bg-orange-500 hover:bg-orange-600 shadow py-1 px-3 text-xs md:text-base font-semibold text-white flex items-center gap-1"
-              >
-                <BsLightningFill />
-                buy
-              </Link>
-            </div>
+            )}
+            {isLogin && <Form setIsLogin={setIsLogin} />}
           </div>
           <div className="flex flex-col gap-3 justify-start items-start p-3">
             <h1 className="text-sm md:text-xl font-bold">
@@ -270,14 +285,6 @@ const handleDelete = async (commentId) => {
                   <h1 className="font-semibold text-sm md:text-base mb-1">
                     {ele.firstname} {ele.lastname}
                   </h1>
-                  {userId === ele.userId && (
-                    <button
-                      onClick={() => handleDelete(ele.commentId)}
-                      className="bg-red-400 px-3 py-1 rounded-md text-white"
-                    >
-                      Remove
-                    </button>
-                  )}
                 </div>
                 <h1 className="text-xs md:text-sm text-gray-600 font-semibold">
                   {ele.comment}
@@ -287,6 +294,6 @@ const handleDelete = async (commentId) => {
         </div>
       </div>
     );
-}
+};
 
-export default MobilesDetails;
+export default Product;

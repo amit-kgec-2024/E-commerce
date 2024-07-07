@@ -268,6 +268,11 @@ const Address = () => {
                       Edit
                     </button>
                     <button
+                      className="text-black"
+                    >
+                      Primary
+                    </button>
+                    <button
                       onClick={() => handleSubmitRemove( ele._id)}
                       className="text-red-500"
                     >

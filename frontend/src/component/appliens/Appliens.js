@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Card from "../fashion/Card";
+import { BsHouseCheckFill } from "react-icons/bs";
+import ApplianceCard from "./ApplianceCard";
 
 const Appliens = () => {
   const [getData, setGetData] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,31 +19,45 @@ const Appliens = () => {
     };
     fetchData();
   }, []);
+
   const shuffleArray = (array) => {
-    return array
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
+    return array.sort(() => Math.random() - 0.5);
   };
 
-  let shuffledProducts = shuffleArray(getData).slice(0, 50);
+  const groupByCategory = (array) => {
+    return array.reduce((result, item) => {
+      (result[item.product.category] =
+        result[item.product.category] || []).push(item);
+      return result;
+    }, {});
+  };
+
+  const groupedProducts = groupByCategory(shuffleArray(getData).slice(0, 50));
+
   return (
     <div>
-      <div className="flex flex-wrap  gap-6 justify-center items-center p-4">
-        {shuffledProducts.map((ele, index) => (
-          <Card
-            key={ele.product.id}
-            id={ele.product.id}
-            img={ele.product.img}
-            title={ele.product.title}
-            price={ele.product.price}
-            discount={ele.product.discount}
-            stars={ele.product.stars}
-            sale={ele.product.sale}
-          />
-        ))}
-      </div>
+      {Object.keys(groupedProducts).map((category) => (
+        <div key={category} className="category-section">
+          <div className="flex flex-row items-center justify-between text-xl font-bold border p-3 shadow">
+            <h2 className="category-title">{category}</h2>
+            <button className="text-blue-500 text-3xl"><BsHouseCheckFill /></button>
+          </div>
+          <div className="flex flex-wrap gap-6 justify-staet w-full items-center p-4">
+            {groupedProducts[category].map((ele) => (
+              <div key={ele.product.id} className="">
+                <ApplianceCard
+                  id={ele.product.id}
+                  img={ele.product.img}
+                  title={ele.product.title}
+                  price={ele.product.price}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
-)};
+  );
+};
 
 export default Appliens;

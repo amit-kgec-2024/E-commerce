@@ -95,7 +95,7 @@ const MobileCard = ({ id, img, stars, title, price, discount, sale }) => {
         </button>
       )}
       <Link
-        to={`/mobilesDetails/${id}`}
+        to={`/product/${id}`}
         className="text-slate-400 hover:text-blue-400"
       >
         <img src={img} alt={title} className="mb-3 w-full h-[200px]" />

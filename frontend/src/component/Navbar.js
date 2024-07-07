@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import Form from "./From";
+import { Link, NavLink } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoSearchOutline } from "react-icons/io5";
 import { FiShoppingCart } from "react-icons/fi";
@@ -15,10 +16,14 @@ import { BsBoxSeam } from "react-icons/bs";
 import { FaPlusSquare } from "react-icons/fa";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-const Navbar = () => {
+const Navbar = ({ handelProduct }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveredMenu, setIsHoveredMenu] = useState(false);
-  
+  const [isLogin, setIsLogin] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(
+    window.localStorage.getItem("user:token") || false
+  );
+
   // User Details
   const [user] = useState(
     () => JSON.parse(localStorage.getItem("user:details")) || {}
@@ -56,20 +61,18 @@ const Navbar = () => {
       const addCartJsonData = await addCartRes.json();
 
       setAddCartGet(addCartJsonData);
-      console.log(addCartJsonData);
     } catch (error) {
       console.log("Error fetching data", error);
     }
   };
   // LOG Out................
-  const navigate = useNavigate();
   const logOut = () => {
     window.localStorage.removeItem("user:token");
     window.localStorage.removeItem("user:details");
-    navigate("/account/signin");
+    setIsUserLoggedIn(false);
   };
   return (
-    <div className="w-full sticky z-50 top-0 px-4 py-3 bg-white shadow-lg">
+    <div className="w-full sticky z-50 top-0 px-8 py-2 bg-white">
       <div className="flex flex-row justify-around items-center gap-5">
         <div className="flex flex-row items-center justify-between w-full">
           <NavLink
@@ -80,7 +83,7 @@ const Navbar = () => {
           >
             IndMart
           </NavLink>
-          <div className="bg-teal-100 text-xl p-1 w-[70%] rounded-md px-2 flex flex-row items-center">
+          <div className="bg-teal-100 text-lg p-1 w-[70%] rounded-md px-3 flex flex-row items-center">
             <IoSearchOutline />
             <input
               placeholder="Search for Products, Brands and More"
@@ -89,73 +92,85 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex flex-row items-center w-full justify-end gap-10">
-          <button
-            className="relative flex flex-row hover:border hover:shadow hover:bg-slate-50 rounded p-1 group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <div className="flex flex-row items-center gap-2">
+          {isUserLoggedIn ? (
+            <button
+              className="relative flex flex-row hover:border hover:shadow hover:bg-slate-50 rounded p-1 group"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <div className="flex flex-row items-center gap-2">
+                <FaRegCircleUser />
+                {isData?.firstname}
+                <div className="w-6">
+                  <SlArrowDown
+                    className={`transition-transform text-xs ${
+                      isHovered ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+              </div>
+              {isHovered && (
+                <div className="absolute border p-2 flex flex-col w-[12rem] mt-7 rounded shadow-lg bg-white">
+                  <button
+                    onClick={() => handelProduct("profile")}
+                    className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50"
+                  >
+                    <FaRegCircleUser />
+                    My Profile
+                  </button>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <FcFlashOn />
+                    SuperCoin Zone
+                  </Link>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <FaPlusSquare />
+                    Plus Zone
+                  </Link>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <BsBoxSeam />
+                    Orders
+                  </Link>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <IoHeartOutline />
+                    Wishlist
+                  </Link>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <GoTag />
+                    Coupons
+                  </Link>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <MdOutlineCardGiftcard />
+                    Gift Cards
+                  </Link>
+                  <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
+                    <IoNotificationsOutline />
+                    Notifications
+                  </Link>
+                  <button
+                    onClick={logOut}
+                    className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50"
+                  >
+                    <MdOutlineLogout />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </button>
+          ) : (
+            <button onClick={() => setIsLogin(true)}>
               <FaRegCircleUser />
-              {isData?.firstname}
-              <div className="w-6">
-                <SlArrowDown
-                  className={`transition-transform text-xs ${
-                    isHovered ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
-            </div>
-            {isHovered && (
-              <div className="absolute border p-2 flex flex-col w-[12rem] mt-7 rounded shadow-lg bg-white">
-                <Link
-                  to={"profile"}
-                  className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50"
-                >
-                  <FaRegCircleUser />
-                  My Profile
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <FcFlashOn />
-                  SuperCoin Zone
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <FaPlusSquare />
-                  Plus Zone
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <BsBoxSeam />
-                  Orders
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <IoHeartOutline />
-                  Wishlist
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <GoTag />
-                  Coupons
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <MdOutlineCardGiftcard />
-                  Gift Cards
-                </Link>
-                <Link className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50">
-                  <IoNotificationsOutline />
-                  Notifications
-                </Link>
-                <button
-                  onClick={() => logOut()}
-                  className="flex flex-row items-center gap-2 text-base p-2 hover:bg-slate-50"
-                >
-                  <MdOutlineLogout />
-                  Logout
-                </button>
-              </div>
-            )}
-          </button>
-          <Link to={"/addToCart"} className="flex flex-row items-center">
+            </button>
+          )}
+
+          <button
+            onClick={() => handelProduct("addToCart")}
+            className="flex flex-row items-center"
+          >
             <FiShoppingCart />
-            <div className="text-xs bg-red-500 text-white w-4 text-center rounded-full mb-4">{addCartGet.length}</div>
-          </Link>
+            <div className="text-xs bg-red-500 text-white w-4 text-center rounded-full mb-4">
+              {addCartGet.length}
+            </div>
+          </button>
           <button
             className="relative flex flex-row hover:border hover:shadow hover:bg-slate-50 rounded p-1 group"
             onMouseEnter={() => setIsHoveredMenu(true)}
@@ -187,6 +202,7 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+      {isLogin && <Form setIsLogin={setIsLogin} />}
     </div>
   );
 };

@@ -2,6 +2,13 @@ const express = require("express");
 const router = express.Router();
 const AddToCarts = require("../modules/Addtocarts");
 const Mobiles = require("../modules/Mobiles");
+const Appliances = require("../modules/Appliances");
+const Beauty = require("../modules/Beauty");
+const Electronics = require("../modules/Electronics");
+const Furniture = require("../modules/Furniture");
+const Kitchen = require("../modules/Kitchen");
+const Products = require("../modules/Products");
+const Grocery = require("../modules/Grocery")
 
 // AddToCart POST Requests.................
 router.post("/addToCart", async (req, res) => {
@@ -26,13 +33,27 @@ router.post("/addToCart", async (req, res) => {
 router.get("/addToCart/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-
     const addToCarts = await AddToCarts.find({ userId: userId });
 
-    const addToCartData = Promise.all(
+    const addToCartData = await Promise.all(
       addToCarts.map(async (addCart) => {
         const _id = addCart._id;
-        const product = await Mobiles.findById(addCart.productId);
+        const productId = addCart.productId;
+
+        let product =
+          (await Mobiles.findById(productId)) ||
+          (await Appliances.findById(productId)) ||
+          (await Electronics.findById(productId)) ||
+          (await Grocery.findById(productId)) ||
+          (await Furniture.findById(productId)) ||
+          (await Products.findById(productId)) ||
+          (await Beauty.findById(productId)) ||
+          (await Kitchen.findById(productId));
+
+        if (!product) {
+          return null; // Skip this product if it wasn't found in any category
+        }
+
         return {
           id: _id,
           userId: addCart.userId,
@@ -48,8 +69,9 @@ router.get("/addToCart/:userId", async (req, res) => {
         };
       })
     );
+    const validCartData = addToCartData.filter((cartItem) => cartItem !== null);
 
-    res.status(200).send(await addToCartData);
+    res.status(200).json(validCartData);
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error!");

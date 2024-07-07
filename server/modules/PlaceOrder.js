@@ -1,15 +1,83 @@
 const mongoose = require('mongoose')
 
 const orderSchema = mongoose.Schema({
-  productId: {
-    type: String,
-    require: true,
-  },
   userId: {
     type: String,
     require: true,
   },
-  addressId: {
+  firstname: {
+    type: String,
+    require: true,
+  },
+  lastname: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
+  mobil: {
+    type: Number,
+    require: true,
+  },
+  place: {
+    type: String,
+    require: true,
+  },
+  post: {
+    type: String,
+    require: true,
+  },
+  police: {
+    type: String,
+    require: true,
+  },
+  dist: {
+    type: String,
+    require: true,
+  },
+  pin: {
+    type: Number,
+    require: true,
+  },
+  state: {
+    type: String,
+    require: true,
+  },
+  img: {
+    type: String,
+    require: true,
+  },
+  title: {
+    type: String,
+    require: true,
+  },
+  models: {
+    type: String,
+    require: true,
+  },
+  price: {
+    type: Number,
+    require: true,
+  },
+  amountSave: {
+    type: Number,
+    require: true,
+  },
+  totalAmount: {
+    type: Number,
+    require: true,
+  },
+  stars: {
+    type: Number,
+    require: true,
+  },
+  discount: {
+    type: Number,
+    require: true,
+  },
+  category: {
     type: String,
     require: true,
   },
@@ -38,3 +106,5 @@ const orderSchema = mongoose.Schema({
 const PlaceOrder = mongoose.model("PlaceOrder", orderSchema);
 
 module.exports = PlaceOrder;
+
+

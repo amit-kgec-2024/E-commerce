@@ -4,9 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import { quentity } from "../../utils/dropdown";
 import OrderAddress from "../sattings/OrderAddress";
 
-const MobilesBuy = () => {
+const ProductBuy = () => {
   const { id, formattedDate } = useParams();
-  const [getData, setGetData] = useState([]);
   // drop down box
   const [dropItems, setdropItems] = useState(1);
   const handelDrop = (event) => {
@@ -16,14 +15,13 @@ const MobilesBuy = () => {
   const handelAddersSet = () => {
     isAddressSet(!addressSet);
   };
-  const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [selectedAddressId, setSelectedAddressId] = useState("0");
   const handleSelectAddress = (id) => {
     setSelectedAddressId(id);
     isAddressSet(false);
   };
   // Get Request.................
   const [isAddress, setAddress] = useState([]);
-  console.log("isAddress", isAddress);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,26 +37,46 @@ const MobilesBuy = () => {
     fetchData();
   }, [selectedAddressId]);
   // API CAlllll.........................
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          "https://e-commerce-nu-seven.vercel.app/api/mobiles/data"
-        );
-        const jsonData = await res.json();
-        setGetData(jsonData);
-      } catch (error) {
-        console.log("Error Fetching Data", error);
-      }
-    };
-    fetchData();
-  }, []);
+ const [getData, setGetData] = useState([]);
+ useEffect(() => {
+   const fetchData = async () => {
+     try {
+       const endpoints = [
+         "https://e-commerce-nu-seven.vercel.app/api/mobiles/data",
+         "https://e-commerce-nu-seven.vercel.app/api/appliances/data",
+         "https://e-commerce-nu-seven.vercel.app/api/electronics/data",
+         "https://e-commerce-nu-seven.vercel.app/api/fashion/data",
+         "https://e-commerce-nu-seven.vercel.app/api/beauty/data",
+         "https://e-commerce-nu-seven.vercel.app/api/kitchen/data",
+         "https://e-commerce-nu-seven.vercel.app/api/furniture/data",
+         "https://e-commerce-nu-seven.vercel.app/api/grocery/data",
+       ];
 
-  if (!getData) {
-    return <div>Loading...</div>;
-  }
+       const fetchPromises = endpoints.map((endpoint) =>
+         fetch(endpoint).then((response) => response.json())
+       );
+       const results = await Promise.all(fetchPromises);
+
+       const allData = results.flat();
+       setGetData(allData);
+     } catch (error) {
+       console.log("Error Fetching Data", error);
+     }
+   };
+   fetchData();
+ }, []);
+ const deFaultImage = "amitphotos.jpg";
   const data = getData.find((p) => p.product.id === id);
-
+  const totalAmount = data
+    ? Math.round(
+        dropItems *
+          (data.product.price -
+            (data.product.price / 100) * data.product.discount)
+      )
+    : 0;
+  const amountSave = data
+    ? Math.round(data.product.price * dropItems - totalAmount)
+    : 0;
   if (data)
     return (
       <div className="flex flex-col justify-center items-center px-4">
@@ -93,20 +111,21 @@ const MobilesBuy = () => {
         )}
         <div className="flex flex-row justify-around gap-4">
           <div className="p-3">
-            <img
-              src={data.product.img}
-              alt={data.product.title}
-              width={1000}
-              height={1000}
-              className="w-[100px] sm:w-[200px] h-[100px] sm:h-[200px] mb-3"
+            <div
+              className="w-[20rem] h-[20rem]"
+              style={{
+                backgroundImage: `url(${data.product.img || deFaultImage})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
             />
             <div
-              className="border flex flex-row sm:mx-12 justify-center text-xs sm:text-base items-center shadow"
+              className="flex flex-row justify-center text-xs sm:text-base items-center"
               value={setdropItems}
               onChange={handelDrop}
             >
-              <h1>Qty:</h1>
-              <select className="form-select outline-none">
+              <h1 className="uppercase">quantity:</h1>
+              <select className="form-select outline-none w-16">
                 {quentity.map((option) => (
                   <option key={option} value={option.value}>
                     {option.label}
@@ -132,11 +151,7 @@ const MobilesBuy = () => {
               <span className="text-sm md:text-lg font-bold text-blue-400">
                 {data.product.discount}% Off
               </span>{" "}
-              ₹
-              {Math.round(
-                data.product.price -
-                  (data.product.price / 100) * data.product.discount
-              )}{" "}
+              ₹{amountSave}{" "}
               <del className="text-xs md:text-sm text-gray-500">
                 ₹{data.product.price}
               </del>
@@ -163,9 +178,7 @@ const MobilesBuy = () => {
             <h1 className="text-xs md:text-sm font-light">Discount</h1>
             <del className="text-xs md:text-sm font-light text-green-400">
               -₹
-              {Math.round(
-                dropItems * (data.product.price / 100) * data.product.discount
-              )}
+              {amountSave}
             </del>
           </div>
           <div className="flex flex-row justify-between mb-2">
@@ -177,26 +190,11 @@ const MobilesBuy = () => {
           </div>
           <div className="flex flex-row justify-between py-2 border-t-2 border-dotted">
             <h1 className="text-xs md:text-sm font-semibold">Total Amount</h1>
-            <h1 className="text-xs md:text-sm font-semibold">
-              ₹
-              {Math.round(
-                dropItems *
-                  (data.product.price -
-                    (data.product.price / 100) * data.product.discount)
-              )}
-            </h1>
+            <h1 className="text-xs md:text-sm font-semibold">₹{totalAmount}</h1>
           </div>
           <div className="py-2 border-t-2">
             <h1 className="text-xs md:text-sm font-semibold text-green-600">
-              You will save{" "}
-              <span>
-                ₹
-                {Math.round(
-                  dropItems *
-                    ((data.product.price / 100) * data.product.discount)
-                )}
-              </span>{" "}
-              on this order
+              You will save <span>₹{amountSave}</span> on this order
             </h1>
           </div>
         </div>
@@ -208,18 +206,11 @@ const MobilesBuy = () => {
                 dropItems * (data.product.price / 100) * data.product.discount
               )}
             </del>
-            <span className="font-semibold">
-              ₹
-              {Math.round(
-                dropItems *
-                  (data.product.price -
-                    (data.product.price / 100) * data.product.discount)
-              )}
-            </span>
+            <span className="font-semibold">₹{totalAmount}</span>
           </h1>
           <Link
-            to={`/mobile/payment/${id}/${dropItems}/${formattedDate}/${selectedAddressId}`}
-            className="bg-yellow-400 text-xs md:text-sm py-1 px-4 rounded font-semibold"
+            to={`/product/${id}/${dropItems}/${amountSave}/${totalAmount}/${formattedDate}/${selectedAddressId}`}
+            className="bg-blue-400 text-xs md:text-sm py-1 px-4 rounded font-semibold"
           >
             Place order
           </Link>
@@ -228,4 +219,4 @@ const MobilesBuy = () => {
     );
 };
 
-export default MobilesBuy;
+export default ProductBuy;

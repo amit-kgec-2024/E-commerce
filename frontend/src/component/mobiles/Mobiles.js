@@ -23,7 +23,7 @@ const Mobiles = () => {
     fetchData();
   }, []);
   const filteredData = getData.filter(
-    (item) => item.product.category === category
+    (item) => item.category === category
   );
   // Function to calculate delivery date
   const getDeliveryDate = () => {
@@ -42,7 +42,7 @@ const Mobiles = () => {
       <div className="">
         {filteredData.map((ele) => (
           <Link
-            to={`/mobilesDetails/${ele.product.id}`}
+            to={`/product/${ele.product.id}`}
             className="w-full flex flex-row p-3 justify-around border"
           >
             <div className="">

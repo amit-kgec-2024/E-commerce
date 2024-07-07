@@ -7,7 +7,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { BiSolidUserRectangle } from "react-icons/bi";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { BiLogOutCircle } from "react-icons/bi";
-import MyOrders from "./MyOrders";
+import MyOrders from "../buy/MyOrders";
 import Address from "./Address";
 import Coupons from "./Coupons";
 import Reviews from "./Reviews";
@@ -19,7 +19,7 @@ import SaveCards from "./SaveCards";
 import SavedUPI from "./SavedUPI";
 import WishList from "./Wishlist";
 
-const Profile = () => {
+const Profile = ({ handelProduct }) => {
   const [isShow, setIsShow] = useState("personal");
   const handelToggle = (toggleBox) => {
     setIsShow(toggleBox);
@@ -31,11 +31,14 @@ const Profile = () => {
     window.localStorage.removeItem("user:details");
     navigate("/account/signin");
   };
-  
+
   return (
     <div className="flex flex-row p-3 gap-4">
       <div className="w-[15rem] flex flex-col gap-3 text-xl">
-        <button className="flex flex-row items-center gap-3 p-3 bg-slate-100">
+        <button
+          onClick={() => handelProduct("home")}
+          className="flex flex-row items-center gap-3 p-3 bg-slate-100"
+        >
           <div className="flex text-4xl items-center justify-center text-orange-500 overflow-hidden">
             <HiMiniUserCircle />
           </div>
@@ -60,19 +63,25 @@ const Profile = () => {
           <div className="flex flex-col">
             <button
               onClick={() => handelToggle("personal")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "personal" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "personal" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               Personal Information
             </button>
             <button
               onClick={() => handelToggle("address")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "address" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "address" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               Manage Addresses
             </button>
             <button
               onClick={() => handelToggle("pancard")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "pancard" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "pancard" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               PAN Card Information
             </button>
@@ -84,19 +93,25 @@ const Profile = () => {
           <div className="flex flex-col">
             <button
               onClick={() => handelToggle("giftcard")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "giftcard" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "giftcard" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               Gift Card
             </button>
             <button
               onClick={() => handelToggle("saveupi")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "saveupi" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "saveupi" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               Save UPI
             </button>
             <button
               onClick={() => handelToggle("savecards")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "savecards" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "savecards" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               Save Cards
             </button>
@@ -108,25 +123,33 @@ const Profile = () => {
           <div className="flex flex-col">
             <button
               onClick={() => handelToggle("coupons")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "coupons" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "coupons" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               My Coupons
             </button>
             <button
               onClick={() => handelToggle("reviews")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "reviews" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "reviews" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               My Reviews & Ratings
             </button>
             <button
               onClick={() => handelToggle("notifications")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "notifications" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "notifications" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               All Notifications
             </button>
             <button
               onClick={() => handelToggle("wishlist")}
-              className={`text-sm p-3 w-full hover:bg-teal-50 ${isShow === "wishlist" ? "text-blue-400 bg-teal-50" : " "}`}
+              className={`text-sm p-3 w-full hover:bg-teal-50 ${
+                isShow === "wishlist" ? "text-blue-400 bg-teal-50" : " "
+              }`}
             >
               My Wishlist
             </button>

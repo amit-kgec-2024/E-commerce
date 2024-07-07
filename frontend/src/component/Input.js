@@ -14,7 +14,7 @@ const Input = ({
     <div className="mb-4">
       {label && (
         <label
-          className="block text-gray-400 font-bold text-sm mb-2"
+          className="block text-black font-bold text-sm mb-2"
           for={name}
         >
           {label}
