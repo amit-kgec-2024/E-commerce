@@ -213,7 +213,7 @@ router.get("/appliances/data", async (req, res) => {
   }
 });
 // Delete Appliances...............
-router.delete("/product/delete/:id", async (req, res) => {
+router.delete("/appliances/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedProduct = await Appliances.findByIdAndDelete(id);
