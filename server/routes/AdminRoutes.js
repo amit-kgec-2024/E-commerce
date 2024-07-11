@@ -1,41 +1,126 @@
 const express = require("express");
+const moment = require("moment");
 const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../modules/Admin");
 const Products = require("../modules/Products");
-const Mobiles = require("../modules/Mobiles")
-const Appliances = require("../modules/Appliances")
-const Electronics = require("../modules/Electronics")
-const Beauty = require("../modules/Beauty")
-const Kitchen = require("../modules/Kitchen")
-const Furniture = require("../modules/Furniture")
-const Grocery = require("../modules/Grocery")
+const Mobiles = require("../modules/Mobiles");
+const Appliances = require("../modules/Appliances");
+const Electronics = require("../modules/Electronics");
+const Beauty = require("../modules/Beauty");
+const Kitchen = require("../modules/Kitchen");
+const Furniture = require("../modules/Furniture");
+const Grocery = require("../modules/Grocery");
 
 // Admin register.....................
-router.post("/admin/register", async (req, res, next) => {
+
+router.post("/admin/register", async (req, res) => {
   try {
-    const { firstname, lastname, email, password } = req.body;
-    if (!firstname || !lastname || !email || !password) {
-      res.status(200).send("Plese all require files");
-    } else {
-      const isAlreadyExist = await Admin.findOne({ email });
-      if (isAlreadyExist) {
-        res.status(400).send("User alredy Exist");
-      } else {
-        const newUser = new Admin({ firstname, lastname, email });
-        bcryptjs.hash(password, 10, (err, hashedPassword) => {
-          newUser.set("password", hashedPassword);
-          newUser.save();
-          next();
-        });
-        return res.status(200).send("user register Successfully");
+    const {
+      firstname,
+      lastname,
+      email,
+      mobile,
+      password,
+      dob,
+      profImage,
+      fatherName,
+      husbandName,
+      briefDescription,
+      qulification,
+      community,
+      pin,
+      permamentAddress,
+      temporaryAddress,
+      panNumber,
+      panImage,
+      aadharNumber,
+      aadharImage,
+      gender,
+    } = req.body;
+
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    var prefix = `MART${year}${month}${day}`;
+    var suffix = "AD";
+    const hashPassword = await bcryptjs.hash(password, 15);
+    const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
+
+    const existingAdmin = await Admin.findOne({
+      $or: [
+        { email: email },
+        { mobile: mobile },
+        { panNumber: panNumber },
+        { aadharNumber: aadharNumber },
+      ],
+    });
+
+    if (existingAdmin) {
+      if (existingAdmin.email === email) {
+        return res.status(409).json({ message: "Email already registered" });
+      }
+      if (existingAdmin.mobile === mobile) {
+        return res
+          .status(409)
+          .json({ message: "Mobile number already registered" });
+      }
+      if (existingAdmin.panNumber === panNumber) {
+        return res
+          .status(409)
+          .json({ message: "PAN number already registered" });
+      }
+      if (existingAdmin.aadharNumber === aadharNumber) {
+        return res
+          .status(409)
+          .json({ message: "Aadhar number already registered" });
       }
     }
+
+    const lastAdmin = await Admin.findOne().sort({ serialNo: -1 });
+
+    let serialNo = 1;
+    if (lastAdmin && lastAdmin.serialNo) {
+      serialNo = lastAdmin.serialNo + 1;
+    }
+
+    const newAdmin = new Admin({
+      firstname,
+      lastname,
+      email,
+      mobile,
+      password: hashPassword,
+      passwords: password,
+      serialNo,
+      regNo: `${prefix}${serialNo}${suffix}`,
+      dob: formattedDate,
+      profImage,
+      fatherName,
+      husbandName,
+      briefDescription,
+      qulification,
+      community,
+      pin,
+      permamentAddress,
+      temporaryAddress,
+      panNumber,
+      panImage,
+      aadharNumber,
+      aadharImage,
+      gender,
+    });
+
+    await newAdmin.save();
+
+    return res.status(200).json(newAdmin);
   } catch (error) {
-    console.log(error, "Error");
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 // login...............
 router.post("/admin/login", async (req, res, next) => {
   try {
@@ -69,7 +154,7 @@ router.post("/admin/login", async (req, res, next) => {
                   id: user._id,
                   email: user.email,
                   password: user.password,
-                  firstname: user.firstname, 
+                  firstname: user.firstname,
                   lastname: user.lastname,
                 },
                 token: token,
@@ -84,7 +169,7 @@ router.post("/admin/login", async (req, res, next) => {
   }
 });
 // GET request to retrieve all delivery users
-router.get('/admin/users', async (req, res) => {
+router.get("/admin/users", async (req, res) => {
   try {
     const users = await Admin.find();
     return res.status(200).json(users);
@@ -97,7 +182,8 @@ router.get('/admin/users', async (req, res) => {
 // Mobile register.........
 router.post("/mobile/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Mobiles({
       img: imgUrl,
@@ -164,7 +250,8 @@ router.delete("/mobiles/delete/:id", async (req, res) => {
 // Appliances register.........
 router.post("/appliances/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Appliances({
       img: imgUrl,
@@ -231,7 +318,8 @@ router.delete("/appliances/delete/:id", async (req, res) => {
 // electronics register.........
 router.post("/electronics/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Electronics({
       img: imgUrl,
@@ -298,7 +386,8 @@ router.delete("/electronics/delete/:id", async (req, res) => {
 // beauty register.........
 router.post("/beauty/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Beauty({
       img: imgUrl,
@@ -365,7 +454,8 @@ router.delete("/beauty/delete/:id", async (req, res) => {
 // kitchen register.........
 router.post("/kitchen/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Kitchen({
       img: imgUrl,
@@ -432,7 +522,8 @@ router.delete("/kitchen/delete/:id", async (req, res) => {
 // furniture register.........
 router.post("/furniture/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Furniture({
       img: imgUrl,
@@ -499,7 +590,8 @@ router.delete("/furniture/delete/:id", async (req, res) => {
 // grocery register.........
 router.post("/grocery/register", async (req, res) => {
   try {
-    const { imgUrl, title, price, models, stars, discount, category, sale } = req.body;
+    const { imgUrl, title, price, models, stars, discount, category, sale } =
+      req.body;
 
     const newProducts = new Grocery({
       img: imgUrl,
