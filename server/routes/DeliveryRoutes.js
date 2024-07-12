@@ -5,7 +5,6 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Delivery = require("../modules/Delivery");
 
-
 // Admin register.....................
 router.post("/delivery/register", async (req, res, next) => {
   try {
@@ -71,7 +70,6 @@ router.post("/delivery/register", async (req, res, next) => {
       }
     }
 
-    // Find the last registered admin to determine the new serial number
     const lastDelivery = await Delivery.findOne().sort({ serialNo: -1 });
 
     let serialNo = 1;
@@ -116,21 +114,21 @@ router.post("/delivery/register", async (req, res, next) => {
 // login...............
 router.post("/delivery/login", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { regNo, password } = req.body;
+    if (!regNo || !password) {
       res.status(400).send("Plese all require files");
     } else {
-      const user = await Delivery.findOne({ email });
+      const user = await Delivery.findOne({ regNo });
       if (!user) {
-        res.status(400).send("User Email & Password is Incorrect");
+        res.status(400).send("User regNo & Password is Incorrect");
       } else {
         const valideteUser = await bcryptjs.compare(password, user.password);
         if (!valideteUser) {
-          res.status(400).send("User Email & Password is Incorrect");
+          res.status(400).send("User regNo & Password is Incorrect");
         } else {
           const payload = {
             userId: user._id,
-            email: user.email,
+            regNo: user.regNo,
           };
           const JWT_SECRET_KEY =
             process.env.JWT_SECRET_KEY || "THIS_IS_A_JWT_SECRET_KEY";
@@ -145,7 +143,6 @@ router.post("/delivery/login", async (req, res, next) => {
                 user: {
                   id: user._id,
                   email: user.email,
-                  password: user.password,
                   firstname: user.firstname,
                   lastname: user.lastname,
                 },
@@ -162,7 +159,7 @@ router.post("/delivery/login", async (req, res, next) => {
 });
 
 // GET request to retrieve all delivery users
-router.get('/delivery/users', async (req, res) => {
+router.get("/delivery/users", async (req, res) => {
   try {
     const users = await Delivery.find();
     return res.status(200).json(users);
@@ -172,4 +169,94 @@ router.get('/delivery/users', async (req, res) => {
   }
 });
 
+// Update Delivery Boy...................
+router.put("/delivery/update/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const {
+      firstname,
+      lastname,
+      email,
+      mobile,
+      password,
+      dob,
+      profImage,
+      fatherName,
+      husbandName,
+      briefDescription,
+      qulification,
+      community,
+      pin,
+      permamentAddress,
+      temporaryAddress,
+    } = req.body;
+
+    const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
+
+    const updateData = {
+      firstname,
+      lastname,
+      email,
+      mobile,
+      password,
+      dob: formattedDate,
+      profImage,
+      fatherName,
+      husbandName,
+      briefDescription,
+      qulification,
+      community,
+      pin,
+      permamentAddress,
+      temporaryAddress,
+    };
+
+    const existingDelivery = await Delivery.findOneAndUpdate(
+      { _id: id },
+      { $set: updateData },
+      { new: true }
+    );
+
+    if (!existingDelivery) {
+      return res.status(404).json({ message: "Delivery not found" });
+    }
+
+    return res.status(200).json(existingDelivery);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+// Delete delevery.................
+router.delete("/delivery/delete/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const existingDelivery = await Delivery.findOneAndDelete({ _id: id });
+    if (!existingDelivery) {
+      return res.status(404).json({ message: "Delivery not found" });
+    }
+
+    return res.status(200).json({ message: "Delete SuccesFully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+// Only one User....................
+router.get("/delivery/boy/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const existingDelivery = await Delivery.findOne({ _id: id });
+    if (!existingDelivery) {
+      return res.status(404).json({ message: "Delivery not found" });
+    }
+
+    return res.status(200).json(existingDelivery);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 module.exports = router;
