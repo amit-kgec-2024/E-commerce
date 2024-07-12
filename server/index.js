@@ -21,6 +21,7 @@ const addtoCartRouters = require("./routes/AddCartRoutes");
 const allDataRouters = require("./routes/AllData");
 const deliveryRoutes = require("./routes/DeliveryRoutes");
 const managementRoutes = require("./routes/ManagementRouter");
+const helpdeskRouter = require("./routes/HelpdeskRouter");
 
 // useRouter..............
 app.use("/api", userRoutes);
@@ -31,6 +32,7 @@ app.use("/api", addtoCartRouters);
 app.use("/api", allDataRouters);
 app.use("/api", deliveryRoutes);
 app.use("/api", managementRoutes);
+app.use("/api", helpdeskRouter);
 
 const port = process.env.PORT || 4000;
 
