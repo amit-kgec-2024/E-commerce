@@ -93,6 +93,14 @@ const adminSchame = mongoose.Schema({
     type: Boolean,
     require: true,
   },
+  state_id: {
+    type: Number,
+    require: true,
+  },
+  district_id: {
+    type: Number,
+    require: true,
+  },
   isActive: {
     type: Boolean,
     defaultValue: true,

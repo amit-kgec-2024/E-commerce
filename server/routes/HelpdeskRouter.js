@@ -29,6 +29,8 @@ router.post("/helpdesk/register", async (req, res, next) => {
       aadharNumber,
       aadharImage,
       gender,
+      state_id,
+      district_id,
     } = req.body;
 
     const date = new Date();
@@ -101,6 +103,8 @@ router.post("/helpdesk/register", async (req, res, next) => {
       aadharNumber,
       aadharImage,
       gender,
+      state_id,
+      district_id,
     });
 
     await newHelpDesk.save();
@@ -189,6 +193,8 @@ router.put("/helpdesk/update/:id", async (req, res, next) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      state_id,
+      district_id,
     } = req.body;
 
     const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
@@ -209,6 +215,8 @@ router.put("/helpdesk/update/:id", async (req, res, next) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      state_id,
+      district_id
     };
 
     const existingHelpDesk = await HelpDesk.findOneAndUpdate(

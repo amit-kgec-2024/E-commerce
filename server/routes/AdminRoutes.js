@@ -28,6 +28,8 @@ router.post("/admin/register", async (req, res) => {
       aadharNumber,
       aadharImage,
       gender,
+      state_id,
+      district_id,
     } = req.body;
 
     const date = new Date();
@@ -100,6 +102,8 @@ router.post("/admin/register", async (req, res) => {
       aadharNumber,
       aadharImage,
       gender,
+      state_id,
+      district_id,
     });
 
     await newAdmin.save();
@@ -187,6 +191,8 @@ router.put("/admin/update/:id", async (req, res, next) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      state_id,
+      district_id,
     } = req.body;
 
     const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
@@ -207,6 +213,8 @@ router.put("/admin/update/:id", async (req, res, next) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      state_id,
+      district_id,
     };
 
     const existingAdmin = await Admin.findOneAndUpdate(
