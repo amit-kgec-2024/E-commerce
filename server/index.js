@@ -22,6 +22,7 @@ const allDataRouters = require("./routes/AllData");
 const deliveryRoutes = require("./routes/DeliveryRoutes");
 const managementRoutes = require("./routes/ManagementRouter");
 const helpdeskRouter = require("./routes/HelpdeskRouter");
+const stateRouter = require("./routes/State");
 
 // useRouter..............
 app.use("/api", userRoutes);
@@ -33,6 +34,7 @@ app.use("/api", allDataRouters);
 app.use("/api", deliveryRoutes);
 app.use("/api", managementRoutes);
 app.use("/api", helpdeskRouter);
+app.use("/state", stateRouter);
 
 const port = process.env.PORT || 4000;
 
