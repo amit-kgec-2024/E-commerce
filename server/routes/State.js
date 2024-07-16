@@ -54,7 +54,7 @@ router.post("/district/register", async (req, res, next) => {
   }
 });
 
-router.post("/district/:id", async (req, res)=>{
+router.get("/district/:id", async (req, res)=>{
     try {
         const state = req.params.id;
         const findDistrict = await District.find({state_id: state});
