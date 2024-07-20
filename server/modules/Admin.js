@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const adminSchame = mongoose.Schema({
+  id: {
+    type: String,
+    autoIncrement: true,
+  },
   firstname: {
     type: String,
     require: true,

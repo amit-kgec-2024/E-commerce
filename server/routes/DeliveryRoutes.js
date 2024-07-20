@@ -4,43 +4,20 @@ const moment = require("moment");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Delivery = require("../modules/Delivery");
+const State = require("../modules/State");
+const District = require("../modules/District");
 
-// Admin register.....................
-router.post("/delivery/register", async (req, res, next) => {
+// Delivery register.....................
+router.post("/delivery/register", async (req, res) => {
   try {
-    const {
-      firstname,
-      lastname,
-      email,
-      mobile,
-      password,
-      dob,
-      profImage,
-      fatherName,
-      husbandName,
-      briefDescription,
-      qulification,
-      community,
-      pin,
-      permamentAddress,
-      temporaryAddress,
-      panNumber,
-      panImage,
-      aadharNumber,
-      aadharImage,
-      gender,
-      state_id,
-      district_id,
-    } = req.body;
+    const { email, mobile, panNumber, aadharNumber } = req.body;
 
     const date = new Date();
     const year = date.getFullYear().toString().slice(-2);
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
     var prefix = `MART${year}${month}${day}`;
-    var suffix = "DP";
-    const hashPassword = await bcryptjs.hash(password, 15);
-    const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
+    var suffix = "AD";
 
     const existingDelivery = await Delivery.findOne({
       $or: [
@@ -80,15 +57,31 @@ router.post("/delivery/register", async (req, res, next) => {
     }
 
     const newDelivery = new Delivery({
-      firstname,
-      lastname,
       email,
       mobile,
-      password: hashPassword,
-      passwords: password,
       serialNo,
       regNo: `${prefix}${serialNo}${suffix}`,
-      dob: formattedDate,
+      panNumber,
+      aadharNumber,
+    });
+
+    await newDelivery.save();
+
+    return res.status(200).json(newDelivery.regNo);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+//Delivery Register..............
+router.put("/delivery/register/:regNo", async (req, res) => {
+  try {
+    const regNo = req.params.regNo;
+    const {
+      firstname,
+      lastname,
+      password,
+      dob,
       profImage,
       fatherName,
       husbandName,
@@ -98,25 +91,55 @@ router.post("/delivery/register", async (req, res, next) => {
       pin,
       permamentAddress,
       temporaryAddress,
-      panNumber,
       panImage,
-      aadharNumber,
       aadharImage,
       gender,
       state_id,
       district_id,
+    } = req.body;
+
+    const hashPassword = await bcryptjs.hash(password, 15);
+    const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
+
+    const existingDelivery = await Delivery.findOne({
+      regNo: regNo,
     });
 
-    await newDelivery.save();
+    if (!existingDelivery) {
+      return res.status(404).json({ message: "Delivery not found" });
+    }
 
-    return res.status(200).json(newDelivery);
+    existingDelivery.firstname = firstname;
+    existingDelivery.lastname = lastname;
+    existingDelivery.password = hashPassword;
+    existingDelivery.passwords = password;
+    existingDelivery.dob = formattedDate;
+    existingDelivery.profImage = profImage;
+    existingDelivery.fatherName = fatherName;
+    existingDelivery.husbandName = husbandName;
+    existingDelivery.briefDescription = briefDescription;
+    existingDelivery.qulification = qulification;
+    existingDelivery.community = community;
+    existingDelivery.pin = pin;
+    existingDelivery.permamentAddress = permamentAddress;
+    existingDelivery.temporaryAddress = temporaryAddress;
+    existingDelivery.panImage = panImage;
+    existingDelivery.aadharImage = aadharImage;
+    existingDelivery.gender = gender;
+    existingDelivery.state_id = state_id;
+    existingDelivery.district_id = district_id;
+
+    await existingDelivery.save();
+
+    return res.status(200).json(existingDelivery);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 // login...............
-router.post("/delivery/login", async (req, res, next) => {
+router.post("/delivery/login", async (req, res) => {
   try {
     const { regNo, password } = req.body;
     if (!regNo || !password) {
@@ -166,7 +189,32 @@ router.post("/delivery/login", async (req, res, next) => {
 router.get("/delivery/users", async (req, res) => {
   try {
     const users = await Delivery.find();
-    return res.status(200).json(users);
+    const stateIds = users.map((user) => user.state_id);
+    const districtIds = users.map((user) => user.district_id);
+
+    const states = await State.find({ state_id: { $in: stateIds } });
+    const districts = await District.find({
+      district_id: { $in: districtIds },
+    });
+
+    const usersWithDetails = users.map((user) => {
+      const userState = states.find(
+        (state) => state.state_id === user.state_id
+      );
+      const userDistrict = districts.find(
+        (district) => district.district_id === user.district_id
+      );
+
+      return {
+        ...user._doc,
+        state_name: userState ? userState.state_name : "State not found",
+        district_name: userDistrict
+          ? userDistrict.district_name
+          : "District not found",
+      };
+    });
+
+    return res.status(200).json(usersWithDetails);
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
@@ -174,7 +222,7 @@ router.get("/delivery/users", async (req, res) => {
 });
 
 // Update Delivery Boy...................
-router.put("/delivery/update/:id", async (req, res, next) => {
+router.put("/delivery/update/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const {
@@ -236,7 +284,7 @@ router.put("/delivery/update/:id", async (req, res, next) => {
   }
 });
 // Delete delevery.................
-router.delete("/delivery/delete/:id", async (req, res, next) => {
+router.delete("/delivery/delete/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -252,7 +300,7 @@ router.delete("/delivery/delete/:id", async (req, res, next) => {
   }
 });
 // Only one User....................
-router.get("/delivery/boy/:id", async (req, res, next) => {
+router.get("/delivery/boy/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -260,10 +308,50 @@ router.get("/delivery/boy/:id", async (req, res, next) => {
     if (!existingDelivery) {
       return res.status(404).json({ message: "Delivery not found" });
     }
+    const state = await State.findOne({ state_id: existingAdmin.state_id });
+    const district = await District.findOne({
+      district_id: existingAdmin.district_id,
+    });
 
-    return res.status(200).json(existingDelivery);
+    const response = {
+      ...existingAdmin._doc,
+      state_name: state ? state.state_name : "State not found",
+      district_name: district ? district.district_name : "District not found",
+    };
+
+    return res.status(200).json(response);
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Forget password..........
+router.put("/delivery/change/password", async (req, res) => {
+  try {
+    const { email, mobile, newPassword } = req.body;
+
+    if (!email || !mobile || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Please provide all required fields" });
+    }
+
+    const user = await Delivery.findOne({ email, mobile });
+    if (!user) {
+      return res.status(400).json({
+        message: "User with provided email and mobile number not found",
+      });
+    }
+
+    const hashedPassword = await bcryptjs.hash(newPassword, 15);
+    user.password = hashedPassword;
+    user.passwords = newPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });

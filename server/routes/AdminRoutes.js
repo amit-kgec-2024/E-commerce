@@ -4,33 +4,12 @@ const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../modules/Admin");
+const State = require("../modules/State");
+const District = require("../modules/District");
 
 router.post("/admin/register", async (req, res) => {
   try {
-    const {
-      firstname,
-      lastname,
-      email,
-      mobile,
-      password,
-      dob,
-      profImage,
-      fatherName,
-      husbandName,
-      briefDescription,
-      qulification,
-      community,
-      pin,
-      permamentAddress,
-      temporaryAddress,
-      panNumber,
-      panImage,
-      aadharNumber,
-      aadharImage,
-      gender,
-      state_id,
-      district_id,
-    } = req.body;
+    const { email, mobile, panNumber, aadharNumber } = req.body;
 
     const date = new Date();
     const year = date.getFullYear().toString().slice(-2);
@@ -38,8 +17,6 @@ router.post("/admin/register", async (req, res) => {
     const day = date.getDate().toString().padStart(2, "0");
     var prefix = `MART${year}${month}${day}`;
     var suffix = "AD";
-    const hashPassword = await bcryptjs.hash(password, 15);
-    const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
 
     const existingAdmin = await Admin.findOne({
       $or: [
@@ -79,15 +56,31 @@ router.post("/admin/register", async (req, res) => {
     }
 
     const newAdmin = new Admin({
-      firstname,
-      lastname,
       email,
       mobile,
-      password: hashPassword,
-      passwords: password,
       serialNo,
       regNo: `${prefix}${serialNo}${suffix}`,
-      dob: formattedDate,
+      panNumber,
+      aadharNumber,
+    });
+
+    await newAdmin.save();
+
+    return res.status(200).json(newAdmin.regNo);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+//Admin Register..............
+router.put("/admin/register/:regNo", async (req, res) => {
+  try {
+    const regNo = req.params.regNo;
+    const {
+      firstname,
+      lastname,
+      password,
+      dob,
       profImage,
       fatherName,
       husbandName,
@@ -97,26 +90,54 @@ router.post("/admin/register", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
-      panNumber,
       panImage,
-      aadharNumber,
       aadharImage,
       gender,
       state_id,
       district_id,
+    } = req.body;
+
+    const hashPassword = await bcryptjs.hash(password, 15);
+    const formattedDate = moment(dob, "DD.MM.YYYY").format("YYYY-MM-DD");
+
+    const existingAdmin = await Admin.findOne({
+      regNo: regNo,
     });
 
-    await newAdmin.save();
+    if (!existingAdmin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
 
-    return res.status(200).json(newAdmin);
+    existingAdmin.firstname = firstname;
+    existingAdmin.lastname = lastname;
+    existingAdmin.password = hashPassword;
+    existingAdmin.passwords = password;
+    existingAdmin.dob = formattedDate;
+    existingAdmin.profImage = profImage;
+    existingAdmin.fatherName = fatherName;
+    existingAdmin.husbandName = husbandName;
+    existingAdmin.briefDescription = briefDescription;
+    existingAdmin.qulification = qulification;
+    existingAdmin.community = community;
+    existingAdmin.pin = pin;
+    existingAdmin.permamentAddress = permamentAddress;
+    existingAdmin.temporaryAddress = temporaryAddress;
+    existingAdmin.panImage = panImage;
+    existingAdmin.aadharImage = aadharImage;
+    existingAdmin.gender = gender;
+    existingAdmin.state_id = state_id;
+    existingAdmin.district_id = district_id;
+
+    await existingAdmin.save();
+
+    return res.status(200).json(existingAdmin);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 // login...............
-router.post("/admin/login", async (req, res, next) => {
+router.post("/admin/login", async (req, res) => {
   try {
     const { regNo, password } = req.body;
     if (!regNo || !password) {
@@ -165,14 +186,41 @@ router.post("/admin/login", async (req, res, next) => {
 router.get("/admin/users", async (req, res) => {
   try {
     const users = await Admin.find();
-    return res.status(200).json(users);
+
+    const stateIds = users.map((user) => user.state_id);
+    const districtIds = users.map((user) => user.district_id);
+
+    const states = await State.find({ state_id: { $in: stateIds } });
+    const districts = await District.find({
+      district_id: { $in: districtIds },
+    });
+
+    const usersWithDetails = users.map((user) => {
+      const userState = states.find(
+        (state) => state.state_id === user.state_id
+      );
+      const userDistrict = districts.find(
+        (district) => district.district_id === user.district_id
+      );
+
+      return {
+        ...user._doc,
+        state_name: userState ? userState.state_name : "State not found",
+        district_name: userDistrict
+          ? userDistrict.district_name
+          : "District not found",
+      };
+    });
+
+    return res.status(200).json(usersWithDetails);
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
   }
 });
+
 // update Admins..........................................
-router.put("/admin/update/:id", async (req, res, next) => {
+router.put("/admin/update/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const {
@@ -234,7 +282,7 @@ router.put("/admin/update/:id", async (req, res, next) => {
   }
 });
 // Delete Admins..................
-router.delete("/admin/delete/:id", async (req, res, next) => {
+router.delete("/admin/delete/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -242,7 +290,6 @@ router.delete("/admin/delete/:id", async (req, res, next) => {
     if (!existingAdmin) {
       return res.status(404).json({ message: "Admin not found" });
     }
-
     return res.status(200).json({ message: "Delete SuccesFully" });
   } catch (error) {
     console.error(error);
@@ -250,7 +297,7 @@ router.delete("/admin/delete/:id", async (req, res, next) => {
   }
 });
 // Only One Admin show..............
-router.get("/admin/boy/:id", async (req, res, next) => {
+router.get("/admin/boy/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -258,10 +305,50 @@ router.get("/admin/boy/:id", async (req, res, next) => {
     if (!existingAdmin) {
       return res.status(404).json({ message: "Admin not found" });
     }
+    const state = await State.findOne({ state_id: existingAdmin.state_id });
+    const district = await District.findOne({
+      district_id: existingAdmin.district_id,
+    });
 
-    return res.status(200).json(existingAdmin);
+    const response = {
+      ...existingAdmin._doc,
+      state_name: state ? state.state_name : "State not found",
+      district_name: district ? district.district_name : "District not found",
+    };
+
+    return res.status(200).json(response);
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Forget password..........
+router.put("/admin/change/password", async (req, res) => {
+  try {
+    const { email, mobile, newPassword } = req.body;
+
+    if (!email || !mobile || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Please provide all required fields" });
+    }
+
+    const user = await Admin.findOne({ email, mobile });
+    if (!user) {
+      return res.status(400).json({
+        message: "User with provided email and mobile number not found",
+      });
+    }
+
+    const hashedPassword = await bcryptjs.hash(newPassword, 15);
+    user.password = hashedPassword;
+    user.passwords = newPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
