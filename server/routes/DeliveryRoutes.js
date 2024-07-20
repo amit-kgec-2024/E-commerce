@@ -308,13 +308,13 @@ router.get("/delivery/boy/:id", async (req, res) => {
     if (!existingDelivery) {
       return res.status(404).json({ message: "Delivery not found" });
     }
-    const state = await State.findOne({ state_id: existingAdmin.state_id });
+    const state = await State.findOne({ state_id: existingDelivery.state_id });
     const district = await District.findOne({
-      district_id: existingAdmin.district_id,
+      district_id: existingDelivery.district_id,
     });
 
     const response = {
-      ...existingAdmin._doc,
+      ...existingDelivery._doc,
       state_name: state ? state.state_name : "State not found",
       district_name: district ? district.district_name : "District not found",
     };
