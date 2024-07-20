@@ -17,7 +17,7 @@ router.post("/helpdesk/register", async (req, res) => {
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
     var prefix = `MART${year}${month}${day}`;
-    var suffix = "AD";
+    var suffix = "H";
 
     const existingHelpDesk = await HelpDesk.findOne({
       $or: [
@@ -188,6 +188,7 @@ router.post("/helpdesk/login", async (req, res) => {
 // GET request to retrieve all HelpDesk users
 router.get("/helpdesk/users", async (req, res) => {
   try {
+    const users = await HelpDesk.find();
     const stateIds = users.map((user) => user.state_id);
     const districtIds = users.map((user) => user.district_id);
 

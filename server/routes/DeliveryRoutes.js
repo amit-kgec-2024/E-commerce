@@ -17,7 +17,7 @@ router.post("/delivery/register", async (req, res) => {
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
     var prefix = `MART${year}${month}${day}`;
-    var suffix = "AD";
+    var suffix = "DP";
 
     const existingDelivery = await Delivery.findOne({
       $or: [
