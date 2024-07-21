@@ -121,7 +121,6 @@ const ProfileInformation = () => {
       console.log(error.message);
     }
   };
-  console.log("---->", isData);
   return (
     <div className="p-4 flex flex-col gap-5">
       <div className="w-full flex gap-3">
@@ -142,14 +141,14 @@ const ProfileInformation = () => {
             <input
               type="text"
               placeholder={isData?.firstname}
-              value={firstname}
+              value={firstname || isData?.firstname}
               onChange={(e) => setFirstname(e.target.value)}
               className="outline-none px-3"
             />
             <input
               type="text"
               placeholder={isData?.lastname}
-              value={lastname}
+              value={lastname || isData?.lastname}
               onChange={(e) => setLastname(e.target.value)}
               className="outline-none px-3"
             />
@@ -180,11 +179,11 @@ const ProfileInformation = () => {
           <input
             type="radio"
             name="gender"
-            value={"true"}
+            value={true}
             onChange={(e) => setGender(e.target.value)}
             className=""
             id="male"
-            checked={isData?.gender === "true"}
+            checked={isData?.gender === true}
             disabled={!isName}
           />
           <label
@@ -197,10 +196,10 @@ const ProfileInformation = () => {
             type="radio"
             name="gender"
             className=""
-            value={"false"}
+            value={false}
             onChange={(e) => setGender(e.target.value)}
             id="female"
-            checked={isData?.gender === "false"}
+            checked={isData?.gender === false}
             disabled={!isName}
           />
           <label
@@ -230,7 +229,7 @@ const ProfileInformation = () => {
             <input
               type="text"
               placeholder={isData?.email}
-              value={email}
+              value={email || isData?.email}
               onChange={(e) => setEmail(e.target.value)}
               className="outline-none px-3"
             />
@@ -271,7 +270,8 @@ const ProfileInformation = () => {
             <input
               type="text"
               placeholder={isData?.mobile}
-              value={mobile}
+              value={mobile || isData?.mobile}
+              maxLength={10}
               onChange={(e) => setMobile(e.target.value)}
               className="outline-none px-3"
             />

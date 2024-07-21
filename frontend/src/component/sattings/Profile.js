@@ -19,6 +19,7 @@ import SaveCards from "./SaveCards";
 import SavedUPI from "./SavedUPI";
 import WishList from "./Wishlist";
 import Layout from "../layout/Layout";
+import TrackOrders from "../orders/TrackOrders";
 
 const Profile = () => {
   const [isShow, setIsShow] = useState("personal");
@@ -77,12 +78,12 @@ const Profile = () => {
                 Manage Addresses
               </button>
               <button
-                onClick={() => handelToggle("pancard")}
+                onClick={() => handelToggle("track")}
                 className={`text-sm p-3 w-full hover:bg-teal-50 ${
-                  isShow === "pancard" ? "text-blue-400 bg-teal-50" : " "
+                  isShow === "track" ? "text-blue-400 bg-teal-50" : " "
                 }`}
               >
-                PAN Card Information
+                New Orders Track
               </button>
             </div>
             <h1 className="flex flex-row items-center p-3 gap-4">
@@ -169,6 +170,7 @@ const Profile = () => {
           {isShow === "reviews" && <Reviews />}
           {isShow === "giftcard" && <GiftCard />}
           {isShow === "notifications" && <Notifications />}
+          {isShow === "track" && <TrackOrders />}
           {isShow === "pancard" && <PanCard />}
           {isShow === "personal" && <ProfileInformation />}
           {isShow === "savecards" && <SaveCards />}

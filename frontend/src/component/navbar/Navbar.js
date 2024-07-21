@@ -78,7 +78,7 @@ const Navbar = ( ) => {
           <NavLink
             to="/"
             className={
-              "text-transparent bg-clip-text text-2xl font-bold bg-gradient-to-r from-blue-400 to-yellow-300"
+              "text-transparent bg-clip-text text-2xl font-bold bg-gradient-to-r from-blue-400 to-yellow-300 animate-bigToSmall"
             }
           >
             IndMart

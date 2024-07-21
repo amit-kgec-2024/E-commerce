@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
-import { stateIndia } from "../../utils/dropdown";
 import { FaPlus } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
@@ -211,6 +210,7 @@ const Address = () => {
           <span>Add a new address</span>
         </button>
       </div>
+      {/* Addresss POST */}
       {isShowBox && (
         <div className="flex justify-center items-center py-6 border bg-white">
           <div className="p-6">
@@ -224,6 +224,7 @@ const Address = () => {
                 name="mobil"
                 id="mobil"
                 value={detail.mobil}
+                maxLength={10}
                 onChange={(e) =>
                   setDetail({ ...detail, mobil: e.target.value })
                 }
@@ -255,14 +256,6 @@ const Address = () => {
                 onChange={(e) =>
                   setDetail({ ...detail, police: e.target.value })
                 }
-              />
-              <Input
-                label="Dist"
-                type="dist"
-                name="dist"
-                id="dist"
-                value={detail.dist}
-                onChange={(e) => setDetail({ ...detail, dist: e.target.value })}
               />
               <Input
                 label="Pin"
@@ -315,6 +308,7 @@ const Address = () => {
           </div>
         </div>
       )}
+      {/* Address map Get........... */}
       <div className={`${isMenu ? "hidden" : "mt-10"}`}>
         {isAddress.map((ele, index) => (
           <div key={index} className="border p-4 flex flex-col gap-3 bg-white">
@@ -352,14 +346,15 @@ const Address = () => {
             <div className="flex uppercase flex-row items-center gap-3">
               <span>{ele.place}</span>
               <span>{ele.police}</span>
-              <span>{ele.dist}</span>
+              <span>{ele.district_id}</span>
               <span>{ele.pin}</span>
-              <span>{ele.state}</span>
+              <span>{ele.state_id}</span>
               <span>{ele.mobil}</span>
             </div>
           </div>
         ))}
       </div>
+      {/* Address EDIT */}
       {isMenu && (
         <div className="flex justify-center mt-10 items-center py-6 border bg-white">
           <div className="p-6">
@@ -406,14 +401,6 @@ const Address = () => {
                 }
               />
               <Input
-                label="Dist"
-                type="dist"
-                name="dist"
-                id="dist"
-                value={detail.dist}
-                onChange={(e) => setDetail({ ...detail, dist: e.target.value })}
-              />
-              <Input
                 label="Pin"
                 type="pin"
                 name="pin"
@@ -421,17 +408,35 @@ const Address = () => {
                 value={detail.pin}
                 onChange={(e) => setDetail({ ...detail, pin: e.target.value })}
               />
-              <div
-                className="mb-4"
-                value={detail.state}
-                onChange={(e) =>
-                  setDetail({ ...detail, state: e.target.value })
-                }
-              >
-                <h1>Get select State</h1>
-                <select className="form-select outline-none border">
-                  {stateIndia.map((option) => (
-                    <option value={option.value}>{option.label}</option>
+              {/* 000000000000000000 */}
+              <div className="w-full flex flex-col">
+                <label htmlFor="state">State</label>
+                <select
+                  onChange={handleStateChange}
+                  value={selectedState}
+                  className="border-gray-400 border outline-none p-2"
+                  id="state"
+                >
+                  <option value="">Select State</option>
+                  {isState.map((state) => (
+                    <option key={state._id} value={state.state_id}>
+                      {state.state_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full flex flex-col">
+                <label htmlFor="district">District</label>
+                <select
+                  id="district"
+                  onChange={handleDistrictChange}
+                  className="border-gray-400 border outline-none p-2"
+                >
+                  <option value="">Select District</option>
+                  {isDistrict.map((district) => (
+                    <option key={district._id} value={district.district_id}>
+                      {district.district_name}
+                    </option>
                   ))}
                 </select>
               </div>

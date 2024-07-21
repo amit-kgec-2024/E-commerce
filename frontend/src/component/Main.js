@@ -17,12 +17,12 @@ const Main = () => {
   };
   return (
     <Layout>
-      <div className="bg-slate-100 flex flex-row justify-between items-start w-full p-2 gap-2">
+      <div className="flex flex-row justify-between items-start w-full">
         <div
           className={`${
             isProduct === "profile"
               ? "hidden"
-              : "w-[10%] uppercase flex flex-col gap-10 p-3 justify-around items-center font-semibold bg-white"
+              : "w-[10%] uppercase flex flex-col gap-3 h-screen p-3 justify-start items-center font-light bg-slate-900"
           }`}
         >
           <button
@@ -80,7 +80,7 @@ const Main = () => {
             Grocery
           </button>
         </div>
-        <div className="w-full bg-slate-50 overflow-y-scroll h-screen p-2">
+        <div className="w-full bg-teal-600 p-2">
           {isProduct === "mobiles" && <Mobiles />}
           {isProduct === "appliances" && <Appliens />}
           {isProduct === "electronics" && <Electronics />}
