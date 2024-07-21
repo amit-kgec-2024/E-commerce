@@ -35,6 +35,18 @@ router.post("/order/confrom", async (req, res) => {
       amountSave,
       totalAmount,
     } = req.body;
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    var prefix = `IND${year}${month}${day}`;
+    var suffix = "CD";
+    const lastOrder = await PlaceOrder.findOne().sort({ serialNo: -1 });
+
+    let serialNo = 1;
+    if (lastOrder && lastOrder.serialNo) {
+      serialNo = lastOrder.serialNo + 1;
+    }
 
     const newPlaceOrder = new PlaceOrder({
       userId,
@@ -51,6 +63,8 @@ router.post("/order/confrom", async (req, res) => {
       img,
       title,
       models,
+      serialNo,
+      regNo: `${prefix}${serialNo}${suffix}`,
       price,
       stars,
       discount,
@@ -86,12 +100,12 @@ router.get("/my/order/:userId", async (req, res) => {
   }
 });
 // orders only one........................
-router.get("/order/:id", async (req, res) => {
+router.get("/order/:regNo", async (req, res) => {
   try {
-    const id = req.params.id;
+    const regNo = req.params.regNo;
 
     const productOrders = await PlaceOrder.findOne({
-      _id: id,
+      regNo: regNo,
     });
     res.status(200).json(productOrders);
   } catch (error) {

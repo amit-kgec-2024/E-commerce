@@ -65,6 +65,14 @@ const orderSchema = mongoose.Schema({
     type: Number,
     require: true,
   },
+  serialNo: {
+    type: Number,
+    require: true,
+  },
+  regNo: {
+    type: String,
+    require: true,
+  },
   totalAmount: {
     type: Number,
     require: true,

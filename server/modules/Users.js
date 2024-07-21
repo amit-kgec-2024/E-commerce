@@ -17,6 +17,14 @@ const userSchame = mongoose.Schema({
     type: Number,
     require: true,
   },
+  serialNo: {
+    type: Number,
+    require: true,
+  },
+  regNo: {
+    type: String,
+    require: true,
+  }, 
   password: {
     type: String,
     require: true,

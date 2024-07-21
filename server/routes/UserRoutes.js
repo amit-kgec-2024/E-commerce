@@ -17,13 +17,31 @@ router.post("/register", async (req, res, next) => {
       if (isAlreadyExist) {
         res.status(400).send("User alredy Exist");
       } else {
-        const newUser = new Users({ firstname, lastname, email });
+        const date = new Date();
+        const year = date.getFullYear().toString().slice(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+        var prefix = `USR${year}${month}${day}`;
+        var suffix = "I";
+        const lastUser = await Users.findOne().sort({ serialNo: -1 });
+
+        let serialNo = 1;
+        if (lastUser && lastUser.serialNo) {
+          serialNo = lastUser.serialNo + 1;
+        }
+        const newUser = new Users({
+          firstname,
+          lastname,
+          email,
+          serialNo,
+          regNo: `${prefix}${serialNo}${suffix}`,
+        });
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
           newUser.save();
           next();
         });
-        return res.status(200).send("user register Successfully");
+        return res.status(200).json(newUser);
       }
     }
   } catch (error) {
@@ -33,21 +51,21 @@ router.post("/register", async (req, res, next) => {
 // login...............
 router.post("/login", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { serialNo, password } = req.body;
+    if (!serialNo || !password) {
       res.status(400).send("Plese all require files");
     } else {
-      const user = await Users.findOne({ email });
+      const user = await Users.findOne({ serialNo });
       if (!user) {
-        res.status(400).send("User Email & Password is Incorrect");
+        res.status(400).send("User serialNo & Password is Incorrect");
       } else {
         const valideteUser = await bcryptjs.compare(password, user.password);
         if (!valideteUser) {
-          res.status(400).send("User Email & Password is Incorrect");
+          res.status(400).send("User serialNo & Password is Incorrect");
         } else {
           const payload = {
             userId: user._id,
-            email: user.email,
+            serialNo: user.serialNo,
           };
           const JWT_SECRET_KEY =
             process.env.JWT_SECRET_KEY || "THIS_IS_A_JWT_SECRET_KEY";
@@ -61,8 +79,7 @@ router.post("/login", async (req, res, next) => {
               res.status(200).json({
                 user: {
                   id: user._id,
-                  email: user.email,
-                  password: user.password,
+                  serialNo:user.serialNo,
                   firstname: user.firstname,
                   lastname: user.lastname,
                 },
