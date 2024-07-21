@@ -29,8 +29,12 @@ const userAddressSchema = mongoose.Schema({
     type: Number,
     require: true,
   },
-  state: {
-    type: String,
+  state_id: {
+    type: Number,
+    require: true,
+  },
+  district_id: {
+    type: Number,
     require: true,
   },
 });

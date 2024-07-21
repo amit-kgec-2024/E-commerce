@@ -121,6 +121,7 @@ const ProfileInformation = () => {
       console.log(error.message);
     }
   };
+  console.log("---->", isData);
   return (
     <div className="p-4 flex flex-col gap-5">
       <div className="w-full flex gap-3">
@@ -179,11 +180,11 @@ const ProfileInformation = () => {
           <input
             type="radio"
             name="gender"
-            value={"Male"}
+            value={"true"}
             onChange={(e) => setGender(e.target.value)}
             className=""
             id="male"
-            checked={isData?.gender === "Male"}
+            checked={isData?.gender === "true"}
             disabled={!isName}
           />
           <label
@@ -196,10 +197,10 @@ const ProfileInformation = () => {
             type="radio"
             name="gender"
             className=""
-            value={"Femal"}
+            value={"false"}
             onChange={(e) => setGender(e.target.value)}
             id="female"
-            checked={isData?.gender === "Femal"}
+            checked={isData?.gender === "false"}
             disabled={!isName}
           />
           <label

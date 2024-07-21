@@ -238,7 +238,7 @@ router.get("/users/:id", async (req, res) => {
 // User Addresss POST details...
 router.post("/address", async (req, res) => {
   try {
-    const { userId, mobil, place, post, police, dist, pin, state } = req.body;
+    const { userId, mobil, place, post, police, pin, state_id, district_id } = req.body;
 
     if (
       !userId ||
@@ -246,9 +246,9 @@ router.post("/address", async (req, res) => {
       !place ||
       !post ||
       !police ||
-      !dist ||
       !pin ||
-      !state
+      !state_id ||
+      !district_id
     ) {
       return res.status(400).send("Please provide all required fields");
     }
@@ -258,12 +258,12 @@ router.post("/address", async (req, res) => {
       place,
       post,
       police,
-      dist,
       pin,
-      state,
+      state_id,
+      district_id
     });
-    await newUser.save();
-    return res.status(201).send("User Address registered successfully");
+    const address = await newUser.save();
+    return res.status(201).json(address);
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error");
@@ -291,11 +291,11 @@ router.get("/address/:userId", async (req, res) => {
 router.put("/address/update/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { mobil, place, post, police, dist, pin, state } = req.body;
+    const { mobil, place, post, police, pin, state_id, district_id } = req.body;
 
     const updatedUserAddress = await UserAddress.findByIdAndUpdate(
       id,
-      { mobil, place, post, police, dist, pin, state },
+      { mobil, place, post, police, pin, state_id, district_id },
       { new: true, runValidators: true }
     );
 
@@ -333,14 +333,14 @@ router.get("/order/address/:id?", async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      const firstAddress = await UserAddress.findOne(); // Fetch the first available address
+      const firstAddress = await UserAddress.findOne(); 
       if (!firstAddress) {
         return res.status(404).send("No addresses available");
       }
       return res.status(200).json(firstAddress);
     }
 
-    const trimmedId = id.trim(); // Trim any whitespace characters including newlines
+    const trimmedId = id.trim();
     const orderAddress = await UserAddress.findById(trimmedId);
 
     if (!orderAddress) {

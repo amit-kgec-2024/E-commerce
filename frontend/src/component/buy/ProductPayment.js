@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Layout from "../layout/Layout";
 
 const ProductPayment = () => {
   const navigate = useNavigate();
@@ -121,98 +122,98 @@ const ProductPayment = () => {
 
       const orders = await response.json();
       console.log("orders succesfully", orders)
-      navigate(`/order/confrom/${orders._id}`);
+      navigate(`/order/confrom/${orders.regNo}`);
     } catch (error) {
       console.log(error.message);
     }
   };
   if (data)
     return (
-      <div className="flex flex-col justify-center items-center px-4">
-        <div className="w-full p-3">
-          <div className="">
-            <h1 className="font-bold">Deliver to:</h1>
-            <h1 className="font-light">
-              {isOrderAddress.place}, {isOrderAddress.post},{" "}
-              {isOrderAddress.police}, {isOrderAddress.dist},{" "}
-              {isOrderAddress.pin}, {isOrderAddress.state}
+      <Layout>
+        <div className="flex flex-col justify-center items-center px-4">
+          <div className="w-full p-3">
+            <div className="">
+              <h1 className="font-bold">Deliver to:</h1>
+              <h1 className="font-light">
+                {isOrderAddress.place}, {isOrderAddress.post},{" "}
+                {isOrderAddress.police}, {isOrderAddress.dist},{" "}
+                {isOrderAddress.pin}, {isOrderAddress.state}
+              </h1>
+              <h1 className="font-light">
+                {isOrderAddress.mobil} {formattedDate}
+              </h1>
+            </div>
+          </div>
+          <div className="w-full h-1 my-2 bg-gray-100" />
+          <div className="w-full md:px-20">
+            <h1 className="text-sm md:text-base font-semibold text-gray-500">
+              All payments options
             </h1>
-            <h1 className="font-light">
-              {isOrderAddress.mobil} {formattedDate}
+            <div className="p-4">
+              {paymentType.map((e) => {
+                return (
+                  <div key={e} className="py-2">
+                    <input
+                      type="radio"
+                      id={e}
+                      name="paymentType"
+                      value={e}
+                      onChange={(ele) => {
+                        setPayBtn(ele.target.value);
+                      }}
+                    />
+                    <label htmlFor={e} className="px-2 text-sm md:text-base">
+                      {e}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="w-full my-2 md:px-20">
+            <h1 className="text-sm md:text-base font-bold uppercase text-gray-300 mb-3">
+              Price Details
             </h1>
+            <div className="flex flex-row justify-between mb-2">
+              <h1 className="text-xs md:text-sm font-light">
+                Price ({dropItems} item)
+              </h1>
+              <h1 className="text-xs md:text-sm font-light">
+                ₹{data.product.price * dropItems}
+              </h1>
+            </div>
+            <div className="flex flex-row justify-between mb-2">
+              <h1 className="text-xs md:text-sm font-light">Discount</h1>
+              <h1 className="text-xs md:text-sm font-light">₹{amountSave}</h1>
+            </div>
+            <div className="flex flex-row justify-between mb-2">
+              <h1 className="text-xs md:text-sm font-light">Delivery Charge</h1>
+              <h1 className="text-xs md:text-sm font-light">
+                <span className="text-green-400">
+                  <del className="text-slate-400">₹40</del> FREE
+                </span>
+              </h1>
+            </div>
+            <div className="flex flex-row justify-between py-2 border-t-2 border-dotted">
+              <h1 className="text-xs md:text-sm font-semibold">Total Amount</h1>
+              <h1 className="text-xs md:text-sm font-semibold">
+                ₹{totalAmount}
+              </h1>
+            </div>
+          </div>
+          <div className="w-full my-2 md:px-20 flex flex-row justify-between items-center bg-stone-100 p-3">
+            <h1 className="flex flex-col">
+              <span className="font-semibold">₹{totalAmount}</span>
+            </h1>
+            <button
+              onClick={(e) => handelClick(e)}
+              className="bg-blue-400 text-white text-xs md:text-sm py-2 px-6 rounded font-semibold"
+            >
+              Place order
+            </button>
           </div>
         </div>
-        <div className="w-full h-1 my-2 bg-gray-100" />
-        <div className="w-full md:px-20">
-          <h1 className="text-sm md:text-base font-semibold text-gray-500">
-            All payments options
-          </h1>
-          <div className="p-4">
-            {paymentType.map((e) => {
-              return (
-                <div key={e} className="py-2">
-                  <input
-                    type="radio"
-                    id={e}
-                    name="paymentType"
-                    value={e}
-                    onChange={(ele) => {
-                      setPayBtn(ele.target.value);
-                    }}
-                  />
-                  <label htmlFor={e} className="px-2 text-sm md:text-base">
-                    {e}
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="w-full my-2 md:px-20">
-          <h1 className="text-sm md:text-base font-bold uppercase text-gray-300 mb-3">
-            Price Details
-          </h1>
-          <div className="flex flex-row justify-between mb-2">
-            <h1 className="text-xs md:text-sm font-light">
-              Price ({dropItems} item)
-            </h1>
-            <h1 className="text-xs md:text-sm font-light">
-              ₹{data.product.price * dropItems}
-            </h1>
-          </div>
-          <div className="flex flex-row justify-between mb-2">
-            <h1 className="text-xs md:text-sm font-light">
-              Discount
-            </h1>
-            <h1 className="text-xs md:text-sm font-light">
-              ₹{amountSave}
-            </h1>
-          </div>
-          <div className="flex flex-row justify-between mb-2">
-            <h1 className="text-xs md:text-sm font-light">Delivery Charge</h1>
-            <h1 className="text-xs md:text-sm font-light">
-              <span className="text-green-400">
-                <del className="text-slate-400">₹40</del> FREE
-              </span>
-            </h1>
-          </div>
-          <div className="flex flex-row justify-between py-2 border-t-2 border-dotted">
-            <h1 className="text-xs md:text-sm font-semibold">Total Amount</h1>
-            <h1 className="text-xs md:text-sm font-semibold">₹{totalAmount}</h1>
-          </div>
-        </div>
-        <div className="w-full my-2 md:px-20 flex flex-row justify-between items-center bg-stone-100 p-3">
-          <h1 className="flex flex-col">
-            <span className="font-semibold">₹{totalAmount}</span>
-          </h1>
-          <button
-            onClick={(e) => handelClick(e)}
-            className="bg-blue-400 text-white text-xs md:text-sm py-2 px-6 rounded font-semibold"
-          >
-            Place order
-          </button>
-        </div>
-      </div>
+      </Layout>
     );
 };
 

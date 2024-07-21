@@ -119,7 +119,7 @@ const SaveAddress = () => {
               value={detail.pin}
               onChange={(e) => setDetail({ ...detail, pin: e.target.value })}
             />
-            <div
+            {/* <div
               className="mb-4"
               value={detail.state}
               onChange={(e) => setDetail({ ...detail, state: e.target.value })}
@@ -130,7 +130,7 @@ const SaveAddress = () => {
                   <option value={option.value}>{option.label}</option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <Button label="Add Now!" type="submit" className="rounded" />
           </form>
         </div>

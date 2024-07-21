@@ -1,27 +1,30 @@
-import React, { useState } from 'react'
-import Home from './Home';
-import Electronics from "../component/electronics/Electronics"
-import Fashion from "../component/fashion/Fashion"
-import Beauty from "../component/beauty/Beauty"
-import Furniture from "../component/furniture/Furniture"
-import Grocery from "../component/grocery/Grocery"
-import Mobiles from '../component/mobiles/Mobiles';
-import Appliens from '../component/appliens/Appliens';
-import Kitchen from '../component/kitchene/Kitchen';
-import Profile from "../component/sattings/Profile";
-import AddToCarts from "../component/addCart/AddToCarts"
-import Navbar from './Navbar';
+import React, { useState } from "react";
+import Home from "./Home";
+import Electronics from "../component/electronics/Electronics";
+import Fashion from "../component/fashion/Fashion";
+import Beauty from "../component/beauty/Beauty";
+import Furniture from "../component/furniture/Furniture";
+import Grocery from "../component/grocery/Grocery";
+import Mobiles from "../component/mobiles/Mobiles";
+import Appliens from "../component/appliens/Appliens";
+import Kitchen from "../component/kitchene/Kitchen";
+import Layout from "./layout/Layout";
 
 const Main = () => {
   const [isProduct, showProduct] = useState("home");
-  const handelProduct =(toggleProduct)=>{
+  const handelProduct = (toggleProduct) => {
     showProduct(toggleProduct);
-  }
+  };
   return (
-    <main>
-      <Navbar handelProduct={handelProduct}/>
+    <Layout>
       <div className="bg-slate-100 flex flex-row justify-between items-start w-full p-2 gap-2">
-        <div className={`${ isProduct === "profile" ? "hidden" : "w-[10%] uppercase flex flex-col gap-10 p-3 justify-around items-center font-semibold bg-white"}`}>
+        <div
+          className={`${
+            isProduct === "profile"
+              ? "hidden"
+              : "w-[10%] uppercase flex flex-col gap-10 p-3 justify-around items-center font-semibold bg-white"
+          }`}
+        >
           <button
             className={`${isProduct === "home" ? "text-teal-300" : ""}`}
             onClick={() => handelProduct("home")}
@@ -87,16 +90,13 @@ const Main = () => {
           {isProduct === "furniture" && <Furniture />}
           {isProduct === "grocery" && <Grocery />}
           {isProduct === "home" && <Home />}
-          {isProduct === "profile" && <Profile handelProduct={handelProduct}/>}
-          {isProduct === "addToCart" && <AddToCarts />}
           {isProduct === "home" && <Home />}
           {isProduct === "home" && <Home />}
           {isProduct === "home" && <Home />}
         </div>
       </div>
-    </main>
+    </Layout>
   );
-}
+};
 
-export default Main
-
+export default Main;

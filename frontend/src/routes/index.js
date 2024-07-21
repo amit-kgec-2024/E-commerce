@@ -3,7 +3,7 @@ import { Route, Routes as Router } from "react-router-dom";
 import Product from "../component/buy/Product";
 import ProductBuy from "../component/buy/ProductBuy";
 import ProductPayment from "../component/buy/ProductPayment";
-import PlaceOrder from "../component/buy/PlacedOrder"
+import PlaceOrder from "../component/buy/PlacedOrder";
 // import Form from "../modules/Authorization";
 // import Navbar from "../component/Navbar";
 // import Reviews from "../modules/Reviews";
@@ -20,6 +20,9 @@ import PlaceOrder from "../component/buy/PlacedOrder"
 // import AdminLogin from "../component/admin/AdminLogin";
 // import Admin from "../component/admin/Admin";
 import Mani from "../component/Main";
+import Profile from "../component/sattings/Profile";
+import AddToCarts from "../component/addCart/AddToCarts";
+import Orders from "../component/orders/Orders";
 // import Mobiles from "../component/mobiles/Mobiles";
 // import Appliens from "../component/appliens/Appliens";
 // import Electronics from "../component/electronics/Electronics";
@@ -51,20 +54,23 @@ import Mani from "../component/Main";
 //   }
 // };
 
-const Routes = ()=>{
-    return (
-      <Router>
-        <Route path="/product/:id" element={<Product />} />
-        <Route path="/product/:id/:formattedDate" element={<ProductBuy />} />
-        <Route
-          path="/product/:id/:dropItems/:amountSave/:totalAmount/:formattedDate/:selectedAddressId"
-          element={<ProductPayment />}
-        />
-        <Route path="/order/confrom/:id" element={<PlaceOrder />} />
-        <Route path="/" element={<Mani />} />
-        
-      </Router>
-    );};
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/product/:id" element={<Product />} />
+      <Route path="/product/:id/:formattedDate" element={<ProductBuy />} />
+      <Route
+        path="/product/:id/:dropItems/:amountSave/:totalAmount/:formattedDate/:selectedAddressId"
+        element={<ProductPayment />}
+      />
+      <Route path="/order/confrom/:regNo" element={<PlaceOrder />} />
+      <Route path="/orders" element={<Orders />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/addToCart" element={<AddToCarts />} />
+      <Route path="/" element={<Mani />} />
+    </Router>
+  );
+};
 
 export default Routes;
 // const Routes = () => {
@@ -84,11 +90,11 @@ export default Routes;
 //             key={id}
 //             path={path}
 //             element={
-              
+
 //                 <Navbar />
 //                 {Comment}
 //                 <Footer/>
-              
+
 //             }
 //           />
 //         );
@@ -118,31 +124,31 @@ export default Routes;
 //       <Route
 //         path={`/mobiles/store`}
 //         element={
-          
+
 //             <Navbar />
 //             {<MobilesStore />}
 //             <Footer />
-          
+
 //         }
 //       />
 //       <Route
 //         path={`/mobilesDetails/:id`}
 //         element={
-          
+
 //             <Navbar />
 //             {<MobilesDetails />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path={`/mobile/buynow/:id/:formattedDate`}
 //         element={
-          
+
 //             <Navbar />
 //             {<MobilesBuy />}
 //             <Footer/>
-          
+
 //         }
 //       />
 
@@ -150,27 +156,27 @@ export default Routes;
 //       <Route
 //         path={`/appliances`}
 //         element={
-          
+
 //             <Navbar />
 //             {<Appliens />}
 //             <Footer />
-          
+
 //         }
 //       />
-//       
+//
 //       {/* electronics....... */}
 //       <Route
 //         path={`/electronics`}
 //         element={
-          
+
 //             <Navbar />
 //             {<Electronics />}
 //             <Footer />
-          
+
 //         }
 //       />
 //
-//       
+//
 //       {/* Management sections...... */}
 //       <Route path="/management/section" element={<ManagementSection />} />
 //       <Route path="/management/login" element={<ManagementLogin />} />
@@ -185,10 +191,10 @@ export default Routes;
 //       <Route
 //         path="/profile"
 //         element={
-          
+
 //             <Navbar />
 //             {<Profile />}
-          
+
 //         }
 //       />
 //       <Route
@@ -198,74 +204,74 @@ export default Routes;
 //       <Route
 //         path="/reviews"
 //         element={
-          
+
 //             {<Reviews />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path={`/placeorder/:id`}
 //         element={
-          
+
 //             {<Placeorder />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path={`/nweplaceorder/:id/:selectedSize/:dropItems/:currentFormatDate`}
 //         element={
-          
+
 //             {<NewPlaceOrder />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path="/addToCart"
 //         element={
-          
+
 //             <Navbar/>
 //             {<AddToCarts />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path="userDetail"
 //         element={
-          
+
 //             {<UserDetail />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path="trackorder"
 //         element={
-          
+
 //             {<TrackOrder />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path="/saveAddress"
 //         element={
-          
+
 //             {<SaveAddress />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route
 //         path="/shopping"
 //         element={
-          
+
 //             {<Shopping />}
 //             <Footer/>
-          
+
 //         }
 //       />
 //       <Route

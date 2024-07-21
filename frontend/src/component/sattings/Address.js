@@ -33,15 +33,14 @@ const Address = () => {
   };
   // POST request in userDetails
   const [detail, setDetail] = useState({
-    img: "",
-    bio: "",
     mobil: "",
     place: "",
     post: "",
     police: "",
     dist: "",
     pin: "",
-    state: "",
+    state_id: "",
+    district_id: "",
   });
   // User Details
   const [user] = useState(
@@ -133,7 +132,8 @@ const Address = () => {
             police: detail.police,
             dist: detail.dist,
             pin: detail.pin,
-            state: detail.state,
+            state_id: detail.state_id,
+            district_id: detail.district_id,
           }),
         }
       );
@@ -147,6 +147,54 @@ const Address = () => {
       console.log(error);
     }
   };
+  const [selectedState, setSelectedState] = useState("");
+  const [isState, setIsState] = useState([]);
+  const [isDistrict, setIsDistrict] = useState([]);
+   useEffect(() => {
+     const fetchState = async () => {
+       try {
+         const response = await fetch(
+           "https://e-commerce-nu-seven.vercel.app/state/list"
+         );
+         if (!response.ok) {
+           throw new Error("Network response was not ok");
+         }
+         const dataState = await response.json();
+         setIsState(dataState);
+       } catch (error) {
+         console.log(error);
+       }
+     };
+     fetchState();
+   }, []);
+   useEffect(() => {
+     if (selectedState) {
+       const fetchDistricts = async () => {
+         try {
+           const response = await fetch(
+             `https://e-commerce-nu-seven.vercel.app/state/district/${selectedState}`
+           );
+           if (!response.ok) {
+             throw new Error("Network response was not ok");
+           }
+           const dataDist = await response.json();
+           setIsDistrict(dataDist);
+         } catch (error) {
+           console.log(error);
+         }
+       };
+       fetchDistricts();
+     }
+   }, [selectedState]);
+   const handleStateChange = (event) => {
+     const stateId = event.target.value;
+     setSelectedState(stateId);
+     setDetail((prevstep2) => ({ ...prevstep2, state_id: stateId }));
+   };
+    const handleDistrictChange = (event) => {
+      const districtId = event.target.value;
+      setDetail((prevstep2) => ({ ...prevstep2, district_id: districtId }));
+    };
   return (
     <div>
       <div className="">
@@ -224,17 +272,35 @@ const Address = () => {
                 value={detail.pin}
                 onChange={(e) => setDetail({ ...detail, pin: e.target.value })}
               />
-              <div
-                className="mb-4"
-                value={detail.state}
-                onChange={(e) =>
-                  setDetail({ ...detail, state: e.target.value })
-                }
-              >
-                <h1>Get select State</h1>
-                <select className="form-select outline-none border">
-                  {stateIndia.map((option) => (
-                    <option value={option.value}>{option.label}</option>
+              {/* 000000000000000000 */}
+              <div className="w-full flex flex-col">
+                <label htmlFor="state">State</label>
+                <select
+                  onChange={handleStateChange}
+                  value={selectedState}
+                  className="border-gray-400 border outline-none p-2"
+                  id="state"
+                >
+                  <option value="">Select State</option>
+                  {isState.map((state) => (
+                    <option key={state._id} value={state.state_id}>
+                      {state.state_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full flex flex-col">
+                <label htmlFor="district">District</label>
+                <select
+                  id="district"
+                  onChange={handleDistrictChange}
+                  className="border-gray-400 border outline-none p-2"
+                >
+                  <option value="">Select District</option>
+                  {isDistrict.map((district) => (
+                    <option key={district._id} value={district.district_id}>
+                      {district.district_name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -267,13 +333,9 @@ const Address = () => {
                     >
                       Edit
                     </button>
+                    <button className="text-black">Primary</button>
                     <button
-                      className="text-black"
-                    >
-                      Primary
-                    </button>
-                    <button
-                      onClick={() => handleSubmitRemove( ele._id)}
+                      onClick={() => handleSubmitRemove(ele._id)}
                       className="text-red-500"
                     >
                       Delete

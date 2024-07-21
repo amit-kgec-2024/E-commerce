@@ -24,12 +24,11 @@ const MyOrders = () => {
     fetchOrders();
   }, [userId]);
   return (
-    <div>
       <div className="p-2 flex flex-col gap-4">
         {orders.map((ele, index) => (
           <OrderCard
             key={index}
-            id={ele._id}
+            regNo={ele.regNo}
             title={ele.title}
             img={ele.img}
             orderDate={ele.orderDate}
@@ -37,7 +36,6 @@ const MyOrders = () => {
           />
         ))}
       </div>
-    </div>
   );
 };
 

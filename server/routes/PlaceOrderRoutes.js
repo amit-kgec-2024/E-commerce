@@ -40,7 +40,7 @@ router.post("/order/confrom", async (req, res) => {
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
     var prefix = `IND${year}${month}${day}`;
-    var suffix = "CD";
+    var suffix = "OD";
     const lastOrder = await PlaceOrder.findOne().sort({ serialNo: -1 });
 
     let serialNo = 1;

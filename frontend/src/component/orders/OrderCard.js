@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-const OrderCard = ({img, title, id, orderDate, deliveryDate}) => {
+const OrderCard = ({ img, title, regNo, orderDate, deliveryDate }) => {
   const deFaultImage = "amitphotos.jpg";
 
   return (
     <Link
-      to={`/order/confrom/${id}`}
+      to={`/order/confrom/${regNo}`}
       className="flex flex-row justify-between items-center w-full border p-3 shadow"
     >
       <div
@@ -26,6 +26,6 @@ const OrderCard = ({img, title, id, orderDate, deliveryDate}) => {
       </div>
     </Link>
   );
-}
+};
 
 export default OrderCard

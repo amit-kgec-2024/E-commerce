@@ -34,7 +34,7 @@ const userSchame = mongoose.Schema({
     require: true,
   },
   gender: {
-    type: String,
+    type: Boolean,
     require: true,
   },
   token: {
