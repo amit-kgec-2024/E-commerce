@@ -1,7 +1,6 @@
 import Input from "../component/Input";
 import Button from "../component/Button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 const From = ({ setIsLogin }) => {
   const [signinPage, isSigninPage] = useState(true);
@@ -13,61 +12,19 @@ const From = ({ setIsLogin }) => {
     firstname: "",
     lastname: "",
     email: "",
+    mobile: "",
     password: "",
   });
   const [dataLogin, setDataLogin] = useState({
     email: "",
+    mobile: "",
     password: "",
   });
 
-//   const handelSubmit = async (e) => {
-//     e.preventDefault(e);
-//     const res = await fetch(
-//       `https://e-commerce-nu-seven.vercel.app/api/${
-//         isSigninPage ? "login" : "register"
-//       }`,
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ ...data }),
-//       }
-//     );
-
-//     if (res.status === 200) {
-//       if (signinPage) {
-//         const { token, user } = await res.json();
-//         console.log(token, user, "response");
-//         localStorage.setItem("user:token", token);
-//         localStorage.setItem("user:details", JSON.stringify(user));
-//         setMessage("Login successful!");
-//         setShowMessage(true);
-//         setIsSuccess(true);
-//         setTimeout(() => {
-//           setShowMessage(false);
-//         }, 1000);
-//       } else {
-//         setMessage("Registration successful!");
-//         setShowMessage(true);
-//         setIsSuccess(true);
-//         setTimeout(() => {
-//           setShowMessage(false);
-//         }, 3000);
-//       }
-//     } else {
-//       setMessage("Registration failed. Please try again.");
-//       setShowMessage(true);
-//       // Hide...
-//       setTimeout(() => {
-//         setShowMessage(false);
-//       }, 3000);
-//     }
-//   };
 const handelLogin = async (e) => {
   e.preventDefault(e);
   const res = await fetch(
-    `https://e-commerce-nu-seven.vercel.app/api/login`,
+    `https://e-commerce-nu-seven.vercel.app/api/users/login`,
     {
       method: "POST",
       headers: {
@@ -103,7 +60,7 @@ const handelLogin = async (e) => {
 const handelRegister = async (e) => {
   e.preventDefault(e);
   const res = await fetch(
-    `https://e-commerce-nu-seven.vercel.app/api/register`,
+    `https://e-commerce-nu-seven.vercel.app/api/users/register`,
     {
       method: "POST",
       headers: {
@@ -143,39 +100,45 @@ const handelRegister = async (e) => {
           {message}
         </div>
       )}
-      <Link
-        to="/management/section"
-        className="text-blue-300 absolute top-0 right-0 m-10 shadow p-3 font-bold"
-      >
-        Management Section
-      </Link>
       <div className="border rounded p-4 flex flex-col items-center bg-white shadow-2xl">
         {signinPage ? (
           <div className="">
-            <h1 className="text-3xl font-bold uppercase mb-4">welcome Back</h1>
+            <h1 className="text-3xl font-bold uppercase mb-4">welcome</h1>
             <h2 className="text-md font-extralight uppercase mb-8">
               ples login to continue
             </h2>
-            <form
-              className="flex flex-col items-center"
-              onSubmit={(e) => handelLogin(e)}
-            >
+            <div className="flex flex-col items-center">
               <Input
                 type="email"
-                label="Email"
+                label="Email Enter"
                 placeholder="email.."
                 value={dataLogin.email}
-                onChange={(e) => setDataLogin({ ...dataLogin, email: e.target.value })}
+                onChange={(e) =>
+                  setDataLogin({ ...dataLogin, email: e.target.value })
+                }
+              />
+              <div className="font-bold">or</div>
+              <Input
+                type="text"
+                label="Mobile Enter"
+                placeholder="mobile.."
+                value={dataLogin.mobile}
+                onChange={(e) =>
+                  setDataLogin({ ...dataLogin, mobile: e.target.value })
+                }
               />
               <Input
                 type="password"
                 label="Password"
                 placeholder="password.."
                 value={dataLogin.password}
-                onChange={(e) => setDataLogin({ ...dataLogin, password: e.target.value })}
+                onChange={(e) =>
+                  setDataLogin({ ...dataLogin, password: e.target.value })
+                }
               />
-              <Button type="submit" label="Sign" />
-            </form>
+              <Button label="Sign in" type="button" />
+              <button onClick={(e) => handelLogin(e)}>Ok</button>
+            </div>
             <div className="text-sm font-semibold mt-2">
               Didnot have an account?{" "}
               <button
@@ -188,7 +151,9 @@ const handelRegister = async (e) => {
           </div>
         ) : (
           <div className="">
-            <h1 className="text-3xl font-bold uppercase mb-4 text-center">welcome</h1>
+            <h1 className="text-3xl font-bold uppercase mb-4 text-center">
+              welcome
+            </h1>
             <h2 className="text-md font-extralight uppercase mb-8 text-center">
               ples register to continue
             </h2>
@@ -196,14 +161,17 @@ const handelRegister = async (e) => {
               className="flex flex-col items-center"
               onSubmit={(e) => handelRegister(e)}
             >
-              <div className="flex flex-row gap-3">
+              <div className="flex flex-col gap-3">
                 <Input
                   type="text"
                   label="First Name"
                   placeholder="firstname.."
                   value={dataRegister.firstname}
                   onChange={(e) =>
-                    setDataRegister({ ...dataRegister, firstname: e.target.value })
+                    setDataRegister({
+                      ...dataRegister,
+                      firstname: e.target.value,
+                    })
                   }
                 />
                 <Input
@@ -212,17 +180,31 @@ const handelRegister = async (e) => {
                   placeholder="lastname.."
                   value={dataRegister.lastname}
                   onChange={(e) =>
-                    setDataRegister({ ...dataRegister, lastname: e.target.value })
+                    setDataRegister({
+                      ...dataRegister,
+                      lastname: e.target.value,
+                    })
                   }
                 />
               </div>
-              <div className="flex flex-row gap-3">
+              <div className="flex flex-col gap-3">
                 <Input
                   type="email"
                   label="Email"
                   placeholder="email.."
                   value={dataRegister.email}
-                  onChange={(e) => setDataRegister({ ...dataRegister, email: e.target.value })}
+                  onChange={(e) =>
+                    setDataRegister({ ...dataRegister, email: e.target.value })
+                  }
+                />
+                <Input
+                  type="text"
+                  label="Monile No"
+                  placeholder="mobile.."
+                  value={dataRegister.mobile}
+                  onChange={(e) =>
+                    setDataRegister({ ...dataRegister, mobile: e.target.value })
+                  }
                 />
                 <Input
                   type="password"
@@ -230,14 +212,14 @@ const handelRegister = async (e) => {
                   placeholder="password.."
                   value={dataRegister.password}
                   onChange={(e) =>
-                    setDataRegister({ ...dataRegister, password: e.target.value })
+                    setDataRegister({
+                      ...dataRegister,
+                      password: e.target.value,
+                    })
                   }
                 />
               </div>
-              <Button
-                type="submit"
-                label="Sign in"
-              />
+              <Button type="submit" label="Register" />
             </form>
             <div className="text-sm font-semibold mt-2 text-end">
               Alredy have an account?{" "}

@@ -7,13 +7,13 @@ const Users = require("../modules/Users");
 const UserAddress = require("../modules/UserAddress");
 
 // register............
-router.post("/register", async (req, res, next) => {
+router.post("/users/register", async (req, res, next) => {
   try {
-    const { firstname, lastname, email, password } = req.body;
-    if (!firstname || !lastname || !email || !password) {
+    const { firstname, lastname, email, password, mobile } = req.body;
+    if (!firstname || !lastname || !email || !password || !mobile) {
       res.status(200).send("Plese all require files");
     } else {
-      const isAlreadyExist = await Users.findOne({ email });
+      const isAlreadyExist = await Users.findOne({ email, mobile });
       if (isAlreadyExist) {
         res.status(400).send("User alredy Exist");
       } else {
@@ -33,8 +33,10 @@ router.post("/register", async (req, res, next) => {
           firstname,
           lastname,
           email,
+          mobile,
           serialNo,
           regNo: `${prefix}${serialNo}${suffix}`,
+          passwords: password,
         });
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
@@ -48,50 +50,83 @@ router.post("/register", async (req, res, next) => {
     console.log(error, "Error");
   }
 });
+
 // login...............
-router.post("/login", async (req, res, next) => {
+router.post("/users/login", async (req, res, next) => {
   try {
-    const { serialNo, password } = req.body;
-    if (!serialNo || !password) {
-      res.status(400).send("Plese all require files");
-    } else {
-      const user = await Users.findOne({ serialNo });
-      if (!user) {
-        res.status(400).send("User serialNo & Password is Incorrect");
-      } else {
-        const valideteUser = await bcryptjs.compare(password, user.password);
-        if (!valideteUser) {
-          res.status(400).send("User serialNo & Password is Incorrect");
-        } else {
-          const payload = {
-            userId: user._id,
-            serialNo: user.serialNo,
-          };
-          const JWT_SECRET_KEY =
-            process.env.JWT_SECRET_KEY || "THIS_IS_A_JWT_SECRET_KEY";
-          jwt.sign(
-            payload,
-            JWT_SECRET_KEY,
-            { expiresIn: 86400 },
-            async (err, token) => {
-              await Users.updateOne({ _id: user._id }, { $set: { token } });
-              user.save();
-              res.status(200).json({
-                user: {
-                  id: user._id,
-                  serialNo:user.serialNo,
-                  firstname: user.firstname,
-                  lastname: user.lastname,
-                },
-                token: token,
-              });
-            }
-          );
-        }
-      }
+    const { email, mobile, password } = req.body;
+
+    if ((!email && !mobile) || !password) {
+      return res.status(400).send("Please provide all required fields");
     }
+
+    // Find user by email or mobile
+    const query = email ? { email } : { mobile };
+    const user = await Users.findOne(query);
+
+    if (!user) {
+      return res
+        .status(400)
+        .send("User email/mobile and password are incorrect");
+    }
+
+    // Validate the password
+    const validateUser = await bcryptjs.compare(password, user.password);
+    if (!validateUser) {
+      console.log("Invalid password");
+      return res
+        .status(400)
+        .send("User email/mobile and password are incorrect");
+    }
+
+    // Create JWT payload
+    const payload = {
+      userId: user._id,
+      email: user.email,
+    };
+
+    const JWT_SECRET_KEY =
+      process.env.JWT_SECRET_KEY || "THIS_IS_A_JWT_SECRET_KEY";
+
+    jwt.sign(
+      payload,
+      JWT_SECRET_KEY,
+      { expiresIn: 86400 },
+      async (err, token) => {
+        if (err) {
+          console.log("Error signing token:", err);
+          return res.status(500).send("Error signing token");
+        }
+
+        await Users.updateOne({ _id: user._id }, { $set: { token } });
+        user.save();
+
+        res.status(200).json({
+          user: {
+            id: user._id,
+            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname,
+          },
+          token: token,
+        });
+      }
+    );
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+// user lists..................
+router.get("/users/list", async (req, res) => {
+  try {
+    const usersList = await Users.find();
+    return res.status(200).json(usersList);
   } catch (error) {
     console.log(error, "Error");
+    res.status(500).send("Internal Server Error");
   }
 });
 // User name update....................
