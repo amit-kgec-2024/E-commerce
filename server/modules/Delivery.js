@@ -57,6 +57,14 @@ const deliverySchame = mongoose.Schema({
     type: String,
     require: true,
   },
+  bankNumber: {
+    type: String,
+    require: true,
+  },
+  bankImage: {
+    type: String,
+    require: true,
+  },
   community: {
     type: String,
     require: true,

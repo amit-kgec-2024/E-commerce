@@ -93,6 +93,8 @@ router.put("/delivery/register/:regNo", async (req, res) => {
       temporaryAddress,
       panImage,
       aadharImage,
+      bankImage,
+      bankNumber,
       gender,
       state_id,
       district_id,
@@ -125,6 +127,8 @@ router.put("/delivery/register/:regNo", async (req, res) => {
     existingDelivery.temporaryAddress = temporaryAddress;
     existingDelivery.panImage = panImage;
     existingDelivery.aadharImage = aadharImage;
+    existingAdmin.bankImage = bankImage;
+    existingAdmin.bankNumber = bankNumber;
     existingDelivery.gender = gender;
     existingDelivery.state_id = state_id;
     existingDelivery.district_id = district_id;
@@ -241,6 +245,8 @@ router.put("/delivery/update/:id", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      bankImage,
+      bankNumber,
       state_id,
       district_id,
     } = req.body;
@@ -263,6 +269,8 @@ router.put("/delivery/update/:id", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      bankImage,
+      bankNumber,
       state_id,
       district_id,
     };

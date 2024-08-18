@@ -92,6 +92,8 @@ router.put("/admin/register/:regNo", async (req, res) => {
       temporaryAddress,
       panImage,
       aadharImage,
+      bankImage,
+      bankNumber,
       gender,
       state_id,
       district_id,
@@ -124,6 +126,8 @@ router.put("/admin/register/:regNo", async (req, res) => {
     existingAdmin.temporaryAddress = temporaryAddress;
     existingAdmin.panImage = panImage;
     existingAdmin.aadharImage = aadharImage;
+    existingAdmin.bankImage = bankImage;
+    existingAdmin.bankNumber = bankNumber;
     existingAdmin.gender = gender;
     existingAdmin.state_id = state_id;
     existingAdmin.district_id = district_id;
@@ -239,6 +243,8 @@ router.put("/admin/update/:id", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      bankImage,
+      bankNumber,
       state_id,
       district_id,
     } = req.body;
@@ -250,7 +256,6 @@ router.put("/admin/update/:id", async (req, res) => {
       lastname,
       email,
       mobile,
-      password,
       dob: formattedDate,
       profImage,
       fatherName,
@@ -261,6 +266,8 @@ router.put("/admin/update/:id", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      bankImage,
+      bankNumber,
       state_id,
       district_id,
     };

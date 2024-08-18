@@ -41,6 +41,14 @@ const helpdeskSchame = mongoose.Schema({
     type: String,
     require: true,
   },
+  bankNumber: {
+    type: String,
+    require: true,
+  },
+  bankImage: {
+    type: String,
+    require: true,
+  },
   fatherName: {
     type: String,
     require: true,

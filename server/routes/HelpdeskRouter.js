@@ -93,6 +93,8 @@ router.put("/helpdesk/register/:regNo", async (req, res) => {
       temporaryAddress,
       panImage,
       aadharImage,
+      bankImage,
+      bankNumber,
       gender,
       state_id,
       district_id,
@@ -125,6 +127,8 @@ router.put("/helpdesk/register/:regNo", async (req, res) => {
     existingHelpDesk.temporaryAddress = temporaryAddress;
     existingHelpDesk.panImage = panImage;
     existingHelpDesk.aadharImage = aadharImage;
+    existingAdmin.bankImage = bankImage;
+    existingAdmin.bankNumber = bankNumber;
     existingHelpDesk.gender = gender;
     existingHelpDesk.state_id = state_id;
     existingHelpDesk.district_id = district_id;
@@ -241,6 +245,8 @@ router.put("/helpdesk/update/:id", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      bankImage,
+      bankNumber,
       state_id,
       district_id,
     } = req.body;
@@ -263,6 +269,8 @@ router.put("/helpdesk/update/:id", async (req, res) => {
       pin,
       permamentAddress,
       temporaryAddress,
+      bankImage,
+      bankNumber,
       state_id,
       district_id,
     };

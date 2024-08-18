@@ -85,6 +85,14 @@ const adminSchame = mongoose.Schema({
     type: String,
     require: true,
   },
+  bankNumber: {
+    type: String,
+    require: true,
+  },
+  bankImage: {
+    type: String,
+    require: true,
+  },
   aadharNumber: {
     type: String,
     require: true,
